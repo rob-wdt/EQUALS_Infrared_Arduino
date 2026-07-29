@@ -1,6 +1,7 @@
 #include "config.h"
 #include "core/sensors/phototransistor/phototransistor.h"
 #include "core/sensors/button/button.h"
+#include "core/motor/motor.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -40,6 +41,33 @@ void loop()
     button.read();
     Serial.print("Button data: ");
     Serial.println(button.is_pressed());
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_MOTORS
+Motor m1(Pin::PIN_M1_1, Pin::PIN_M1_2, MotorDirection::forward);
+Motor m2(Pin::PIN_M2_1, Pin::PIN_M2_2, MotorDirection::forward);
+Motor m3(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward);
+Motor m4(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward);
+
+void setup()
+{
+    m1.init();
+    m2.init();
+    m3.init();
+    m4.init();
+}
+
+void loop()
+{
+    m1.set_speed(SPEED);
+    m2.set_speed(SPEED);
+    m3.set_speed(SPEED);
+    m4.set_speed(SPEED);
+
+    m1.run();
+    m2.run();
+    m3.run();
+    m4.run();
 }
 
 #endif
