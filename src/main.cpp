@@ -2,7 +2,7 @@
 #include "core/sensors/phototransistor/phototransistor.h"
 #include "core/sensors/button/button.h"
 #include "core/motor/motor.h"
-#include "core/BNO055/BNO055.h"
+#include "core/sensors/BNO055/BNO055.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
