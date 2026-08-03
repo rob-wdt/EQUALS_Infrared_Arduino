@@ -2,6 +2,7 @@
 #include "core/sensors/phototransistor/phototransistor.h"
 #include "core/sensors/button/button.h"
 #include "core/motor/motor.h"
+#include "core/BNO055/BNO055.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -68,6 +69,48 @@ void loop()
     m2.run();
     m3.run();
     m4.run();
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_GYROSCOPE
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+
+void setup()
+{
+    gyro.init();
+    Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
+}
+
+void loop()
+{
+    gyro.read();
+    gyroData data = gyro.data();
+
+    Serial.print("Gyro data: ");
+    Serial.print("Roll: ");
+    Serial.print(data.roll);
+    Serial.print(", Pitch: ");
+    Serial.print(data.pitch);
+    Serial.print(", Yaw: ");
+    Serial.println(data.yaw);
 }
 
 #endif
