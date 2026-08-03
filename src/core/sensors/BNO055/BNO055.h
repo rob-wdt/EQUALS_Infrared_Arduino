@@ -1,21 +1,24 @@
 #pragma once
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
+
+#include "core/sensors/sensor.h"
 
 struct gyroData
 {
     int16_t pitch, roll, yaw; // from -180 to 180
 };
 
-class BNO055
+class BNO055 : public Sensor
 {
 public:
     BNO055(uint8_t IIC_address);
-    void init();
+    void init() override;
     bool calibrated();
-    void read();
+    void read() override;
     void set_zero_angles();
     gyroData data();
 
