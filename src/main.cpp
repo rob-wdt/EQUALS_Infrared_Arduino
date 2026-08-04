@@ -3,6 +3,7 @@
 #include "core/sensors/button/button.h"
 #include "core/motor/motor.h"
 #include "core/sensors/BNO055/BNO055.h"
+#include "control/PID-control/PID-control.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -113,4 +114,82 @@ void loop()
     Serial.println(data.yaw);
 }
 
+#elif DEBUG_MODE == DEBUG_MODE_PID
+PIDControl pid(control_gyro_align_pid);
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+
+void setup()
+{
+    gyro.init();
+    Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
+}
+
+void loop()
+{
+    gyro.read();
+    gyroData data = gyro.data();
+
+    double pid_output = pid.calculate(data.yaw);
+
+    Serial.println(pid_output);
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_PDC
+PDCControl pdc(control_gyro_align_pdc);
+BNO055 gyro(GYROSCOPE_ADDRESS);
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+
+void setup()
+{
+    gyro.init();
+    Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
+}
+
+void loop()
+{
+    gyro.read();
+    gyroData data = gyro.data();
+
+    double pdc_output = pdc.calculate(data.yaw);
+
+    Serial.println(pdc_output);
+}
 #endif

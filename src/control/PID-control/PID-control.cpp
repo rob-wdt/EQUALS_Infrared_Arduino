@@ -1,6 +1,6 @@
 #include "PID-control.h"
 
-PIDControl::PIDControl(double kp, double ki, double kd) : Control(), _kp(kp), _ki(ki), _kd(kd) {}
+PIDControl::PIDControl(PIDCoefficients coefficients) : _kp(coefficients.kp), _ki(coefficients.ki), _kd(coefficients.kd) {}
 
 double PIDControl::calculate(double error)
 {

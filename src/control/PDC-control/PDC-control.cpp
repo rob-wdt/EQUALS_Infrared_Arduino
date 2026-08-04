@@ -1,7 +1,7 @@
 #include "PDC-control.h"
 #include "utils/math/math-utils.h"
 
-PDCControl::PDCControl(double kp, double kd, double kc) : Control(), _kp(kp), _kd(kd), _kc(kc) {}
+PDCControl::PDCControl(PDCCoefficients coefficients) : _kp(coefficients.kp), _kd(coefficients.kd), _kc(coefficients.kc) {}
 
 double PDCControl::calculate(double error)
 {

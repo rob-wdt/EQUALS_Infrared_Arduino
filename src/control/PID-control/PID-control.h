@@ -1,10 +1,17 @@
 #pragma once
 #include "control/control.h"
 
+struct PIDCoefficients
+{
+    double kp;
+    double ki;
+    double kd;
+};
+
 class PIDControl : public Control
 {
 public:
-    PIDControl(double kp, double ki, double kd);
+    PIDControl(PIDCoefficients coefficients);
     double calculate(double error) override;
 
 private:
