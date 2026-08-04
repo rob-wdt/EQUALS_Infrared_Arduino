@@ -8,9 +8,7 @@ public:
     double calculate(double error) override;
 
 private:
-    double _kp;
-    double _ki;
-    double _kd;
+    double _kp, _ki, _kd;
 
     double _sum_errors = 0;
     double _prev_error = 0;
