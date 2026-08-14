@@ -18,8 +18,9 @@
 #define DEBUG_MODE_PID 5
 #define DEBUG_MODE_PDC 6
 #define DEBUG_MODE_MOVEMENT_CONTROLLER 7
+#define DEBUG_MODE_BALL_DETECTOR 8
 
-#define DEBUG_MODE DEBUG_MODE_MOVEMENT_CONTROLLER
+#define DEBUG_MODE DEBUG_MODE_BALL_DETECTOR
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //

@@ -6,6 +6,7 @@
 #include "utils/control/PDC-control/PDC-control.h"
 #include "utils/control/PID-control/PID-control.h"
 #include "control/movement-controller/movement-controller.h"
+#include "control/ball-detector/ball-detector.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -216,6 +217,22 @@ void loop()
     movement_controller.read_gyro();
     movement_controller.set_velocity(SPEED, 0, 0);
     movement_controller.move();
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_BALL_DETECTOR
+BallDetector ball_detector(Phototransistor(Pin::PIN_PHOTOTRANSISTOR), 50);
+
+void setup()
+{
+    ball_detector.init();
+    Serial.begin(115200);
+}
+
+void loop()
+{
+    ball_detector.read();
+    Serial.print("Ball detected: ");
+    Serial.println(ball_detector.ball_detected());
 }
 
 #endif
