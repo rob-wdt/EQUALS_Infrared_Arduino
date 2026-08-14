@@ -201,7 +201,7 @@ MovementController movement_controller(
      Motor(Pin::PIN_M2_1, Pin::PIN_M2_2, MotorDirection::forward),
      Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward),
      Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward)},
-    {0, 90, 180, 270},
+    {MotorLocationAngle::M1_ANGLE, MotorLocationAngle::M2_ANGLE, MotorLocationAngle::M3_ANGLE, MotorLocationAngle::M4_ANGLE},
     BNO055(GYROSCOPE_ADDRESS),
     new PDCControl(control_gyro_align_pdc));
 
