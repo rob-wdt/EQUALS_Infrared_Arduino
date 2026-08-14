@@ -1,8 +1,8 @@
 #pragma once
 #include <stdint.h>
 
-#include "control/PID-control/PID-control.h"
-#include "control/PDC-control/PDC-control.h"
+#include "utils/control/PID-control/PID-control.h"
+#include "utils/control/PDC-control/PDC-control.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------- GENERAL ----------------------------------------------------- //
@@ -17,8 +17,9 @@
 #define DEBUG_MODE_GYROSCOPE 4
 #define DEBUG_MODE_PID 5
 #define DEBUG_MODE_PDC 6
+#define DEBUG_MODE_MOVEMENT_CONTROLLER 7
 
-#define DEBUG_MODE DEBUG_MODE_PDC
+#define DEBUG_MODE DEBUG_MODE_MOVEMENT_CONTROLLER
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //

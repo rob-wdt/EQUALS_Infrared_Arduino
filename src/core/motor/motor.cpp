@@ -29,3 +29,8 @@ void Motor::stop()
     digitalWrite(_pin1, HIGH);
     digitalWrite(_pin2, HIGH);
 }
+
+MotorDirection Motor::direction() const
+{
+    return static_cast<MotorDirection>(_direction);
+}

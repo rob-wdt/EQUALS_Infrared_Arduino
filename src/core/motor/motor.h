@@ -16,6 +16,8 @@ public:
     void run();
     void stop();
 
+    MotorDirection direction() const;
+
 private:
     int16_t _speed;
     uint8_t _pin1;

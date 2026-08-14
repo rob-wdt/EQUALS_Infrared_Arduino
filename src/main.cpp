@@ -3,7 +3,9 @@
 #include "core/sensors/button/button.h"
 #include "core/motor/motor.h"
 #include "core/sensors/BNO055/BNO055.h"
-#include "control/PID-control/PID-control.h"
+#include "utils/control/PDC-control/PDC-control.h"
+#include "utils/control/PID-control/PID-control.h"
+#include "control/movement-controller/movement-controller.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -192,4 +194,28 @@ void loop()
 
     Serial.println(pdc_output);
 }
+
+#elif DEBUG_MODE == DEBUG_MODE_MOVEMENT_CONTROLLER
+MovementController movement_controller(
+    {Motor(Pin::PIN_M1_1, Pin::PIN_M1_2, MotorDirection::forward),
+     Motor(Pin::PIN_M2_1, Pin::PIN_M2_2, MotorDirection::forward),
+     Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward),
+     Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward)},
+    {0, 90, 180, 270},
+    BNO055(GYROSCOPE_ADDRESS),
+    new PDCControl(control_gyro_align_pdc));
+
+void setup()
+{
+    movement_controller.init();
+    Serial.begin(115200);
+}
+
+void loop()
+{
+    movement_controller.read_gyro();
+    movement_controller.set_velocity(SPEED, 0, 0);
+    movement_controller.move();
+}
+
 #endif
