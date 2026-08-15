@@ -17,16 +17,14 @@ struct motors_loc_angles
 class MovementController
 {
 public:
-    MovementController(motors motors, motors_loc_angles loc_angles, BNO055 gyro, Control *align_control);
+    MovementController(motors motors, motors_loc_angles loc_angles, Control *align_control);
     void init();
-    void read_gyro();
-    void set_velocity(int16_t lin_speed, int16_t move_angle, int16_t align_angle);
+    void set_velocity(int16_t lin_speed, int16_t move_angle, int16_t align_angle, gyroData gyro_data);
     void move();
     void stop();
 
 private:
     motors _motors;
     motors_loc_angles _loc_angles;
-    BNO055 _gyro;
     Control *_align_control;
 };

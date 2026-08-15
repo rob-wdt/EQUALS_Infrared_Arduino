@@ -203,19 +203,45 @@ MovementController movement_controller(
      Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward),
      Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward)},
     {MotorLocationAngle::M1_ANGLE, MotorLocationAngle::M2_ANGLE, MotorLocationAngle::M3_ANGLE, MotorLocationAngle::M4_ANGLE},
-    BNO055(GYROSCOPE_ADDRESS),
     new PDCControl(control_gyro_align_pdc));
+
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+
+#define MOVE_ANGLE 0
+#define ALIGN_ANGLE 0
 
 void setup()
 {
+    gyro.init();
     movement_controller.init();
     Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
 }
 
 void loop()
 {
-    movement_controller.read_gyro();
-    movement_controller.set_velocity(SPEED, 0, 0);
+    gyro.read();
+    gyroData data = gyro.data();
+
+    movement_controller.set_velocity(SPEED, MOVE_ANGLE, ALIGN_ANGLE, data);
     movement_controller.move();
 }
 
