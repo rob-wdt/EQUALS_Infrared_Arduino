@@ -1,5 +1,8 @@
 #pragma once
+
 #include <stdint.h>
+
+#include <Arduino.h>
 
 #include "utils/control/PID-control/PID-control.h"
 #include "utils/control/PDC-control/PDC-control.h"
@@ -20,7 +23,7 @@
 #define DEBUG_MODE_MOVEMENT_CONTROLLER 7
 #define DEBUG_MODE_BALL_DETECTOR 8
 
-#define DEBUG_MODE DEBUG_MODE_MOVEMENT_CONTROLLER
+#define DEBUG_MODE DEBUG_MODE_PHOTOTRANSISTOR
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
