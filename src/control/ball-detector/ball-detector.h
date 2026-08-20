@@ -9,6 +9,7 @@ public:
     void init();
     void read();
     bool ball_detected();
+    uint16_t phototransistor_data();
 
 private:
     Phototransistor _phototransistor;
