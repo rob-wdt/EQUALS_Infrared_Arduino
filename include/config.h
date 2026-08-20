@@ -23,15 +23,15 @@
 #define DEBUG_MODE_MOVEMENT_CONTROLLER 7
 #define DEBUG_MODE_BALL_DETECTOR 8
 
-#define DEBUG_MODE DEBUG_MODE_PHOTOTRANSISTOR
+#define DEBUG_MODE DEBUG_MODE_BUTTON
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
 enum Pin : uint8_t
 {
     PIN_PHOTOTRANSISTOR = A14,
-    PIN_BTN_1 = 32,
-    PIN_BTN_2 = 36,
+    PIN_BTN_1 = 36,
+    PIN_BTN_2 = 32,
     PIN_BTN_3 = 34,
     PIN_M1_1 = 0,
     PIN_M1_2 = 0,

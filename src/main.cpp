@@ -34,11 +34,12 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_BUTTON
-Button button(Pin::PIN_BTN_1);
+Button button(Pin::PIN_BTN_3);
 
 void setup()
 {
     button.init();
+    Serial.begin(115200);
 }
 
 void loop()
