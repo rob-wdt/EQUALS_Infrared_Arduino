@@ -28,6 +28,7 @@ GAIN_ATTACKER = 0
 EXPOSURE_ATTACKER = 0
 
 PX_TO_CM_ATTACKER = (
+    # PX CM
     (0, 0),
     (0, 0),
     (0, 0),
@@ -59,6 +60,7 @@ GAIN_DEFENDER = 0
 EXPOSURE_DEFENDER = 0
 
 PX_TO_CM_DEFENDER = (
+    # PX CM
     (0, 0),
     (0, 0),
     (0, 0),
