@@ -1,3 +1,4 @@
 .pio
 .vscode
 class-diagram.mmd
+src/OpenMV/class-diagram.mmd
