@@ -35,11 +35,12 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_BUTTON
-Button button(Pin::PIN_BTN_1);
+Button button(Pin::PIN_BTN_3);
 
 void setup()
 {
     button.init();
+    Serial.begin(115200);
 }
 
 void loop()
@@ -247,7 +248,10 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_BALL_DETECTOR
-BallDetector ball_detector(Phototransistor(Pin::PIN_PHOTOTRANSISTOR), 50);
+
+#define THRESHOLD 1
+
+BallDetector ball_detector(Phototransistor(Pin::PIN_PHOTOTRANSISTOR), THRESHOLD);
 
 void setup()
 {
@@ -259,7 +263,11 @@ void loop()
 {
     ball_detector.read();
     Serial.print("Ball detected: ");
-    Serial.println(ball_detector.ball_detected());
+    Serial.print(ball_detector.ball_detected());
+    Serial.print("\tPhtstr data: ");
+    Serial.print(ball_detector.phototransistor_data());
+    Serial.print("\tThreshold: ");
+    Serial.println(THRESHOLD);
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_COORDS

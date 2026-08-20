@@ -1,5 +1,8 @@
 #pragma once
+
 #include <stdint.h>
+
+#include <Arduino.h>
 
 #include "utils/control/PID-control/PID-control.h"
 #include "utils/control/PDC-control/PDC-control.h"
@@ -22,15 +25,15 @@
 #define DEBUG_MODE_COORDS 9
 #define DEBUG_MODE_CAM_PERCEPTION 10
 
-#define DEBUG_MODE DEBUG_MODE_CAM_PERCEPTION
+#define DEBUG_MODE DEBUG_MODE_BALL_DETECTOR
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
 enum Pin : uint8_t
 {
     PIN_PHOTOTRANSISTOR = A14,
-    PIN_BTN_1 = 32,
-    PIN_BTN_2 = 36,
+    PIN_BTN_1 = 36,
+    PIN_BTN_2 = 32,
     PIN_BTN_3 = 34,
     PIN_M1_1 = 0,
     PIN_M1_2 = 0,
