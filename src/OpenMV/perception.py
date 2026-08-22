@@ -1,4 +1,7 @@
+from typing import LiteralString
+
 import pyb
+
 
 class DataSender:
     def __init__(self, bus: int, baud: int) -> None:
@@ -17,16 +20,20 @@ class DataSender:
             return 0
         return val + 127
 
-    def send(self, buffer: tuple[int, ...]) -> bytearray:
+    def send(self, buffer: tuple[int, ...]) -> str:
         data = bytearray(len(buffer))
         for i in range(len(buffer)):
             data[i] = self.__clamp_value(buffer[i])
 
         self.__uart.writechar(255)
-        for i in data:
-            self.__uart.writechar(int(i))
+        to_send = f""
 
-        return data
+        for i in data:
+            to_send += f"{int(i)},"
+
+        self.__uart.write(to_send)
+
+        return to_send
 
     __uart: pyb.UART
     __baud: int
