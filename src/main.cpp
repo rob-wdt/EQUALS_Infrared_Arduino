@@ -9,6 +9,8 @@
 #include "control/ball-detector/ball-detector.h"
 #include "core/UART/UART.h"
 #include "control/camera-data-parcer/camera-data-parser.h"
+#include "control/coordinates-calculator/coordinates-calculator.h"
+#include "control/outs-handler/outs-handler.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -272,6 +274,48 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_COORDS
+CoordinatesCalculator coords;
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+UART uart(UART_NUM::UART_1, 230400);
+CameraDataParser cam_parser(uart);
+
+void setup()
+{
+    gyro.init();
+    cam_parser.init();
+    Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
+}
+
+void loop()
+{
+    gyro.read();
+    cam_parser.parse();
+    coords.calculate_coordinates(gyro.data(), cam_parser.data().own_goal_angle, cam_parser.data().own_goal_distance);
+
+    Serial.print("Current robot coords:\tx: ");
+    Serial.print(coords.coordinates().x);
+    Serial.print(" y: ");
+    Serial.println(coords.coordinates().y);
+}
 
 #elif DEBUG_MODE == DEBUG_MODE_CAM_PERCEPTION
 UART uart(UART_NUM::UART_1, 230400);
@@ -305,16 +349,90 @@ void loop()
     cam_data_parser.parse();
     Serial.print("Parsed data:\tBall angle: ");
     Serial.print(cam_data_parser.data().ball_angle);
-    Serial.print("Ball distance: ");
+    Serial.print(" Ball distance: ");
     Serial.print(cam_data_parser.data().ball_distance);
-    Serial.print("Own goal angle: ");
+    Serial.print(" Own goal angle: ");
     Serial.print(cam_data_parser.data().own_goal_angle);
-    Serial.print("Own goal distance: ");
+    Serial.print(" Own goal distance: ");
     Serial.print(cam_data_parser.data().own_goal_distance);
-    Serial.print("Opp goal angle: ");
+    Serial.print(" Opp goal angle: ");
     Serial.print(cam_data_parser.data().own_goal_angle);
-    Serial.print("Opp goal distance: ");
+    Serial.print(" Opp goal distance: ");
     Serial.print(cam_data_parser.data().own_goal_distance);
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_OUTS_COMMON
+OutsHandler outs;
+CoordinatesCalculator coords;
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+UART uart(UART_NUM::UART_1, 230400);
+CameraDataParser cam_parser(uart);
+
+void setup()
+{
+    gyro.init();
+    cam_parser.init();
+    Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
+}
+
+void loop()
+{
+    gyro.read();
+    cam_parser.parse();
+    coords.calculate_coordinates(gyro.data(), cam_parser.data().own_goal_angle, cam_parser.data().own_goal_distance);
+
+    outs.handle(coords.coordinates(), OUTS_BOUNDS);
+
+    String out_type;
+    bool in_out;
+
+    switch (outs.out_type())
+    {
+    case OutType::LEFT:
+        out_type = "LEFT";
+        in_out = true;
+        break;
+    case OutType::FRONT_GOAL:
+        out_type = "FRONT";
+        in_out = true;
+        break;
+    case OutType::NO:
+        out_type = "NO";
+        in_out = false;
+        break;
+    case OutType::REAR_GOAL:
+        out_type = "REAR";
+        in_out = true;
+        break;
+    case OutType::RIGHT:
+        out_type = "RIGHT";
+        in_out = true;
+        break;
+    }
+
+    Serial.print("In out: ");
+    Serial.print(in_out);
+    Serial.print("\tOut type: ");
+    Serial.println(out_type);
 }
 
 #endif
