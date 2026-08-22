@@ -24,8 +24,9 @@
 #define DEBUG_MODE_BALL_DETECTOR 8
 #define DEBUG_MODE_COORDS 9
 #define DEBUG_MODE_CAM_PERCEPTION 10
+#define DEBUG_MODE_CAM_DATA_PARSER 11
 
-#define DEBUG_MODE DEBUG_MODE_BALL_DETECTOR
+#define DEBUG_MODE DEBUG_MODE_CAM_DATA_PARSER
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //

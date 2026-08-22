@@ -8,6 +8,7 @@
 #include "control/movement-controller/movement-controller.h"
 #include "control/ball-detector/ball-detector.h"
 #include "core/UART/UART.h"
+#include "control/camera-data-parcer/camera-data-parser.h"
 
 #if DEBUG_MODE == DEBUG_MODE_NONE
 void setup()
@@ -273,7 +274,7 @@ void loop()
 #elif DEBUG_MODE == DEBUG_MODE_COORDS
 
 #elif DEBUG_MODE == DEBUG_MODE_CAM_PERCEPTION
-UART uart(UART_NUM::UART_1, 115200);
+UART uart(UART_NUM::UART_1, 230400);
 
 void setup()
 {
@@ -283,12 +284,37 @@ void setup()
 
 void loop()
 {
-    uart.send("Request");
-    delay(100); // Wait for the data to be sent and received
     uart.receive();
     String data = uart.recieved_data();
     Serial.print("Received data: ");
     Serial.println(data);
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_CAM_DATA_PARSER
+UART uart(UART_NUM::UART_1, 230400);
+CameraDataParser cam_data_parser(uart);
+
+void setup()
+{
+    cam_data_parser.init();
+    Serial.begin(115200);
+}
+
+void loop()
+{
+    cam_data_parser.parse();
+    Serial.print("Parsed data:\tBall angle: ");
+    Serial.print(cam_data_parser.data().ball_angle);
+    Serial.print("Ball distance: ");
+    Serial.print(cam_data_parser.data().ball_distance);
+    Serial.print("Own goal angle: ");
+    Serial.print(cam_data_parser.data().own_goal_angle);
+    Serial.print("Own goal distance: ");
+    Serial.print(cam_data_parser.data().own_goal_distance);
+    Serial.print("Opp goal angle: ");
+    Serial.print(cam_data_parser.data().own_goal_angle);
+    Serial.print("Opp goal distance: ");
+    Serial.print(cam_data_parser.data().own_goal_distance);
 }
 
 #endif
