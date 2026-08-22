@@ -1,6 +1,6 @@
 from ast import Tuple
 
-import point
+import OpenMV.maths as maths
 import sensor
 
 #############################################################################################################################
@@ -21,7 +21,7 @@ if FRAMESIZE_ATTACKER == sensor.QVGA:
     FRAME_H_ATTACKER = 0
     FRAME_W_ATTACKER = 0
 
-CENTER_ATTACKER = point.Point(FRAME_W_ATTACKER // 2, FRAME_H_ATTACKER // 2)
+CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2, FRAME_H_ATTACKER // 2)
 
 GAIN_ATTACKER = 0
 
@@ -53,7 +53,7 @@ if FRAMESIZE_DEFENDER == sensor.QVGA:
     FRAME_H_DEFENDER = 0
     FRAME_W_DEFENDER = 0
 
-CENTER_DEFENDER = point.Point(FRAME_W_DEFENDER // 2, FRAME_H_DEFENDER // 2)
+CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2, FRAME_H_DEFENDER // 2)
 
 GAIN_DEFENDER = 0
 
