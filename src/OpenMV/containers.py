@@ -3,6 +3,7 @@ from abc import abstractmethod
 import settings
 import maths
 
+
 class RobotType:
     @abstractmethod
     def __init__(self) -> None:
@@ -29,6 +30,15 @@ class RobotType:
     def exposure(self) -> int:
         return self.__exposure
 
+    def framesize(self) -> int:
+        return self.__framesize
+
+    def mask_radius(self) -> int:
+        return self.__mask_radius
+
+    def robot_radius(self) -> int:
+        return self.__robot_radius
+
     def px_to_cm_table(self) -> tuple[tuple[float, float], ...]:
         return self.__pixels_to_cm_table
 
@@ -39,6 +49,9 @@ class RobotType:
     __center: maths.Point
     __gain: int
     __exposure: int
+    __framesize: int
+    __mask_radius: int
+    __robot_radius: int
 
     __pixels_to_cm_table: tuple[tuple[float, float], ...]
 
@@ -54,6 +67,9 @@ class RobotAttacker(RobotType):
         self.__center = settings.CENTER_ATTACKER
         self.__gain = settings.GAIN_ATTACKER
         self.__exposure = settings.EXPOSURE_ATTACKER
+        self.__framesize = settings.FRAMESIZE_ATTACKER
+        self.__mask_radius = settings.MASK_RADIUS_ATTACKER
+        self.__robot_radius = settings.ROBOT_RADIUS_ATTACKER
         self.__pixels_to_cm_table = settings.PX_TO_CM_ATTACKER
 
 
@@ -68,6 +84,9 @@ class RobotDefender(RobotType):
         self.__center = settings.CENTER_DEFENDER
         self.__gain = settings.GAIN_DEFENDER
         self.__exposure = settings.EXPOSURE_DEFENDER
+        self.__framesize = settings.FRAMESIZE_DEFENDER
+        self.__mask_radius = settings.MASK_RADIUS_DEFENDER
+        self.__robot_radius = settings.ROBOT_RADIUS_DEFENDER
         self.__pixels_to_cm_table = settings.PX_TO_CM_DEFENDER
 
 
@@ -80,6 +99,9 @@ class CameraConfig:
         self.__center = robot_type.center()
         self.__gain = robot_type.gain()
         self.__exposure = robot_type.exposure()
+        self.__framesize = robot_type.framesize()
+        self.__mask_radius = robot_type.mask_radius()
+        self.__robot_radius = robot_type.robot_radius()
         self.__pixels_to_cm_table = robot_type.px_to_cm_table()
 
     def yellow_threshold(self) -> tuple[list[int]]:
@@ -103,6 +125,15 @@ class CameraConfig:
     def exposure(self) -> int:
         return self.__exposure
 
+    def framesize(self) -> int:
+        return self.__framesize
+
+    def mask_radius(self) -> int:
+        return self.__mask_radius
+
+    def robot_radius(self) -> int:
+        return self.__robot_radius
+
     def px_to_cm_table(self) -> tuple[tuple[float, float], ...]:
         return self.__pixels_to_cm_table
 
@@ -113,6 +144,9 @@ class CameraConfig:
     __center: maths.Point
     __gain: int
     __exposure: int
+    __framesize: int
+    __mask_radius: int
+    __robot_radius: int
 
     __pixels_to_cm_table: tuple[tuple[float, float], ...]
 

@@ -1,7 +1,10 @@
-from ast import Tuple
-
 import OpenMV.maths as maths
 import sensor
+
+#############################################################################################################################
+# ------------------------------------------------ GENERAL ---------------------------------------------------------------- #
+UART_NUM: int = 3
+UART_BAUDRATE: int = 230400
 
 #############################################################################################################################
 # ----------------------------------------------- ATTACKER ---------------------------------------------------------------- #
@@ -22,6 +25,10 @@ if FRAMESIZE_ATTACKER == sensor.QVGA:
     FRAME_W_ATTACKER = 0
 
 CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2, FRAME_H_ATTACKER // 2)
+
+MASK_RADIUS_ATTACKER: int = 0
+
+ROBOT_RADIUS_ATTACKER: int = 0
 
 GAIN_ATTACKER = 0
 
@@ -54,6 +61,10 @@ if FRAMESIZE_DEFENDER == sensor.QVGA:
     FRAME_W_DEFENDER = 0
 
 CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2, FRAME_H_DEFENDER // 2)
+
+MASK_RADIUS_DEFENDER: int = 0
+
+ROBOT_RADIUS_DEFENDER: int = 0
 
 GAIN_DEFENDER = 0
 
