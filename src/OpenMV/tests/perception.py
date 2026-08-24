@@ -11,3 +11,11 @@ class DataSenderTest:
         buffer = (400, 400, 400, 400)
         while True:
             print(*data_sender.send(buffer))
+
+
+def main() -> NoReturn:
+    test = DataSenderTest()
+    test.main()
+
+
+main()
