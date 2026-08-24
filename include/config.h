@@ -29,7 +29,7 @@
 #define DEBUG_MODE_OUTS_COMMON 12
 #define DEBUG_MODE_OUTS_MOVEMENT 13
 
-#define DEBUG_MODE DEBUG_MODE_OUTS_COMMON
+#define DEBUG_MODE DEBUG_MODE_OUTS_MOVEMENT
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //

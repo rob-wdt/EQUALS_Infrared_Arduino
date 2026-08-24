@@ -426,4 +426,95 @@ void loop()
     Serial.println(out_type);
 }
 
+#elif DEBUG_MODE == DEBUG_MODE_OUTS_MOVEMENT
+OutsHandler outs;
+MovementController movement_controller(
+    {Motor(Pin::PIN_M1_1, Pin::PIN_M1_2, MotorDirection::forward),
+     Motor(Pin::PIN_M2_1, Pin::PIN_M2_2, MotorDirection::forward),
+     Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward),
+     Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward)},
+    {MotorLocationAngle::M1_ANGLE, MotorLocationAngle::M2_ANGLE, MotorLocationAngle::M3_ANGLE, MotorLocationAngle::M4_ANGLE},
+    new PDCControl(control_gyro_align_pdc));
+CoordinatesCalculator coords;
+BNO055 gyro(GYROSCOPE_ADDRESS);
+Button button(Pin::PIN_BTN_1);
+UART uart(UART_NUM::UART_1, 230400);
+CameraDataParser cam_parser(uart);
+
+void setup()
+{
+    gyro.init();
+    cam_parser.init();
+    movement_controller.init();
+    Serial.begin(115200);
+
+    Serial.print("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to calibrate the gyroscope.");
+    while (!button.is_pressed())
+        ;
+
+    while (!gyro.calibrated())
+        ;
+
+    Serial.println("Gyroscope calibrated");
+    Serial.println("Press button #");
+    Serial.print(Pin::PIN_BTN_1);
+    Serial.println(" to set the zero angles.");
+    while (!button.is_pressed())
+        ;
+
+    gyro.set_zero_angles();
+}
+
+int move_angle = 0;
+
+void loop()
+{
+    gyro.read();
+    cam_parser.parse();
+    coords.calculate_coordinates(gyro.data(), cam_parser.data().own_goal_angle, cam_parser.data().own_goal_distance);
+
+    outs.handle(coords.coordinates(), OUTS_BOUNDS);
+
+    movement_controller.set_velocity(SPEED, move_angle, 0, gyro.data());
+    movement_controller.move();
+
+    String out_type;
+    bool in_out;
+
+    switch (outs.out_type())
+    {
+    case OutType::LEFT:
+        out_type = "LEFT";
+        in_out = true;
+        move_angle = 90;
+        break;
+    case OutType::FRONT_GOAL:
+        out_type = "FRONT";
+        in_out = true;
+        move_angle = 180;
+        break;
+    case OutType::NO:
+        out_type = "NO";
+        in_out = false;
+        break;
+    case OutType::REAR_GOAL:
+        out_type = "REAR";
+        in_out = true;
+        move_angle = 0;
+        break;
+    case OutType::RIGHT:
+        out_type = "RIGHT";
+        in_out = true;
+        move_angle = -90;
+        break;
+    }
+
+    Serial.print("In out: ");
+    Serial.print(in_out);
+    Serial.print("\tOut type: ");
+    Serial.println(out_type);
+}
+
 #endif
