@@ -20,7 +20,7 @@ class DistanceTest:
 
             obj_detector.set_strategy(DetectingBlob())
             data: ObjectData = obj_detector.find_object(
-                img, robot_type.blue_threshold(), robot_type)
+                img, cam_cfg.blue_threshold(), robot_type)
 
             print(data.raw_distance)
 
@@ -30,4 +30,5 @@ def main() -> NoReturn:
     test.main()
 
 
-main()
+if __name__ == "__main__":
+    main()
