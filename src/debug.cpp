@@ -45,10 +45,10 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_MOTORS
-Motor m1(Pin::PIN_M1_1, Pin::PIN_M1_2, MotorDirection::forward);
-Motor m2(Pin::PIN_M2_1, Pin::PIN_M2_2, MotorDirection::forward);
-Motor m3(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward);
-Motor m4(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward);
+Motor m1(Pin::PIN_M1_1, Pin::PIN_M1_2, motors_directions.m1_dir);
+Motor m2(Pin::PIN_M2_1, Pin::PIN_M2_2, motors_directions.m2_dir);
+Motor m3(Pin::PIN_M3_1, Pin::PIN_M3_2, motors_directions.m3_dir);
+Motor m4(Pin::PIN_M4_1, Pin::PIN_M4_2, motors_directions.m4_dir);
 
 void setup()
 {
@@ -194,11 +194,11 @@ void loop()
 
 #elif DEBUG_MODE == DEBUG_MODE_MOVEMENT_CONTROLLER
 MovementController movement_controller(
-    {Motor(Pin::PIN_M1_1, Pin::PIN_M1_2, MotorDirection::forward),
-     Motor(Pin::PIN_M2_1, Pin::PIN_M2_2, MotorDirection::forward),
-     Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, MotorDirection::forward),
-     Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, MotorDirection::forward)},
-    {MotorLocationAngle::M1_ANGLE, MotorLocationAngle::M2_ANGLE, MotorLocationAngle::M3_ANGLE, MotorLocationAngle::M4_ANGLE},
+    {Motor(Pin::PIN_M1_1, Pin::PIN_M1_2, motors_directions.m1_dir),
+     Motor(Pin::PIN_M2_1, Pin::PIN_M2_2, motors_directions.m2_dir),
+     Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, motors_directions.m3_dir),
+     Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, motors_directions.m4_dir)},
+    motors_loc_angles,
     new PDCControl(control_gyro_align_pdc));
 
 BNO055 gyro(GYROSCOPE_ADDRESS);

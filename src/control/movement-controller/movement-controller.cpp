@@ -1,7 +1,7 @@
 #include "movement-controller.h"
 #include <Arduino.h>
 
-MovementController::MovementController(motors motors, motors_loc_angles loc_angles, Control *align_control)
+MovementController::MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control)
     : _motors(motors), _loc_angles(loc_angles), _align_control(align_control)
 {
 }

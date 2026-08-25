@@ -7,6 +7,7 @@
 #include "utils/control/PID-control/PID-control.h"
 #include "utils/control/PDC-control/PDC-control.h"
 #include "control/outs-handler/outs-handler.h"
+#include "control/movement-controller/movement-controller.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------- GENERAL ----------------------------------------------------- //
@@ -29,7 +30,7 @@
 #define DEBUG_MODE_OUTS_COMMON 12
 #define DEBUG_MODE_OUTS_MOVEMENT 13
 
-#define DEBUG_MODE DEBUG_MODE_OUTS_MOVEMENT
+#define DEBUG_MODE DEBUG_MODE_MOVEMENT_CONTROLLER
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
@@ -55,13 +56,18 @@ const outsBounds OUTS_BOUNDS = {0, 0, 0, 0};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------- Motors ------------------------------------------------------ //
-enum MotorLocationAngle : int16_t
-{
-    M1_ANGLE = 45,
-    M2_ANGLE = 135,
-    M3_ANGLE = 225,
-    M4_ANGLE = 315
-};
+
+const motorsLocAngles motors_loc_angles = {
+    MotorLocationAngle::ANGLE_45,
+    MotorLocationAngle::ANGLE_135,
+    MotorLocationAngle::ANGLE_225,
+    MotorLocationAngle::ANGLE_315};
+
+const motorsDirections motors_directions = {
+    MotorDirection::forward,
+    MotorDirection::forward,
+    MotorDirection::forward,
+    MotorDirection::forward};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ----------------------------------------------------------- GYROSCOPE ----------------------------------------------------- //
