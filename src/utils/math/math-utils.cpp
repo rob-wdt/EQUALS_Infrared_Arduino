@@ -8,14 +8,14 @@ namespace math_utils
 
         if (exp >= 0)
         {
-            for (unsigned int i = 0; i < exp; i++)
+            for (int i = 0; i < exp; i++)
             {
                 res *= base;
             }
         }
         else
         {
-            for (unsigned int i = 0; i > exp; i--)
+            for (int i = 0; i > exp; i--)
             {
                 res /= base;
             }
