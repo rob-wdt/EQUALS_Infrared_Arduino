@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include "core/device.h"
 
-enum UART_NUM
+enum UARTNum
 {
     UART_1 = 1,
     UART_2 = 2,
@@ -13,14 +13,18 @@ enum UART_NUM
 class UART : public Device
 {
 public:
-    UART(UART_NUM uart_num, uint32_t baud_rate);
+    UART(UARTNum uart_num, uint32_t baud_rate, unsigned buffer_size, uint8_t buffer_starter);
     void init() override;
     void send(const String &data);
     void receive();
-    String recieved_data();
+    uint8_t *recieved_data() const;
+    unsigned buffer_size() const;
 
 private:
-    UART_NUM _uart_num;
+    UARTNum _uart_num;
     uint32_t _baud_rate;
-    String _recieved_data;
+    unsigned _buffer_size;
+    uint8_t _buffer_starter;
+
+    uint8_t *_recieved_data;
 };

@@ -156,8 +156,8 @@ class VisionSystem:
                 data: dict[str, ObjectData] = self.process_frame(
                     draw_objects_scopes, draw_lines)
 
-                self.__sender.send((data["blue goal"].angle, int(data["blue goal"].distance), data["yellow goal"].angle, int(
-                    data["yellow goal"].distance), data["ball"].angle, int(data["ball"].distance)))
+                self.__sender.send((data["blue goal"].angle, int(data["blue goal"].distance), data["yellow goal"].angle,
+                                    int(data["yellow goal"].distance), data["ball"].angle, int(data["ball"].distance)))
             except Exception as e:
                 print(f"Error: {e}")
 

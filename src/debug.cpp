@@ -8,7 +8,6 @@
 #include "control/movement-controller/movement-controller.h"
 #include "control/ball-detector/ball-detector.h"
 #include "core/UART/UART.h"
-#include "control/camera-data-parcer/camera-data-parser.h"
 #include "control/coordinates-calculator/coordinates-calculator.h"
 #include "control/outs-handler/outs-handler.h"
 
@@ -309,20 +308,28 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_CAM_PERCEPTION
-UART uart(UART_NUM::UART_1, 230400);
+#define UART_BUFFER_SIZE 5
+
+UART uart(UARTNum::UART_3, 230400, UART_BUFFER_SIZE, UART_BUFFER_STARTER);
 
 void setup()
 {
-    uart.init();
     Serial.begin(115200);
+    uart.init();
 }
 
 void loop()
 {
     uart.receive();
-    String data = uart.recieved_data();
-    Serial.print("Received data: ");
-    Serial.println(data);
+    auto data = uart.recieved_data();
+    // Serial.print("Received data:\t");
+
+    // for (int i = 0; i < uart.buffer_size(); i++)
+    // {
+    //     Serial.print(data[i]);
+    //     Serial.print("\t");
+    // }
+    // Serial.println();
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_CAM_DATA_PARSER
