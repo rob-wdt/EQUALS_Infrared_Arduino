@@ -1,11 +1,8 @@
-from abc import abstractmethod
-
 import settings
 import maths
 
 
 class RobotType:
-    @abstractmethod
     def __init__(self) -> None:
         pass
 
@@ -17,6 +14,9 @@ class RobotType:
 
     def red_threshold(self) -> tuple[list[int]]:
         return self.__red_threshold
+
+    def pixels_format(self) -> int:
+        return self.__pixformat
 
     def white(self) -> tuple[int, int, int]:
         return self.__white
@@ -45,6 +45,7 @@ class RobotType:
     __yellow_threshold: tuple[list[int]]
     __blue_threshold: tuple[list[int]]
     __red_threshold: tuple[list[int]]
+    __pixformat: int
     __white: tuple[int, int, int]
     __center: maths.Point
     __gain: int
@@ -63,6 +64,7 @@ class RobotAttacker(RobotType):
         self.__yellow_threshold = settings.YELLOW_THRESHOLD_ATTACKER
         self.__blue_threshold = settings.BLUE_THRESHOLD_ATTACKER
         self.__red_threshold = settings.RED_THRESHOLD_ATTACKER
+        self.__pixformat = settings.PIXELS_FORMAT_ATTACKER
         self.__white = settings.WHITE_ATTACKER
         self.__center = settings.CENTER_ATTACKER
         self.__gain = settings.GAIN_ATTACKER
@@ -80,6 +82,7 @@ class RobotDefender(RobotType):
         self.__yellow_threshold = settings.YELLOW_THRESHOLD_DEFENDER
         self.__blue_threshold = settings.BLUE_THRESHOLD_DEFENDER
         self.__red_threshold = settings.RED_THRESHOLD_DEFENDER
+        self.__pixformat = settings.PIXELS_FORMAT_DEFENDER
         self.__white = settings.WHITE_DEFENDER
         self.__center = settings.CENTER_DEFENDER
         self.__gain = settings.GAIN_DEFENDER
@@ -95,6 +98,7 @@ class CameraConfig:
         self.__yellow_threshold = robot_type.yellow_threshold()
         self.__blue_threshold = robot_type.blue_threshold()
         self.__red_threshold = robot_type.red_threshold()
+        self.__pixformat = robot_type.pixels_format()
         self.__white = robot_type.white()
         self.__center = robot_type.center()
         self.__gain = robot_type.gain()
@@ -112,6 +116,9 @@ class CameraConfig:
 
     def red_threshold(self) -> tuple[list[int]]:
         return self.__red_threshold
+
+    def pixels_format(self) -> int:
+        return self.__pixformat
 
     def white(self) -> tuple[int, int, int]:
         return self.__white

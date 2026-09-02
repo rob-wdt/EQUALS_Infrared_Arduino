@@ -1,31 +1,33 @@
-from typing import NoReturn
-
 from image import Image
-import sensor
 
-from OpenMV.CV import DetectingBlob, ObjectDetector
-from OpenMV.containers import CameraConfig, ObjectData, RobotAttacker
-from OpenMV.maths import DistanceCalculator
+from CV import ObjectDetector
+from CV import DetectingBlob
+from CV import VisionSystem
+import containers
+from CV import DistanceCalculator
 
 
 class DistanceTest:
-    def main(self) -> NoReturn:
-        robot_type = RobotAttacker()    # CHANGE THIS FOR EACH ROBOT
-        cam_cfg = CameraConfig(robot_type)
+    def main(self):
+        robot_type = containers.RobotDefender()   # CHANGE THIS FOR EACH ROBOT
+        cam_cfg = containers.CameraConfig(robot_type)
+        vs_system = VisionSystem(robot_type)
         dist_calc = DistanceCalculator()
         obj_detector = ObjectDetector(cam_cfg, dist_calc, DetectingBlob())
 
+        vs_system.init()
+
         while True:
-            img: Image = sensor.snapshot()
+            img: Image = vs_system.capture_frame()
 
             obj_detector.set_strategy(DetectingBlob())
-            data: ObjectData = obj_detector.find_object(
+            data: containers.ObjectData = obj_detector.find_object(
                 img, cam_cfg.blue_threshold(), robot_type)
 
             print(data.raw_distance)
 
 
-def main() -> NoReturn:
+def main():
     test = DistanceTest()
     test.main()
 

@@ -1,32 +1,44 @@
-from abc import abstractmethod
 import math
-from typing import Any, List, NoReturn
 
-from OpenMV import maths, settings
-from OpenMV.containers import CameraConfig, ObjectData, RobotType
-from OpenMV.maths import DistanceCalculator
-from OpenMV.perception import DataSender
-from image import Image, blob
-
+import maths
+import settings
+from containers import CameraConfig, ObjectData, RobotType
+from perception import DataSender
+from image import Image
 import sensor
 
 
+class DistanceCalculator:
+    def euclidean_distance(self, a: int | float, b: int | float) -> float:
+        return math.sqrt(a**2 + b**2)
+
+    def linearize(self, robot_type: RobotType, pixels: int) -> float:
+        res: tuple[float, float] = (0, 0)
+        pixels_abs: int = abs(pixels)
+
+        for i in range(len(robot_type.px_to_cm_table())):
+            if pixels_abs >= robot_type.px_to_cm_table()[i][0] and pixels_abs <= robot_type.px_to_cm_table()[i + 1][0]:
+                res = robot_type.px_to_cm_table()[i]
+                break
+
+        return res[1]
+
+
 class DetectingStrategy:
-    @abstractmethod
-    def get_blobs(self, img, threshold) -> List[blob]:
+    def get_blobs(self, img, threshold):
         pass
 
 
 class DetectingBlob(DetectingStrategy):
-    def get_blobs(self, img: sensor.image.Image, threshold: Any) -> List[blob]:
-        blobs: List[blob] = img.find_blobs(threshold)
+    def get_blobs(self, img: sensor.image.Image, threshold):
+        blobs = img.find_blobs(threshold)
         blobs = sorted(blobs, key=lambda b: b.area(), reverse=True)
         return blobs
 
 
 class DetectingRound(DetectingStrategy):
-    def get_blobs(self, img: sensor.image.Image, threshold: Any) -> List[blob]:
-        blobs: List[blob] = img.find_blobs(threshold)
+    def get_blobs(self, img: sensor.image.Image, threshold):
+        blobs = img.find_blobs(threshold)
         blobs = sorted(blobs, key=lambda b: b.roundness(), reverse=True)
         return blobs
 
@@ -41,12 +53,12 @@ class ObjectDetector:
         self.__strategy = strategy
         return self
 
-    def find_object(self, img: sensor.image.Image, threshold: Any, robot_type: RobotType) -> ObjectData:
-        blobs: List[blob] = self.__strategy.get_blobs(img, threshold)
+    def find_object(self, img: sensor.image.Image, threshold, robot_type: RobotType) -> ObjectData:
+        blobs = self.__strategy.get_blobs(img, threshold)
         if not blobs:
             return ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0)
 
-        max_blob: blob = blobs[0]
+        max_blob = blobs[0]
         w: float = -(max_blob.cx() - self.__cm_cfg.center().x)
         h: float = -(max_blob.cy() - self.__cm_cfg.center().y)
         distance: float = self.__dst_clc.linearize(
@@ -75,15 +87,15 @@ class VisionSystem:
 
         sensor.reset()
 
-        sensor.set_pixformat(sensor.RGB565)
+        sensor.set_pixformat(self.__cm_cfg.pixels_format())
         sensor.set_framesize(self.__cm_cfg.framesize())
         sensor.set_auto_gain(True)
         sensor.set_auto_whitebal(True)
         sensor.set_auto_exposure(True)
 
-        sensor.skip_frames(time=2000)
+        sensor.skip_frames(time=1000)
 
-        sensor.set_pixformat(sensor.RGB565)
+        sensor.set_pixformat(self.__cm_cfg.pixels_format())
         sensor.set_framesize(self.__cm_cfg.framesize())
         sensor.set_auto_gain(False, self.__cm_cfg.gain())
         sensor.set_auto_whitebal(False, self.__cm_cfg.white())
@@ -150,7 +162,7 @@ class VisionSystem:
                 img.draw_line(int(self.__cm_cfg.center().x), int(self.__cm_cfg.center().y), int(
                     ball.center.x), int(ball.center.y), color=(255, 255, 255), thickness=5)
 
-    def run(self, draw_objects_scopes: bool, draw_lines: bool) -> NoReturn:
+    def run(self, draw_objects_scopes: bool, draw_lines: bool):
         while True:
             try:
                 data: dict[str, ObjectData] = self.process_frame(
