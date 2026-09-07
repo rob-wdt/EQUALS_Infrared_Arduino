@@ -30,7 +30,7 @@
 #define DEBUG_MODE_OUTS_COMMON 12
 #define DEBUG_MODE_OUTS_MOVEMENT 13
 
-#define DEBUG_MODE DEBUG_MODE_GYROSCOPE
+#define DEBUG_MODE DEBUG_MODE_PID
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
@@ -80,5 +80,5 @@ const motorsDirections motors_directions = {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ----------------------------------------------------------- CONTROLS ------------------------------------------------------ //
-const PIDCoefficients control_gyro_align_pid = {0.5, 0.1, 0.05};
+const PIDCoefficients control_gyro_align_pid = {2.0, 0.0, 0.0};
 const PDCCoefficients control_gyro_align_pdc = {0.5, 0.05, 0.1};
