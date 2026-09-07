@@ -18,16 +18,16 @@ void MovementController::set_velocity(int16_t lin_speed, int16_t move_angle, int
 {
     int16_t angular_speed = _align_control->calculate(align_angle - gyro_data.yaw);
 
-    int16_t speed = _motors.m1.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m1_angle)) + angular_speed;
+    int16_t speed = _motors.m1.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m1_angle)) + _motors.m1.direction() * angular_speed;
     _motors.m1.set_speed(speed);
 
-    speed = _motors.m2.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m2_angle)) + angular_speed;
+    speed = _motors.m2.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m2_angle)) + _motors.m2.direction() * angular_speed;
     _motors.m2.set_speed(speed);
 
-    speed = _motors.m3.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m3_angle)) + angular_speed;
+    speed = _motors.m3.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m3_angle)) + _motors.m3.direction() * angular_speed;
     _motors.m3.set_speed(speed);
 
-    speed = _motors.m4.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m4_angle)) + angular_speed;
+    speed = _motors.m4.direction() * lin_speed * cos(radians(move_angle + _loc_angles.m4_angle)) + _motors.m4.direction() * angular_speed;
     _motors.m4.set_speed(speed);
 }
 
