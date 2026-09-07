@@ -28,7 +28,7 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_BUTTON
-Button button(Pin::PIN_BTN_3);
+Button button(Pin::PIN_BTN_1);
 
 void setup()
 {
@@ -82,8 +82,11 @@ void setup()
     Serial.print("Press button #");
     Serial.print(Pin::PIN_BTN_1);
     Serial.println(" to calibrate the gyroscope.");
+    button.reset();
     while (!button.is_pressed())
-        ;
+    {
+        button.read();
+    }
 
     while (!gyro.calibrated())
         ;
