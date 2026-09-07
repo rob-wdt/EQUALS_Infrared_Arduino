@@ -40,18 +40,18 @@ void BNO055::read()
 {
     sensors_event_t event;
     _bno.getEvent(&event);
-    _data.pitch = _wrap_angle(event.orientation.x - _zero_angles.pitch);
+    _data.yaw = _wrap_angle(event.orientation.x - _zero_angles.yaw);
     _data.roll = _wrap_angle(event.orientation.y - _zero_angles.roll);
-    _data.yaw = _wrap_angle(event.orientation.z - _zero_angles.yaw);
+    _data.pitch = _wrap_angle(event.orientation.z - _zero_angles.pitch);
 }
 
 void BNO055::set_zero_angles()
 {
     sensors_event_t event;
     _bno.getEvent(&event);
-    _zero_angles.pitch = event.orientation.x;
+    _zero_angles.pitch = event.orientation.z;
     _zero_angles.roll = event.orientation.y;
-    _zero_angles.yaw = event.orientation.z;
+    _zero_angles.yaw = event.orientation.x;
 }
 
 gyroData BNO055::data() { return _data; }
