@@ -10,6 +10,7 @@
 #include "core/UART/UART.h"
 #include "control/coordinates-calculator/coordinates-calculator.h"
 #include "control/outs-handler/outs-handler.h"
+#include "control/timer/timer.h"
 
 #if DEBUG_MODE == DEBUG_MODE_PHOTOTRANSISTOR
 Phototransistor pt(Pin::PIN_PHOTOTRANSISTOR);
@@ -532,6 +533,24 @@ void loop()
     Serial.print(in_out);
     Serial.print("\tOut type: ");
     Serial.println(out_type);
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_TIMER
+Timer timer;
+
+void setup()
+{
+    Serial.begin(115200);
+    timer.set_time_ms(5000);
+}
+
+void loop()
+{
+    if (timer.time_is_up())
+    {
+        Serial.println("Time is up");
+        timer.reset();
+    }
 }
 
 #endif

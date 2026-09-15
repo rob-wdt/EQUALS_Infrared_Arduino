@@ -29,8 +29,9 @@
 #define DEBUG_MODE_CAM_DATA_PARSER 11
 #define DEBUG_MODE_OUTS_COMMON 12
 #define DEBUG_MODE_OUTS_MOVEMENT 13
+#define DEBUG_MODE_TIMER 14
 
-#define DEBUG_MODE DEBUG_MODE_MOVEMENT_CONTROLLER
+#define DEBUG_MODE DEBUG_MODE_TIMER
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
