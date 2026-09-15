@@ -11,6 +11,7 @@
 #include "control/coordinates-calculator/coordinates-calculator.h"
 #include "control/outs-handler/outs-handler.h"
 #include "control/timer/timer.h"
+#include "core/kicker/kicker.h"
 
 #if DEBUG_MODE == DEBUG_MODE_PHOTOTRANSISTOR
 Phototransistor pt(Pin::PIN_PHOTOTRANSISTOR);
@@ -551,6 +552,28 @@ void loop()
         Serial.println("Time is up");
         timer.reset();
     }
+}
+
+#elif DEBUG_MODE == DEBUG_MODE_KICKER
+Kicker kicker(Pin::PIN_SOLENOID, KICKING_TIME_MS);
+
+Timer kicking_timer;
+
+void setup()
+{
+    Serial.begin(115200);
+    kicker.init();
+    kicking_timer.set_time_ms(3000);
+}
+
+void loop()
+{
+    if (kicking_timer.time_is_up())
+    {
+        kicker.kick();
+        kicking_timer.reset();
+    }
+    kicker.unkick();
 }
 
 #endif
