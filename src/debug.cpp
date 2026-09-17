@@ -332,15 +332,14 @@ void setup()
 void loop()
 {
     uart.receive();
-    auto data = uart.recieved_data();
-    // Serial.print("Received data:\t");
 
-    // for (int i = 0; i < uart.buffer_size(); i++)
-    // {
-    //     Serial.print(data[i]);
-    //     Serial.print("\t");
-    // }
-    // Serial.println();
+    Serial.print("Received data:\t");
+    for (int i = 0; i < uart.buffer_size(); i++)
+    {
+        Serial.print(uart.recieved_data()[i]);
+        Serial.print("\t");
+    }
+    Serial.println();
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_CAM_DATA_PARSER
