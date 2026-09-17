@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include "core/device.h"
 
-enum UARTNum
+enum UARTNum : int
 {
     UART_1 = 1,
     UART_2 = 2,
@@ -17,14 +17,19 @@ public:
     void init() override;
     void send(const String &data);
     void receive();
-    uint8_t *recieved_data() const;
+    const int *recieved_data() const;
     unsigned buffer_size() const;
 
 private:
     UARTNum _uart_num;
     uint32_t _baud_rate;
-    unsigned _buffer_size;
+
+    static const unsigned MAX_BUFFER_SIZE = 16;
+    int _buffer_size;
     uint8_t _buffer_starter;
 
-    uint8_t *_recieved_data;
+    int _recieved_data[MAX_BUFFER_SIZE];
+
+    int _available();
+    int _read_byte();
 };
