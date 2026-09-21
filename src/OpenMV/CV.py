@@ -137,10 +137,10 @@ class VisionSystem:
 
         return {"blue goal": blue_goal, "yellow goal": yellow_goal, "ball": ball}
 
-    def __draw_debug_info(self, img: sensor.image.Image, blue_goal: ObjectData, yellow_goal: ObjectData, ball: ObjectData, draw_lines: bool) -> None:
+    def draw_debug_info(self, img: sensor.image.Image, blue_goal: ObjectData, yellow_goal: ObjectData, ball: ObjectData, draw_lines: bool) -> None:
         if blue_goal:
             img.draw_rectangle(int(blue_goal.left_upper_corner.x), int(
-                blue_goal.left_upper_corner.y), blue_goal.w, blue_goal.h, color=(0, 0, 0))
+                blue_goal.left_upper_corner.y), blue_goal.w, blue_goal.h, color=(0, 0, 0), thickness=5)
 
             if draw_lines:
                 img.draw_line(int(self.__cm_cfg.center().x), int(self.__cm_cfg.center().y), int(
@@ -148,7 +148,7 @@ class VisionSystem:
 
         if yellow_goal:
             img.draw_rectangle(int(yellow_goal.left_upper_corner.x), int(
-                yellow_goal.left_upper_corner.y), yellow_goal.w, yellow_goal.h, color=(0, 0, 0))
+                yellow_goal.left_upper_corner.y), yellow_goal.w, yellow_goal.h, color=(0, 0, 0), thickness=5)
 
             if draw_lines:
                 img.draw_line(int(self.__cm_cfg.center().x), int(self.__cm_cfg.center().y), int(

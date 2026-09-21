@@ -6,8 +6,10 @@ from CV import VisionSystem
 import containers
 from CV import DistanceCalculator
 
+import maths
 
-class DistanceTest:
+
+class DistanceCMTest:
     def main(self):
         robot_type = containers.RobotDefender()   # CHANGE THIS FOR EACH ROBOT
         cam_cfg = containers.CameraConfig(robot_type)
@@ -24,11 +26,13 @@ class DistanceTest:
             data: containers.ObjectData = obj_detector.find_object(
                 img, cam_cfg.blue_threshold(), robot_type)
 
-            print(data.raw_distance)
+            vs_system.draw_debug_info(img, data, containers.ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0), containers.ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0), True)
+
+            print(data.distance, data.raw_distance)
 
 
 def main():
-    test = DistanceTest()
+    test = DistanceCMTest()
     test.main()
 
 
