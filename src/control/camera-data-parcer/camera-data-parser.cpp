@@ -6,30 +6,10 @@ void CameraDataParser::init() { _uart.init(); }
 
 void CameraDataParser::parse()
 {
-    // _uart.receive();
-    // String data = _uart.recieved_data();
+    _uart.receive();
+    auto data = _uart.recieved_data();
 
-    // char sep = ',';
-    // int parced_data[6] = {};
-    // uint8_t index = 0;
-
-    // String word = "";
-    // for (auto i : data)
-    // {
-    //     if (i != sep)
-    //     {
-    //         word += i;
-    //     }
-    //     else
-    //     {
-    //         parced_data[index] = word.toInt();
-    //         index++;
-    //         word = "";
-    //     }
-    // }
-    // parced_data[index] = word.toInt();
-
-    // _data = {parced_data[0], parced_data[1], parced_data[2], parced_data[3], parced_data[4], parced_data[5]};
+    _data = {data[1], data[2], data[3], data[4], data[5], data[6]};
 }
 
 cameraData CameraDataParser::data() { return _data; }

@@ -11,6 +11,7 @@
 #include "control/coordinates-calculator/coordinates-calculator.h"
 #include "control/outs-handler/outs-handler.h"
 #include "control/timer/timer.h"
+#include "control/camera-data-parcer/camera-data-parser.h"
 
 #if DEBUG_MODE == DEBUG_MODE_PHOTOTRANSISTOR
 Phototransistor pt(Pin::PIN_PHOTOTRANSISTOR);
@@ -343,30 +344,31 @@ void loop()
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_CAM_DATA_PARSER
-UART uart(UART_NUM::UART_1, 230400);
+UART uart(UARTNum::UART_3, 230400, UART_BUFFER_SIZE, UART_BUFFER_STARTER);
 CameraDataParser cam_data_parser(uart);
 
 void setup()
 {
-    cam_data_parser.init();
     Serial.begin(115200);
+    cam_data_parser.init();
 }
 
 void loop()
 {
     cam_data_parser.parse();
+
     Serial.print("Parsed data:\tBall angle: ");
     Serial.print(cam_data_parser.data().ball_angle);
-    Serial.print(" Ball distance: ");
+    Serial.print("   Ball distance: ");
     Serial.print(cam_data_parser.data().ball_distance);
-    Serial.print(" Own goal angle: ");
+    Serial.print("   Own goal angle: ");
     Serial.print(cam_data_parser.data().own_goal_angle);
-    Serial.print(" Own goal distance: ");
+    Serial.print("   Own goal distance: ");
     Serial.print(cam_data_parser.data().own_goal_distance);
-    Serial.print(" Opp goal angle: ");
+    Serial.print("   Opp goal angle: ");
     Serial.print(cam_data_parser.data().own_goal_angle);
-    Serial.print(" Opp goal distance: ");
-    Serial.print(cam_data_parser.data().own_goal_distance);
+    Serial.print("   Opp goal distance: ");
+    Serial.println(cam_data_parser.data().own_goal_distance);
 }
 
 #elif DEBUG_MODE == DEBUG_MODE_OUTS_COMMON
