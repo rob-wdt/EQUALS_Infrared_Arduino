@@ -1,10 +1,12 @@
 import CV
-from OpenMV.containers import RobotAttacker, RobotDefender
+from containers import RobotAttacker, RobotDefender
 
 
 def main() -> None:
-    robot_type = RobotAttacker()
+    robot_type = RobotDefender()
     vision = CV.VisionSystem(robot_type)
+
+    vision.init()
 
     vision.run(draw_objects_scopes=True, draw_lines=True)
 

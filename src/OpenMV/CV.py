@@ -63,8 +63,8 @@ class ObjectDetector:
             return ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0)
 
         max_blob = blobs[0]
-        w: float = -(max_blob.cx() - self.__cm_cfg.center().x)
-        h: float = -(max_blob.cy() - self.__cm_cfg.center().y)
+        w: float = (max_blob.cx() - self.__cm_cfg.center().x)
+        h: float = (max_blob.cy() - self.__cm_cfg.center().y)
         distance: float = self.__dst_clc.linearize(
             robot_type, int(self.__dst_clc.euclidean_distance(w, h)))
 
@@ -136,7 +136,7 @@ class VisionSystem:
             img, self.__cm_cfg.red_threshold(), self.__robot_type)
 
         if draw_objects_scopes:
-            self.__draw_debug_info(
+            self.draw_debug_info(
                 img, blue_goal, yellow_goal, ball, draw_lines)
 
         return {"blue goal": blue_goal, "yellow goal": yellow_goal, "ball": ball}
@@ -168,14 +168,11 @@ class VisionSystem:
 
     def run(self, draw_objects_scopes: bool, draw_lines: bool):
         while True:
-            try:
-                data: dict[str, ObjectData] = self.process_frame(
-                    draw_objects_scopes, draw_lines)
+            data: dict[str, ObjectData] = self.process_frame(
+                draw_objects_scopes, draw_lines)
 
-                self.__sender.send((data["blue goal"].angle, int(data["blue goal"].distance), data["yellow goal"].angle,
-                                    int(data["yellow goal"].distance), data["ball"].angle, int(data["ball"].distance)))
-            except Exception as e:
-                print(f"Error: {e}")
+            self.__sender.send((data["blue goal"].angle, int(data["blue goal"].distance), data["yellow goal"].angle,
+                                int(data["yellow goal"].distance), data["ball"].angle, int(data["ball"].distance)))
 
     __robot_type: RobotType
     __cm_cfg: CameraConfig
