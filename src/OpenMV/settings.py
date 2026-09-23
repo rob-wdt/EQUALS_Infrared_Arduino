@@ -47,7 +47,7 @@ PX_TO_CM_ATTACKER = (
 ########################################################################################################################
 # ----------------------------------------------- DEFENDER ----------------------------------------------------------- #
 
-YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 0, 0, 0, 0, 0)]
+YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(83, 100, -29, 40, 26, 62)]
 BLUE_THRESHOLD_DEFENDER: tuple[list[int]] = [(57, 100, -37, -18, -19, 9)]
 RED_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 0, 0, 0, 0, 0)]
 
@@ -64,7 +64,7 @@ if FRAMESIZE_DEFENDER == sensor.QVGA:
 
 CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2 + 15, FRAME_H_DEFENDER // 2 - 6)
 
-MASK_RADIUS_DEFENDER: int = 100
+MASK_RADIUS_DEFENDER: int = 120
 
 ROBOT_RADIUS_DEFENDER: int = 20
 

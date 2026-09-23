@@ -24,9 +24,9 @@ class DistanceCMTest:
 
             obj_detector.set_strategy(DetectingBlob())
             data: containers.ObjectData = obj_detector.find_object(
-                img, cam_cfg.blue_threshold(), robot_type)
+                img, cam_cfg.yellow_threshold(), robot_type)
 
-            vs_system.draw_debug_info(img, data, containers.ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0), containers.ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0), True)
+            vs_system.draw_debug_info(img, containers.ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0), data, containers.ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0), True)
 
             print(data.distance, data.raw_distance)
 

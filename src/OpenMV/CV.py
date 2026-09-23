@@ -17,9 +17,13 @@ class DistanceCalculator:
         pixels_abs: int = abs(pixels)
 
         for i in range(len(robot_type.px_to_cm_table())):
-            if pixels_abs >= robot_type.px_to_cm_table()[i][0] and pixels_abs <= robot_type.px_to_cm_table()[i + 1][0]:
-                res = robot_type.px_to_cm_table()[i]
-                break
+            if i < len(robot_type.px_to_cm_table()) - 1:
+                if pixels_abs >= robot_type.px_to_cm_table()[i][0] and pixels_abs <= robot_type.px_to_cm_table()[i + 1][0]:
+                    res = robot_type.px_to_cm_table()[i]
+                    break
+
+            else:
+                res = robot_type.px_to_cm_table()[-1]
 
         return res[1]
 
