@@ -9,6 +9,6 @@ public:
     void reset();
 
 private:
-    long _set_time_ms;
-    long _mark;
+    unsigned long _set_time_ms;
+    unsigned long _mark;
 };
