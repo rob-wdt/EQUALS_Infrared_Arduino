@@ -61,12 +61,13 @@ void Robot::listen()
 void Robot::calculate_coords()
 {
     _coords.calculate_coordinates(_gyro.data(), _cam_parser.data().own_goal_angle, _cam_parser.data().own_goal_distance);
+    _outs_handler.handle(_coords.coordinates(), OUTS_BOUNDS);
 }
 
 void Robot::update()
 {
+    listen();
     calculate_coords();
-    _outs_handler.handle(_coords.coordinates(), OUTS_BOUNDS);
 
     _role->update(_cam_parser.data());
 
