@@ -14,27 +14,6 @@
 #define SPEED 100
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// --------------------------------------------------------------- DEBUG ----------------------------------------------------- //
-#define DEBUG_MODE_NONE 0
-#define DEBUG_MODE_PHOTOTRANSISTOR 1
-#define DEBUG_MODE_BUTTON 2
-#define DEBUG_MODE_MOTORS 3
-#define DEBUG_MODE_GYROSCOPE 4
-#define DEBUG_MODE_PID 5
-#define DEBUG_MODE_PDC 6
-#define DEBUG_MODE_MOVEMENT_CONTROLLER 7
-#define DEBUG_MODE_BALL_DETECTOR 8
-#define DEBUG_MODE_COORDS 9
-#define DEBUG_MODE_CAM_PERCEPTION 10
-#define DEBUG_MODE_CAM_DATA_PARSER 11
-#define DEBUG_MODE_OUTS_COMMON 12
-#define DEBUG_MODE_OUTS_MOVEMENT 13
-#define DEBUG_MODE_TIMER 14
-#define DEBUG_MODE_KICKER 15
-
-#define DEBUG_MODE DEBUG_MODE_CAM_PERCEPTION
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------- PINS ------------------------------------------------------ //
 enum Pin : uint8_t
 {
