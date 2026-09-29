@@ -11,12 +11,13 @@
 #include "core/sensors/button/button.h"
 #include "control/camera-data-parser/camera-data-parser.h"
 
+#include "management/config/robot-config.h"
 #include "management/role/role.h"
 
 class Robot
 {
 public:
-    Robot(Role *initial_role, BallDetector bd, OutsHandler oh, CoordinatesCalculator coords, CameraDataParser cam_parser, MovementController mc, BNO055 gyro, Button gyro_button);
+    Robot(Role *initial_role, RobotType robot_type);
     void init();
     void calibrate_gyro();
     void listen();
@@ -34,4 +35,6 @@ private:
     Button _gyro_button;
 
     Role *_role;
+    RobotType _robot_type;
+    RobotConfig _config;
 };

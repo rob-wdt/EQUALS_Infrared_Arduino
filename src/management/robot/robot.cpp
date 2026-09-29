@@ -1,20 +1,17 @@
 #include "robot.h"
 
-Robot::Robot(Role *initial_role,
-             BallDetector bd,
-             OutsHandler oh,
-             CoordinatesCalculator coords,
-             CameraDataParser cam_parser,
-             MovementController mc,
-             BNO055 gyro,
-             Button gyro_button) : _role(initial_role),
-                                   _ball_detector(bd),
-                                   _outs_handler(oh),
-                                   _coords(coords),
-                                   _cam_parser(cam_parser),
-                                   _movement_controller(mc),
-                                   _gyro(gyro),
-                                   _gyro_button(gyro_button) {}
+Robot::Robot(Role *initial_role, RobotType robot_type) : _role(initial_role),
+                                                         _robot_type(robot_type),
+                                                         _config(_robot_type),
+                                                         _ball_detector(Phototransistor(_config.pins().phototransistor), _config.phototransistor_threshold()),
+                                                         _cam_parser(UART(_config.UART_config().num, _config.UART_config().baudrate, _config.UART_config().buffer_size, _config.UART_config().buffer_starter)),
+                                                         _movement_controller(motors{
+                                                                                  Motor(_config.pins().m1_1, _config.pins().m1_2, _config.motors_config().directions.m1_dir),
+                                                                                  Motor(_config.pins().m2_1, _config.pins().m2_2, _config.motors_config().directions.m2_dir),
+                                                                                  Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
+                                                                                  Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
+                                                                              _config.motors_config().loc_angles, new PDCControl(_config.controls_config().pdc)),
+                                                         _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1) {}
 
 void Robot::init()
 {
@@ -30,7 +27,7 @@ void Robot::calibrate_gyro()
     Serial.begin(115200);
 
     Serial.print("Press button #");
-    Serial.print(Pin::PIN_BTN_1);
+    Serial.print(_config.pins().btn1);
     Serial.println(" to calibrate the gyroscope.");
     _gyro_button.reset();
     while (!_gyro_button.is_pressed())
@@ -43,7 +40,7 @@ void Robot::calibrate_gyro()
 
     Serial.println("Gyroscope calibrated");
     Serial.println("Press button #");
-    Serial.print(Pin::PIN_BTN_1);
+    Serial.print(_config.pins().btn1);
     Serial.println(" to set the zero angles.");
     while (!_gyro_button.is_pressed())
         ;
@@ -61,7 +58,7 @@ void Robot::listen()
 void Robot::calculate_coords()
 {
     _coords.calculate_coordinates(_gyro.data(), _cam_parser.data().own_goal_angle, _cam_parser.data().own_goal_distance);
-    _outs_handler.handle(_coords.coordinates(), OUTS_BOUNDS);
+    _outs_handler.handle(_coords.coordinates(), _config.outs_bounds());
 }
 
 void Robot::update()
@@ -78,16 +75,16 @@ void Robot::update()
         _movement_controller.move();
         break;
     case OutType::LEFT:
-        _movement_controller.set_velocity(SPEED, 90, _role->align_angle(), _gyro.data());
+        _movement_controller.set_velocity(_config.speed(), 90, _role->align_angle(), _gyro.data());
         break;
     case OutType::RIGHT:
-        _movement_controller.set_velocity(SPEED, -90, _role->align_angle(), _gyro.data());
+        _movement_controller.set_velocity(_config.speed(), -90, _role->align_angle(), _gyro.data());
         break;
     case OutType::FRONT_GOAL:
-        _movement_controller.set_velocity(SPEED, 180, _role->align_angle(), _gyro.data());
+        _movement_controller.set_velocity(_config.speed(), 180, _role->align_angle(), _gyro.data());
         break;
     case OutType::REAR_GOAL:
-        _movement_controller.set_velocity(SPEED, 0, _role->align_angle(), _gyro.data());
+        _movement_controller.set_velocity(_config.speed(), 0, _role->align_angle(), _gyro.data());
         break;
     }
 }

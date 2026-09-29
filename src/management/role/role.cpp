@@ -23,11 +23,11 @@ void RoleAttacker::update(cameraData cam_data)
     }
 }
 
-RoleDefender::RoleDefender(double move_koef) : _koef(_koef) {}
+RoleDefender::RoleDefender(double move_coef) : _coef(_coef) {}
 
 void RoleDefender::update(cameraData cam_data)
 {
     _align_angle = 0;
-    _lin_speed = _koef * cam_data.ball_angle;
+    _lin_speed = _coef * cam_data.ball_angle;
     _move_angle = 90;
 }

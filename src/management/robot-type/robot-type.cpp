@@ -1,0 +1,84 @@
+#include "robot-type.h"
+
+RobotType::RobotType() {}
+
+controlsConfig RobotType::controls_config() { return _controls_config; }
+int RobotType::defender_move_coef() { return _defender_move_coef; }
+int RobotType::gyro_address() { return _gyroscope_address; }
+int RobotType::kicking_time_ms() { return _kicking_time_ms; }
+motorsConfig RobotType::motors_config() { return _motors_config; }
+outsBounds RobotType::outs_bounds() { return _outs; }
+int RobotType::phototransistor_threshold() { return _phototransistor_threshold; }
+pin RobotType::pins() { return _pins; }
+int RobotType::speed() { return _speed; }
+UARTConfig RobotType::UART_config() { return _uart_config; }
+
+pin pins_violet = {
+    PinViolet::PIN_PHOTOTRANSISTOR,
+    PinViolet::PIN_BTN_1,
+    PinViolet::PIN_BTN_2,
+    PinViolet::PIN_BTN_3,
+    PinViolet::PIN_M1_1,
+    PinViolet::PIN_M1_2,
+    PinViolet::PIN_M2_1,
+    PinViolet::PIN_M2_2,
+    PinViolet::PIN_M3_1,
+    PinViolet::PIN_M3_2,
+    PinViolet::PIN_M4_1,
+    PinViolet::PIN_M4_2,
+    PinViolet::PIN_SOLENOID};
+
+UARTConfig uart_config_violet = {UART_num_violet, UART_BAUDRATE_VIOLET, UART_BUFFER_SIZE_VIOLET, UART_BUFFER_STARTER_VIOLET};
+
+motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet};
+
+controlsConfig controls_config_violet = {control_gyro_align_pid_violet, control_gyro_align_pdc_violet};
+
+RobotViolet::RobotViolet() : RobotType()
+{
+    _speed = SPEED_VIOLET;
+    _pins = pins_violet;
+    _uart_config = uart_config_violet;
+    _outs = outs_bounds_violet;
+    _motors_config = motors_config_violet;
+    _gyroscope_address = GYROSCOPE_ADDRESS_VIOLET;
+    _controls_config = controls_config_violet;
+    _kicking_time_ms = KICKING_TIME_MS_VIOLET;
+    _phototransistor_threshold = PHOTOTRANSISTOR_THRESHOLD_VIOLET;
+    _defender_move_coef = DEFENDER_MOVE_COEF_VIOLET;
+}
+
+pin pins_white = {
+    PinWhite::PIN_PHOTOTRANSISTOR,
+    PinWhite::PIN_BTN_1,
+    PinWhite::PIN_BTN_2,
+    PinWhite::PIN_BTN_3,
+    PinWhite::PIN_M1_1,
+    PinWhite::PIN_M1_2,
+    PinWhite::PIN_M2_1,
+    PinWhite::PIN_M2_2,
+    PinWhite::PIN_M3_1,
+    PinWhite::PIN_M3_2,
+    PinWhite::PIN_M4_1,
+    PinWhite::PIN_M4_2,
+    PinWhite::PIN_SOLENOID};
+
+UARTConfig uart_config_white = {UART_num_white, UART_BAUDRATE_WHITE, UART_BUFFER_SIZE_WHITE, UART_BUFFER_STARTER_WHITE};
+
+motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white};
+
+controlsConfig controls_config_white = {control_gyro_align_pid_white, control_gyro_align_pdc_white};
+
+RobotWhite::RobotWhite() : RobotType()
+{
+    _speed = SPEED_WHITE;
+    _pins = pins_white;
+    _uart_config = uart_config_white;
+    _outs = outs_bounds_white;
+    _motors_config = motors_config_white;
+    _gyroscope_address = GYROSCOPE_ADDRESS_WHITE;
+    _controls_config = controls_config_white;
+    _kicking_time_ms = KICKING_TIME_MS_WHITE;
+    _phototransistor_threshold = PHOTOTRANSISTOR_THRESHOLD_WHITE;
+    _defender_move_coef = DEFENDER_MOVE_COEF_WHITE;
+}

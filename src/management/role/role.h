@@ -25,9 +25,9 @@ public:
 class RoleDefender : public Role
 {
 public:
-    RoleDefender(double move_koef);
+    RoleDefender(double move_coef);
     void update(cameraData cam_data) override;
 
 private:
-    double _koef;
+    double _coef;
 };
