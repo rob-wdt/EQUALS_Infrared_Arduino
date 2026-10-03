@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "core/UART/UART.h"
-#include "control/camera-data-parcer/camera-data-parser.h"
+#include "control/camera-data-parser/camera-data-parser.h"
 
 class CamDataParserTest
 {

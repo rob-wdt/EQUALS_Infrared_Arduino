@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include "core/motor/motor.h"
 #include "config.h"
 
@@ -19,7 +20,7 @@ private:
     Motor _motor;
 };
 
-MotorTest test(Pin::PIN_M1_1, Pin::PIN_M1_2, motors_directions.m1_dir);
+MotorTest test(Pin::PIN_M4_1, Pin::PIN_M4_2, motors_directions.m1_dir);
 
 void setup()
 {
