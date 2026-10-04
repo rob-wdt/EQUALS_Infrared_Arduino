@@ -12,6 +12,8 @@ public:
     void reset();
     bool is_pressed();
 
+    int pin();
+
 private:
     uint8_t _pin;
     bool _is_pressed;
