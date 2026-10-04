@@ -12,20 +12,24 @@
 #include "control/camera-data-parser/camera-data-parser.h"
 
 #include "management/config/robot-config.h"
-#include "management/role/role.h"
+#include "core/kicker/kicker.h"
+#include "management/state-machine/state-machine.h"
 
 class Robot
 {
 public:
-    Robot(Role *initial_role, RobotType robot_type);
+    Robot(RoleKind start_role, RobotType robot_type);
     void init();
     void calibrate_gyro();
     void listen();
     void calculate_coords();
     void update();
-    void set_role(Role *role);
 
 private:
+    // _config must be declared first: the members below are built from it
+    RobotType _robot_type;
+    RobotConfig _config;
+
     BallDetector _ball_detector;
     OutsHandler _outs_handler;
     CoordinatesCalculator _coords;
@@ -33,8 +37,13 @@ private:
     MovementController _movement_controller;
     BNO055 _gyro;
     Button _gyro_button;
+    Button _start_button;
+    Button _stop_button;
+    Kicker _kicker;
 
-    Role *_role;
-    RobotType _robot_type;
-    RobotConfig _config;
+    StateMachine _fsm;
+    RoleKind _start_role;
+
+    StateContext _make_context();
+    void _apply(Command cmd);
 };

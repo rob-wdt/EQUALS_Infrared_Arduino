@@ -20,8 +20,7 @@ private:
 };
 
 RobotViolet robot_type;
-RobotConfig config(robot_type);
-Robot robot(new RoleDefender(config.defender_move_coef()), robot_type);
+Robot robot(RoleKind::DEFENDER, robot_type);
 
 RobotTest test(robot);
 
