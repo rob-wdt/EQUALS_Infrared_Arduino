@@ -7,6 +7,7 @@
 #include "core/sensors/button/button.h"
 #include "core/UART/UART.h"
 #include "control/camera-data-parser/camera-data-parser.h"
+#include "management/config/robot-config.h"
 
 class OutsMovementTest
 {
@@ -20,7 +21,7 @@ public:
         Serial.begin(115200);
 
         Serial.print("Press button #");
-        Serial.print(Pin::PIN_BTN_1);
+        Serial.print(_button.pin());
         Serial.println(" to calibrate the gyroscope.");
         while (!_button.is_pressed())
             ;
@@ -30,22 +31,22 @@ public:
 
         Serial.println("Gyroscope calibrated");
         Serial.println("Press button #");
-        Serial.print(Pin::PIN_BTN_1);
+        Serial.print(_button.pin());
         Serial.println(" to set the zero angles.");
         while (!_button.is_pressed())
             ;
 
         _gyro.set_zero_angles();
     }
-    void loop()
+    void loop(outsBounds outs_bounds, int speed)
     {
         _gyro.read();
         _cam_parser.parse();
         _coords.calculate_coordinates(_gyro.data(), _cam_parser.data().own_goal_angle, _cam_parser.data().own_goal_distance);
 
-        _outs.handle(_coords.coordinates(), OUTS_BOUNDS);
+        _outs.handle(_coords.coordinates(), outs_bounds);
 
-        _m.set_velocity(SPEED, _move_angle, 0, _gyro.data());
+        _m.set_velocity(speed, _move_angle, 0, _gyro.data());
         _m.move();
 
         String out_type;
@@ -97,18 +98,21 @@ private:
     int _move_angle = 0;
 };
 
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
 OutsHandler outs;
 MovementController movement_controller(
-    {Motor(Pin::PIN_M1_1, Pin::PIN_M1_2, motors_directions.m1_dir),
-     Motor(Pin::PIN_M2_1, Pin::PIN_M2_2, motors_directions.m2_dir),
-     Motor(Pin::PIN_M3_1, Pin::PIN_M3_2, motors_directions.m3_dir),
-     Motor(Pin::PIN_M4_1, Pin::PIN_M4_2, motors_directions.m4_dir)},
-    motors_loc_angles,
-    new PDCControl(control_gyro_align_pdc));
+    {Motor(config.pins().m1_1, config.pins().m1_2, config.motors_config().directions.m1_dir),
+     Motor(config.pins().m2_1, config.pins().m2_2, config.motors_config().directions.m2_dir),
+     Motor(config.pins().m3_1, config.pins().m3_2, config.motors_config().directions.m3_dir),
+     Motor(config.pins().m4_1, config.pins().m4_2, config.motors_config().directions.m4_dir)},
+    config.motors_config().loc_angles,
+    new PDCControl(config.controls_config().pdc));
 CoordinatesCalculator coords;
-BNO055 gyro(GYROSCOPE_ADDRESS);
-Button button(Pin::PIN_BTN_1);
-UART uart(UARTNum::UART_1, 230400, UART_BUFFER_SIZE, UART_BUFFER_STARTER);
+BNO055 gyro(config.gyro_address());
+Button button(config.pins().btn1);
+UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CameraDataParser cam_parser(uart);
 
 OutsMovementTest test(outs, movement_controller, coords, gyro, button, uart, cam_parser);
@@ -120,5 +124,5 @@ void setup()
 
 void loop()
 {
-    test.loop();
+    test.loop(config.outs_bounds(), config.speed());
 }
