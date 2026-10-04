@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "control/ball-detector/ball-detector.h"
+#include "management/config/robot-config.h"
 
 #define THRESHOLD 1
 
@@ -28,7 +29,10 @@ private:
     BallDetector _b;
 };
 
-BallDetector ball_detector(Phototransistor(Pin::PIN_PHOTOTRANSISTOR), THRESHOLD);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+BallDetector ball_detector(Phototransistor(config.pins().phototransistor), THRESHOLD);
 
 BallDetectorTest test(ball_detector);
 
