@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "core/UART/UART.h"
+#include "management/config/robot-config.h"
 
 #define UART_BUFFER_SIZE 5
 
@@ -30,7 +31,10 @@ private:
     UART _uart;
 };
 
-UART uart(UARTNum::UART_3, 230400, UART_BUFFER_SIZE, UART_BUFFER_STARTER);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CamPerceptionTest test(uart);
 
 void setup()
