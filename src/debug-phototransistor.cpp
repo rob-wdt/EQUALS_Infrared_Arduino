@@ -1,5 +1,6 @@
 #include "core/sensors/phototransistor/phototransistor.h"
 #include "config.h"
+#include "management/config/robot-config.h"
 
 class PhototransistorTest
 {
@@ -21,7 +22,10 @@ private:
     Phototransistor _phototransistor;
 };
 
-PhototransistorTest test(Pin::PIN_PHOTOTRANSISTOR);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+PhototransistorTest test(config.pins().phototransistor);
 
 void setup()
 {
