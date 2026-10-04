@@ -9,12 +9,13 @@
 #include "control/outs-handler/outs-handler.h"
 #include "control/movement-controller/movement-controller.h"
 #include "management/robot-type/robot-type.h"
+#include "core/UART/UART.h"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------- VIOLET ------------------------------------------------------ //
 #define SPEED_VIOLET 100
 
-enum PinViolet : uint8_t
+enum class PinViolet : uint8_t
 {
     PIN_PHOTOTRANSISTOR = A14,
     PIN_BTN_1 = 36,
@@ -31,7 +32,7 @@ enum PinViolet : uint8_t
     PIN_SOLENOID = 31
 };
 
-UARTNum UART_num_violet = UARTNum::UART_3;
+extern UARTNum UART_num_violet;
 #define UART_BAUDRATE_VIOLET 230400
 #define UART_BUFFER_SIZE_VIOLET 7
 #define UART_BUFFER_STARTER_VIOLET 255
@@ -65,7 +66,7 @@ const PDCCoefficients control_gyro_align_pdc_violet = {0.5, 0.05, 0.1};
 // ------------------------------------------------------------- WHITE ------------------------------------------------------- //
 #define SPEED_WHITE 100
 
-enum PinWhite : uint8_t
+enum class PinWhite : uint8_t
 {
     PIN_PHOTOTRANSISTOR = A14,
     PIN_BTN_1 = 36,
@@ -82,7 +83,7 @@ enum PinWhite : uint8_t
     PIN_SOLENOID = 31
 };
 
-UARTNum UART_num_white = UARTNum::UART_3;
+extern UARTNum UART_num_white;
 #define UART_BAUDRATE_WHITE 230400
 #define UART_BUFFER_SIZE_WHITE 7
 #define UART_BUFFER_STARTER_WHITE 255

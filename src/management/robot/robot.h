@@ -27,6 +27,7 @@ public:
 
 private:
     // _config must be declared first: the members below are built from it
+    RoleKind _start_role;
     RobotType _robot_type;
     RobotConfig _config;
 
@@ -42,7 +43,6 @@ private:
     Kicker _kicker;
 
     StateMachine _fsm;
-    RoleKind _start_role;
 
     StateContext _make_context();
     void _apply(Command cmd);

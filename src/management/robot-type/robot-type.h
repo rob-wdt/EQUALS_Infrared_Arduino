@@ -1,4 +1,7 @@
+#pragma once
+
 #include "config.h"
+#include "core/UART/UART.h"
 
 struct pin
 {
@@ -7,8 +10,9 @@ struct pin
 
 struct UARTConfig
 {
-    UARTNum num; 
-    int baudrate, buffer_size, buffer_starter;
+    UARTNum num;
+    long int baudrate;
+    int buffer_size, buffer_starter;
 };
 
 struct motorsConfig
@@ -56,8 +60,12 @@ protected:
 
 class RobotViolet : public RobotType
 {
+public:
+    RobotViolet();
 };
 
 class RobotWhite : public RobotType
 {
+public:
+    RobotWhite();
 };

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "management/robot-type/robot-type.h"
 
 class RobotConfig

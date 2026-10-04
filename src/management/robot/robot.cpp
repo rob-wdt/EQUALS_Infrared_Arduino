@@ -25,7 +25,10 @@ void Robot::init()
 
 void Robot::calibrate_gyro()
 {
-    _gyro.init();
+    StateContext ctx = _make_context();
+    Command cmd;
+    _fsm.update(ctx, cmd);
+
     Serial.begin(115200);
 
     Serial.print("Press button #");

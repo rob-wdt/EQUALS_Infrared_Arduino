@@ -1,5 +1,8 @@
 #include "robot-type.h"
 
+UARTNum UART_num_violet = UARTNum::UART_3;
+UARTNum UART_num_white = UARTNum::UART_3;
+
 RobotType::RobotType() {}
 
 controlsConfig RobotType::controls_config() { return _controls_config; }
@@ -14,19 +17,19 @@ int RobotType::speed() { return _speed; }
 UARTConfig RobotType::UART_config() { return _uart_config; }
 
 pin pins_violet = {
-    PinViolet::PIN_PHOTOTRANSISTOR,
-    PinViolet::PIN_BTN_1,
-    PinViolet::PIN_BTN_2,
-    PinViolet::PIN_BTN_3,
-    PinViolet::PIN_M1_1,
-    PinViolet::PIN_M1_2,
-    PinViolet::PIN_M2_1,
-    PinViolet::PIN_M2_2,
-    PinViolet::PIN_M3_1,
-    PinViolet::PIN_M3_2,
-    PinViolet::PIN_M4_1,
-    PinViolet::PIN_M4_2,
-    PinViolet::PIN_SOLENOID};
+    static_cast<int>(PinViolet::PIN_PHOTOTRANSISTOR),
+    static_cast<int>(PinViolet::PIN_BTN_1),
+    static_cast<int>(PinViolet::PIN_BTN_2),
+    static_cast<int>(PinViolet::PIN_BTN_3),
+    static_cast<int>(PinViolet::PIN_M1_1),
+    static_cast<int>(PinViolet::PIN_M1_2),
+    static_cast<int>(PinViolet::PIN_M2_1),
+    static_cast<int>(PinViolet::PIN_M2_2),
+    static_cast<int>(PinViolet::PIN_M3_1),
+    static_cast<int>(PinViolet::PIN_M3_2),
+    static_cast<int>(PinViolet::PIN_M4_1),
+    static_cast<int>(PinViolet::PIN_M4_2),
+    static_cast<int>(PinViolet::PIN_SOLENOID)};
 
 UARTConfig uart_config_violet = {UART_num_violet, UART_BAUDRATE_VIOLET, UART_BUFFER_SIZE_VIOLET, UART_BUFFER_STARTER_VIOLET};
 
@@ -49,19 +52,19 @@ RobotViolet::RobotViolet() : RobotType()
 }
 
 pin pins_white = {
-    PinWhite::PIN_PHOTOTRANSISTOR,
-    PinWhite::PIN_BTN_1,
-    PinWhite::PIN_BTN_2,
-    PinWhite::PIN_BTN_3,
-    PinWhite::PIN_M1_1,
-    PinWhite::PIN_M1_2,
-    PinWhite::PIN_M2_1,
-    PinWhite::PIN_M2_2,
-    PinWhite::PIN_M3_1,
-    PinWhite::PIN_M3_2,
-    PinWhite::PIN_M4_1,
-    PinWhite::PIN_M4_2,
-    PinWhite::PIN_SOLENOID};
+    static_cast<int>(PinWhite::PIN_PHOTOTRANSISTOR),
+    static_cast<int>(PinWhite::PIN_BTN_1),
+    static_cast<int>(PinWhite::PIN_BTN_2),
+    static_cast<int>(PinWhite::PIN_BTN_3),
+    static_cast<int>(PinWhite::PIN_M1_1),
+    static_cast<int>(PinWhite::PIN_M1_2),
+    static_cast<int>(PinWhite::PIN_M2_1),
+    static_cast<int>(PinWhite::PIN_M2_2),
+    static_cast<int>(PinWhite::PIN_M3_1),
+    static_cast<int>(PinWhite::PIN_M3_2),
+    static_cast<int>(PinWhite::PIN_M4_1),
+    static_cast<int>(PinWhite::PIN_M4_2),
+    static_cast<int>(PinWhite::PIN_SOLENOID)};
 
 UARTConfig uart_config_white = {UART_num_white, UART_BAUDRATE_WHITE, UART_BUFFER_SIZE_WHITE, UART_BUFFER_STARTER_WHITE};
 
