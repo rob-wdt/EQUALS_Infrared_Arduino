@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "core/kicker/kicker.h"
+#include "management/config/robot-config.h"
 
 class KickerTest
 {
@@ -27,7 +28,10 @@ private:
     Timer _kicking_timer;
 };
 
-Kicker kicker(Pin::PIN_SOLENOID, KICKING_TIME_MS);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+Kicker kicker(config.pins().solenoid, config.kicking_time_ms());
 KickerTest test(kicker);
 
 void setup()

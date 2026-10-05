@@ -1,5 +1,6 @@
 #include "core/sensors/button/button.h"
 #include "config.h"
+#include "management/config/robot-config.h"
 
 class ButtonTest
 {
@@ -22,7 +23,10 @@ private:
     Button _button;
 };
 
-ButtonTest test(Pin::PIN_BTN_1);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+ButtonTest test(config.pins().btn1);
 
 void setup()
 {

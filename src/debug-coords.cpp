@@ -3,7 +3,8 @@
 #include "control/coordinates-calculator/coordinates-calculator.h"
 #include "core/sensors/button/button.h"
 #include "core/UART/UART.h"
-#include "control/camera-data-parcer/camera-data-parser.h"
+#include "control/camera-data-parser/camera-data-parser.h"
+#include "management/config/robot-config.h"
 
 class CoordsTest
 {
@@ -16,7 +17,7 @@ public:
         Serial.begin(115200);
 
         Serial.print("Press button #");
-        Serial.print(Pin::PIN_BTN_1);
+        Serial.print(_button.pin());
         Serial.println(" to calibrate the gyroscope.");
         while (!_button.is_pressed())
             ;
@@ -26,7 +27,7 @@ public:
 
         Serial.println("Gyroscope calibrated");
         Serial.println("Press button #");
-        Serial.print(Pin::PIN_BTN_1);
+        Serial.print(_button.pin());
         Serial.println(" to set the zero angles.");
         while (!_button.is_pressed())
             ;
@@ -52,10 +53,13 @@ private:
     Button _button;
 };
 
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
 CoordinatesCalculator coords;
-BNO055 gyro(GYROSCOPE_ADDRESS);
-Button button(Pin::PIN_BTN_1);
-UART uart(UARTNum::UART_3, 230400, UART_BUFFER_SIZE, UART_BUFFER_STARTER);
+BNO055 gyro(config.gyro_address());
+Button button(config.pins().btn1);
+UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CameraDataParser cam_parser(uart);
 
 CoordsTest test(coords, gyro, cam_parser, button);

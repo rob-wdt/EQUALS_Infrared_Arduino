@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include "config.h"
 #include "core/UART/UART.h"
-#include "control/camera-data-parcer/camera-data-parser.h"
+#include "control/camera-data-parser/camera-data-parser.h"
+#include "management/config/robot-config.h"
 
 class CamDataParserTest
 {
@@ -34,7 +35,10 @@ private:
     CameraDataParser _c;
 };
 
-UART uart(UARTNum::UART_1, 230400, UART_BUFFER_SIZE, UART_BUFFER_STARTER);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CamDataParserTest test(uart);
 
 void setup()

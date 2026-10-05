@@ -2,6 +2,7 @@
 #include "config.h"
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
+#include "management/config/robot-config.h"
 
 class GyroscopeTest
 {
@@ -13,7 +14,7 @@ public:
         Serial.begin(115200);
 
         Serial.print("Press button #");
-        Serial.print(Pin::PIN_BTN_1);
+        Serial.print(_button.pin());
         Serial.println(" to calibrate the gyroscope.");
         _button.reset();
         while (!_button.is_pressed())
@@ -26,7 +27,7 @@ public:
 
         Serial.println("Gyroscope calibrated");
         Serial.println("Press button #");
-        Serial.print(Pin::PIN_BTN_1);
+        Serial.print(_button.pin());
         Serial.println(" to set the zero angles.");
         while (!_button.is_pressed())
             ;
@@ -52,8 +53,11 @@ private:
     Button _button;
 };
 
-BNO055 gyro(GYROSCOPE_ADDRESS);
-Button button(Pin::PIN_BTN_1);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+BNO055 gyro(config.gyro_address());
+Button button(config.pins().btn1);
 GyroscopeTest test(gyro, button);
 
 void setup()

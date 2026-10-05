@@ -1,5 +1,7 @@
+#include <Arduino.h>
 #include "core/motor/motor.h"
 #include "config.h"
+#include "management/config/robot-config.h"
 
 class MotorTest
 {
@@ -9,9 +11,9 @@ public:
     {
         _motor.init();
     }
-    void loop()
+    void loop(int speed)
     {
-        _motor.set_speed(SPEED);
+        _motor.set_speed(speed);
         _motor.run();
     }
 
@@ -19,7 +21,10 @@ private:
     Motor _motor;
 };
 
-MotorTest test(Pin::PIN_M1_1, Pin::PIN_M1_2, motors_directions.m1_dir);
+RobotViolet robot_type;
+RobotConfig config(robot_type);
+
+MotorTest test(config.pins().m1_1, config.pins().m1_2, config.motors_config().directions.m1_dir);
 
 void setup()
 {
@@ -28,5 +33,5 @@ void setup()
 
 void loop()
 {
-    test.loop();
+    test.loop(config.speed());
 }
