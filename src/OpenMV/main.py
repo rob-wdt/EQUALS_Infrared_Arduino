@@ -8,7 +8,7 @@ def main() -> None:
 
     vision.init()
 
-    vision.run(draw_objects_scopes=True, draw_lines=True)
+    vision.run(draw_objects_scopes=True, draw_lines=True, print_info=True)
 
 
 if __name__ == "__main__":

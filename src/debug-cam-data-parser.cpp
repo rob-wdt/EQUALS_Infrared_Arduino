@@ -7,7 +7,7 @@
 class CamDataParserTest
 {
 public:
-    CamDataParserTest(UART uart) : _uart(uart), _c(uart) {}
+    CamDataParserTest(UART uart, GoalMapper goal) : _uart(uart), _c(uart, goal) {}
     void setup()
     {
         _c.init();
@@ -18,16 +18,16 @@ public:
         _c.parse();
         Serial.print("Parsed data:\tBall angle: ");
         Serial.print(_c.data().ball_angle);
-        Serial.print(" Ball distance: ");
+        Serial.print("\t\tBall distance: ");
         Serial.print(_c.data().ball_distance);
-        Serial.print(" Own goal angle: ");
+        Serial.print("\tOwn goal angle: ");
         Serial.print(_c.data().own_goal_angle);
-        Serial.print(" Own goal distance: ");
+        Serial.print("\tOwn goal distance: ");
         Serial.print(_c.data().own_goal_distance);
-        Serial.print(" Opp goal angle: ");
-        Serial.print(_c.data().own_goal_angle);
-        Serial.print(" Opp goal distance: ");
-        Serial.print(_c.data().own_goal_distance);
+        Serial.print("\t\tOpp goal angle: ");
+        Serial.print(_c.data().opp_goal_angle);
+        Serial.print("\tOpp goal distance: ");
+        Serial.println(_c.data().opp_goal_distance);
     }
 
 private:
@@ -35,11 +35,12 @@ private:
     CameraDataParser _c;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
-CamDataParserTest test(uart);
+GoalMapper goal(GoalColor::YELLOW);
+CamDataParserTest test(uart, goal);
 
 void setup()
 {

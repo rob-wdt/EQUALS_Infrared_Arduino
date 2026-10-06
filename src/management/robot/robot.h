@@ -18,7 +18,7 @@
 class Robot
 {
 public:
-    Robot(RoleKind start_role, RobotType robot_type);
+    Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal);
     void init();
     void calibrate_gyro();
     void listen();

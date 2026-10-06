@@ -1,26 +1,19 @@
 #pragma once
 #include <Arduino.h>
 #include "core/UART/UART.h"
-
-struct cameraData
-{
-    int own_goal_angle,
-        own_goal_distance,
-        opp_goal_angle,
-        opp_goal_distance,
-        ball_angle,
-        ball_distance;
-};
+#include "management/goal-mapper/goal-mapper.h"
+#include "control/camera-data/camera-data.h"
 
 class CameraDataParser
 {
 public:
-    CameraDataParser(UART uart);
+    CameraDataParser(UART uart, GoalMapper goal_mapper);
     void init();
     void parse();
     cameraData data();
 
 private:
     UART _uart;
+    GoalMapper _goal;
     cameraData _data = {0, 0, 0, 0, 0, 0};
 };

@@ -101,9 +101,9 @@ class VisionSystem:
 
         sensor.set_pixformat(self.__cm_cfg.pixels_format())
         sensor.set_framesize(self.__cm_cfg.framesize())
-        sensor.set_auto_gain(False, self.__cm_cfg.gain())
-        sensor.set_auto_whitebal(False, self.__cm_cfg.white())
-        sensor.set_auto_exposure(False, self.__cm_cfg.exposure())
+        sensor.set_auto_gain(False, gain_db=self.__cm_cfg.gain())
+        sensor.set_auto_whitebal(False, rgb_gain_db=self.__cm_cfg.white())
+        sensor.set_auto_exposure(False, exposure_us=self.__cm_cfg.exposure())
 
         sensor.skip_frames(time=1000)
 
@@ -166,10 +166,18 @@ class VisionSystem:
                 img.draw_line(int(self.__cm_cfg.center().x), int(self.__cm_cfg.center().y), int(
                     ball.center.x), int(ball.center.y), color=(255, 255, 255), thickness=5)
 
-    def run(self, draw_objects_scopes: bool, draw_lines: bool):
+    def run(self, draw_objects_scopes: bool, draw_lines: bool, print_info: bool):
         while True:
             data: dict[str, ObjectData] = self.process_frame(
                 draw_objects_scopes, draw_lines)
+
+            if print_info:
+                print("Ball angle/dist.:\t", end='')
+                print(data["ball"].angle, data["ball"].distance, sep='\t', end='\t')
+                print("Blue goal angle/dist.:\t", end='')
+                print(data["blue goal"].angle, data["blue goal"].distance, sep='\t', end='\t')
+                print("Yellow goal angle/dist.:\t", end='')
+                print(data["yellow goal"].angle, data["yellow goal"].distance, sep='\t', end='\n')
 
             self.__sender.send((data["blue goal"].angle, int(data["blue goal"].distance), data["yellow goal"].angle,
                                 int(data["yellow goal"].distance), data["ball"].angle, int(data["ball"].distance)))

@@ -47,28 +47,25 @@ PX_TO_CM_ATTACKER = (
 ########################################################################################################################
 # ----------------------------------------------- DEFENDER ----------------------------------------------------------- #
 
-YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(83, 100, -29, 40, 26, 62)]
-BLUE_THRESHOLD_DEFENDER: tuple[list[int]] = [(57, 100, -37, -18, -19, 9)]
-RED_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 0, 0, 0, 0, 0)]
+YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, -128, 127, 41, 127)]
+BLUE_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, -128, -12, -128, 7)]
+RED_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, 0, 127, 20, 40)]
 
-WHITE_DEFENDER = (62, 60, 62)
+WHITE_DEFENDER = (63, 59, 61)
 
 FRAMESIZE_DEFENDER: int = sensor.QVGA
-
-FRAME_H_DEFENDER: int
-FRAME_W_DEFENDER: int
 
 if FRAMESIZE_DEFENDER == sensor.QVGA:
     FRAME_H_DEFENDER = 240
     FRAME_W_DEFENDER = 320
 
-CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2 + 15, FRAME_H_DEFENDER // 2 - 6)
+CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2 - 3, FRAME_H_DEFENDER // 2 - 13)
 
 MASK_RADIUS_DEFENDER: int = 120
 
 ROBOT_RADIUS_DEFENDER: int = 20
 
-GAIN_DEFENDER = 50
+GAIN_DEFENDER = 23
 
 EXPOSURE_DEFENDER = 100_000
 
@@ -76,47 +73,36 @@ PIXELS_FORMAT_DEFENDER = sensor.RGB565
 
 PX_TO_CM_DEFENDER = (
     # PX CM
-    (30, 10),
-    (30, 15),
-    (18, 20),
-    (23, 25),
-    (27, 30),
-    (33, 35),
-    (37, 40),
-    (41, 45),
-    (45, 50),
-    (49, 55),
-    (51, 60),
-    (54, 65),
-    (57, 70),
-    (60, 75),
-    (63, 80),
-    (65, 85),
-    (67, 90),
-    (69, 95),
-    (71, 100),
-    (73, 105),
-    (75, 110),
-    (77, 115),
-    (78, 120),
-    (79, 125),
-    (80, 130),
-    (81, 135),
-    (81, 140),
-    (82, 145),
-    (83, 150),
-    (84, 155),
-    (85, 160),
-    (85, 165),
-    (85, 170),
-    (86, 175),
-    (86, 180),
-    (87, 185),
-    (87, 190),
-    (87, 195),
-    (89, 200),
-    (89, 205),
-    (89, 210),
-    (89, 215),
-    (90, 220),
-    (90, 225))
+    (11, 10),
+    (17, 15),
+    (24, 20),
+    (30, 25),
+    (35, 30),
+    (41, 35),
+    (46, 40),
+    (50, 45),
+    (55, 50),
+    (57, 55),
+    (61, 60),
+    (65, 65),
+    (68, 70),
+    (72, 75),
+    (74, 80),
+    (76, 85),
+    (79, 90),
+    (81, 95),
+    (81, 100),
+    (83, 105),
+    (84, 110),
+    (86, 115),
+    (87, 120),
+    (87, 125),
+    (92, 130),
+    (93, 135),
+    (94, 140),
+    (96, 145),
+    (98, 150),
+    (99, 155),
+    (100, 160),
+    (100, 165),
+    (103, 210))

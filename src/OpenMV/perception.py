@@ -22,8 +22,6 @@ class DataSender:
         data = bytearray(len(buffer))
         for i in range(len(buffer)):
             data[i] = self.__clamp_value(buffer[i])
-            print(data[i], end='\t')
-        print()
 
         self.__uart.writechar(255)
 
