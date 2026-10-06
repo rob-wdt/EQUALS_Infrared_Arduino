@@ -53,7 +53,7 @@ public:
     {
         _gyro.read();
         _cam_parser.parse();
-        _c.calculate_coordinates(_gyro.data(), _cam_parser.data().own_goal_angle, _cam_parser.data().own_goal_distance);
+        _c.calculate_coordinates(_gyro.data(), _cam_parser.data());
 
         Serial.print("Current robot coords:\tx: ");
         Serial.print(_c.coordinates().x);
