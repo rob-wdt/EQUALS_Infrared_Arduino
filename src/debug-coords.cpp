@@ -68,7 +68,7 @@ private:
     Button _button;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 GoalMapper goal(GoalColor::YELLOW);
 
