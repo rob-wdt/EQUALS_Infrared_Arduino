@@ -14,6 +14,7 @@ public:
     int gyro_address();
     controlsConfig controls_config();
     int kicking_time_ms();
+    dribblerConfig dribbler_config();
     int phototransistor_threshold();
     int defender_move_coef();
     UARTConfig UART_config();
@@ -29,6 +30,7 @@ protected:
     int _gyroscope_address;
     controlsConfig _controls_config;
     int _kicking_time_ms;
+    dribblerConfig _dribbler_config;
     int _phototransistor_threshold;
     int _defender_move_coef;
 };

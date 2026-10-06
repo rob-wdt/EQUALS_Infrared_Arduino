@@ -29,7 +29,8 @@ enum class PinViolet : uint8_t
     PIN_M3_2 = 6,
     PIN_M4_1 = 5,
     PIN_M4_2 = 7,
-    PIN_SOLENOID = 31
+    PIN_SOLENOID = 31,
+    PIN_DRIBBLER = 3
 };
 
 extern UARTNum UART_num_violet;
@@ -58,6 +59,9 @@ const PDCCoefficients control_gyro_align_pdc_violet = {0.5, 0.05, 0.1};
 
 #define KICKING_TIME_MS_VIOLET 200
 
+#define DRIBBLER_MIN_VIOLET 1000
+#define DRIBBLER_MAX_VIOLET 1500
+
 #define PHOTOTRANSISTOR_THRESHOLD_VIOLET 1
 
 #define DEFENDER_MOVE_COEF_VIOLET 0.5
@@ -80,7 +84,8 @@ enum class PinWhite : uint8_t
     PIN_M3_2 = 6,
     PIN_M4_1 = 5,
     PIN_M4_2 = 7,
-    PIN_SOLENOID = 31
+    PIN_SOLENOID = 31,
+    PIN_DRIBBLER = 3
 };
 
 extern UARTNum UART_num_white;
@@ -108,6 +113,9 @@ const PIDCoefficients control_gyro_align_pid_white = {2.0, 0.0, 0.0};
 const PDCCoefficients control_gyro_align_pdc_white = {0.5, 0.05, 0.1};
 
 #define KICKING_TIME_MS_WHITE 200
+
+#define DRIBBLER_MIN_WHITE 1000
+#define DRIBBLER_MAX_WHITE 1500
 
 #define PHOTOTRANSISTOR_THRESHOLD_WHITE 1
 
