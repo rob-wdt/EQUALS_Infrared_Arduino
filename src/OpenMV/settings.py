@@ -9,39 +9,65 @@ UART_BAUDRATE: int = 230400
 ########################################################################################################################
 # ----------------------------------------------- ATTACKER ----------------------------------------------------------- #
 
-YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = ([0, 0, 0, 0, 0, 0],)
-BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = ([0, 0, 0, 0, 0, 0],)
-RED_THRESHOLD_ATTACKER: tuple[list[int]] = ([0, 0, 0, 0, 0, 0],)
+YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -25, 127, 39, 127)]
+BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -128, -10, -128, 6)]
+RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 2, 127, 21, 127)]
 
-WHITE_ATTACKER = (0, 0, 0)
+WHITE_ATTACKER = (63, 59, 61)
 
 FRAMESIZE_ATTACKER: int = sensor.QVGA
 
-FRAME_H_ATTACKER: int = 0
-FRAME_W_ATTACKER: int = 0
-
 if FRAMESIZE_ATTACKER == sensor.QVGA:
-    FRAME_H_ATTACKER = 0
-    FRAME_W_ATTACKER = 0
+    FRAME_H_ATTACKER = 240
+    FRAME_W_ATTACKER = 320
 
-CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2, FRAME_H_ATTACKER // 2)
+CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2 + 13, FRAME_H_ATTACKER // 2 - 10)
 
-MASK_RADIUS_ATTACKER: int = 0
+MASK_RADIUS_ATTACKER: int = 120
 
-ROBOT_RADIUS_ATTACKER: int = 0
+ROBOT_RADIUS_ATTACKER: int = 20
 
-GAIN_ATTACKER = 0
+GAIN_ATTACKER = 25
 
-EXPOSURE_ATTACKER = 0
+EXPOSURE_ATTACKER = 100_000
 
 PIXELS_FORMAT_ATTACKER = sensor.RGB565
 
 PX_TO_CM_ATTACKER = (
     # PX CM
-    (0, 0),
-    (0, 0),
-    (0, 0),
-    (0, 0))
+    (11, 10),
+    (17, 15),
+    (24, 20),
+    (30, 25),
+    (35, 30),
+    (41, 35),
+    (45, 40),
+    (50, 45),
+    (56, 50),
+    (60, 55),
+    (65, 60),
+    (70, 65),
+    (74, 70),
+    (77, 75),
+    (81, 80),
+    (84, 85),
+    (86, 90),
+    (88, 95),
+    (91, 100),
+    (92, 105),
+    (93, 110),
+    (94, 115),
+    (95, 120),
+    (97, 125),
+    (98, 130),
+    (99, 135),
+    (101, 140),
+    (102, 145),
+    (103, 150),
+    (103, 155),
+    (104, 160),
+    (104, 165),
+    (120, 210))
 
 
 ########################################################################################################################
