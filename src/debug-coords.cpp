@@ -14,23 +14,38 @@ public:
     {
         _gyro.init();
         _cam_parser.init();
+        _button.init();
         Serial.begin(115200);
 
         Serial.print("Press button #");
         Serial.print(_button.pin());
         Serial.println(" to calibrate the gyroscope.");
+        _button.reset();
         while (!_button.is_pressed())
-            ;
+        {
+            _button.read();
+        }
+        while (_button.is_pressed())
+        {
+            _button.read();
+        }
 
         while (!_gyro.calibrated())
             ;
 
         Serial.println("Gyroscope calibrated");
-        Serial.println("Press button #");
+        Serial.print("Press button #");
         Serial.print(_button.pin());
         Serial.println(" to set the zero angles.");
+        _button.reset();
         while (!_button.is_pressed())
-            ;
+        {
+            _button.read();
+        }
+        while (_button.is_pressed())
+        {
+            _button.read();
+        }
 
         _gyro.set_zero_angles();
     }
@@ -55,12 +70,13 @@ private:
 
 RobotViolet robot_type;
 RobotConfig config(robot_type);
+GoalMapper goal(GoalColor::YELLOW);
 
 CoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
-CameraDataParser cam_parser(uart);
+CameraDataParser cam_parser(uart, goal);
 
 CoordsTest test(coords, gyro, cam_parser, button);
 

@@ -12,10 +12,10 @@ void CameraDataParser::parse()
     rawCameraData raw = {
         (recieved_raw[5] - 127) * 3,
         (recieved_raw[6] - 127) * 3,
-        (recieved_raw[3] - 127) * 3,
-        (recieved_raw[4] - 127) * 3,
         (recieved_raw[1] - 127) * 3,
-        (recieved_raw[2] - 127) * 3};
+        (recieved_raw[2] - 127) * 3,
+        (recieved_raw[3] - 127) * 3,
+        (recieved_raw[4] - 127) * 3};
 
     _goal.map(raw);
 

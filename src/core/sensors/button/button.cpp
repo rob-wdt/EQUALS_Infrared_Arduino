@@ -8,6 +8,6 @@ void Button::read() { _is_pressed = digitalRead(_pin); }
 
 bool Button::is_pressed() { return !_is_pressed; }
 
-void Button::reset() { _is_pressed = false; }
+void Button::reset() { _is_pressed = true; }
 
 int Button::pin() { return _pin; }
