@@ -35,7 +35,7 @@ private:
     CameraDataParser _c;
 };
 
-RobotWhite robot_type;
+RobotViolet robot_type;
 RobotConfig config(robot_type);
 
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);

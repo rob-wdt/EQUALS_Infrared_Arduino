@@ -57,7 +57,7 @@ class RobotType:
     __pixels_to_cm_table: tuple[tuple[float, float], ...]
 
 
-class RobotAttacker(RobotType):
+class RobotViolet(RobotType):
     def __init__(self) -> None:
         super().__init__()
 
@@ -75,7 +75,7 @@ class RobotAttacker(RobotType):
         self.__pixels_to_cm_table = settings.PX_TO_CM_ATTACKER
 
 
-class RobotDefender(RobotType):
+class RobotWhite(RobotType):
     def __init__(self) -> None:
         super().__init__()
 

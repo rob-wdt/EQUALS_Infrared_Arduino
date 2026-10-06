@@ -1,9 +1,9 @@
 import CV
-from containers import RobotAttacker, RobotDefender
+from containers import RobotViolet, RobotWhite
 
 
 def main() -> None:
-    robot_type = RobotDefender()
+    robot_type = RobotWhite()
     vision = CV.VisionSystem(robot_type)
 
     vision.init()
