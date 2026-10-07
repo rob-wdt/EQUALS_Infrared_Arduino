@@ -40,7 +40,7 @@ public:
     {
         _gyro.read();
         _c.parse();
-        _coords.calculate_coordinates(_gyro.data(), _c.data().own_goal_angle, _c.data().own_goal_distance);
+        _coords.calculate_coordinates(_gyro.data(), _c.data());
 
         _outs.handle(_coords.coordinates(), outs_bounds);
 
@@ -94,7 +94,8 @@ CoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
-CameraDataParser cam_parser(uart);
+GoalMapper goal(GoalColor::BLUE);
+CameraDataParser cam_parser(uart, goal);
 
 OutsCommonTest test(outs, coords, gyro, button, uart, cam_parser);
 

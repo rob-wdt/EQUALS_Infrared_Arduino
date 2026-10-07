@@ -8,6 +8,7 @@
 #include "core/UART/UART.h"
 #include "control/camera-data-parser/camera-data-parser.h"
 #include "management/config/robot-config.h"
+#include "management/goal-mapper/goal-mapper.h"
 
 class OutsMovementTest
 {
@@ -42,7 +43,7 @@ public:
     {
         _gyro.read();
         _cam_parser.parse();
-        _coords.calculate_coordinates(_gyro.data(), _cam_parser.data().own_goal_angle, _cam_parser.data().own_goal_distance);
+        _coords.calculate_coordinates(_gyro.data(), _cam_parser.data());
 
         _outs.handle(_coords.coordinates(), outs_bounds);
 
@@ -113,7 +114,8 @@ CoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
-CameraDataParser cam_parser(uart);
+GoalColor own_goal = GoalColor::BLUE;
+CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 
 OutsMovementTest test(outs, movement_controller, coords, gyro, button, uart, cam_parser);
 
