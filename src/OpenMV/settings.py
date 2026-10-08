@@ -85,7 +85,7 @@ if FRAMESIZE_DEFENDER == sensor.QVGA:
     FRAME_H_DEFENDER = 240
     FRAME_W_DEFENDER = 320
 
-CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2 - 3, FRAME_H_DEFENDER // 2 - 13)
+CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2 - 5, FRAME_H_DEFENDER // 2 - 15)
 
 MASK_RADIUS_DEFENDER: int = 120
 
@@ -117,12 +117,12 @@ PX_TO_CM_DEFENDER = (
     (76, 85),
     (79, 90),
     (81, 95),
-    (81, 100),
+    (82, 100),
     (83, 105),
     (84, 110),
     (86, 115),
     (87, 120),
-    (87, 125),
+    (89, 125),
     (92, 130),
     (93, 135),
     (94, 140),
@@ -130,5 +130,5 @@ PX_TO_CM_DEFENDER = (
     (98, 150),
     (99, 155),
     (100, 160),
-    (100, 165),
+    (101, 165),
     (103, 210))
