@@ -16,23 +16,38 @@ public:
     {
         _gyro.init();
         _c.init();
+        _button.init();
         Serial.begin(115200);
 
         Serial.print("Press button #");
         Serial.print(_button.pin());
         Serial.println(" to calibrate the gyroscope.");
+        _button.reset();
         while (!_button.is_pressed())
-            ;
+        {
+            _button.read();
+        }
+        while (_button.is_pressed())
+        {
+            _button.read();
+        }
 
         while (!_gyro.calibrated())
             ;
 
         Serial.println("Gyroscope calibrated");
-        Serial.println("Press button #");
+        Serial.print("Press button #");
         Serial.print(_button.pin());
         Serial.println(" to set the zero angles.");
+        _button.reset();
         while (!_button.is_pressed())
-            ;
+        {
+            _button.read();
+        }
+        while (_button.is_pressed())
+        {
+            _button.read();
+        }
 
         _gyro.set_zero_angles();
     }
@@ -42,7 +57,9 @@ public:
         _c.parse();
         _coords.calculate_coordinates(_gyro.data(), _c.data());
 
-        _outs.handle(_coords.coordinates(), outs_bounds);
+        coordinates cur_coords = _coords.coordinates();
+
+        _outs.handle(cur_coords, outs_bounds);
 
         String out_type;
         bool in_out;
@@ -74,7 +91,17 @@ public:
         Serial.print("In out: ");
         Serial.print(in_out);
         Serial.print("\tOut type: ");
-        Serial.println(out_type);
+        Serial.print(out_type);
+        Serial.print("\t\t|\t");
+        Serial.print("x: ");
+        Serial.print(cur_coords.x);
+        Serial.print("\ty: ");
+        Serial.print(cur_coords.y);
+        Serial.print("\t\t|\t");
+        Serial.print("y <= rear_out: ");
+        Serial.print(cur_coords.y <= outs_bounds.rear_goal);
+        Serial.print("\trear out:\t");
+        Serial.println(outs_bounds.rear_goal);
     }
 
 private:

@@ -38,7 +38,7 @@ extern UARTNum UART_num_violet;
 #define UART_BUFFER_SIZE_VIOLET 7
 #define UART_BUFFER_STARTER_VIOLET 255
 
-const outsBounds outs_bounds_violet = {0, 0, 0, 0};
+const outsBounds outs_bounds_violet = {60, -60, 50, -60};
 
 const motorsLocAngles motors_loc_angles_violet = {
     MotorLocationAngle::ANGLE_315,
