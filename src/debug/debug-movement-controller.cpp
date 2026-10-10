@@ -6,6 +6,7 @@
 #include "management/config/robot-config.h"
 
 // FEEL FREE TO CHANGE
+#define SPEED 0
 #define MOVE_ANGLE 0
 #define ALIGN_ANGLE 0
 
@@ -60,7 +61,7 @@ private:
     Led _led;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
 MovementController movement_controller(
@@ -69,6 +70,7 @@ MovementController movement_controller(
      Motor(config.pins().m3_1, config.pins().m3_2, config.motors_config().directions.m3_dir),
      Motor(config.pins().m4_1, config.pins().m4_2, config.motors_config().directions.m4_dir)},
     config.motors_config().loc_angles,
+    config.motors_config().min_pwm,
     new PIDControl(config.controls_config().pid));
 
 BNO055 gyro(config.gyro_address());
@@ -84,5 +86,5 @@ void setup()
 
 void loop()
 {
-    test.loop(config.speed());
+    test.loop(SPEED);
 }

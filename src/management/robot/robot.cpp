@@ -11,7 +11,7 @@ Robot::Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal) : _s
                                                                                                        Motor(_config.pins().m2_1, _config.pins().m2_2, _config.motors_config().directions.m2_dir),
                                                                                                        Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
                                                                                                        Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
-                                                                                                   _config.motors_config().loc_angles, new PDCControl(_config.controls_config().pdc)),
+                                                                                                   _config.motors_config().loc_angles, _config.motors_config().min_pwm, new PDCControl(_config.controls_config().pdc)),
                                                                               _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn2), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led) {}
 
 void Robot::init()

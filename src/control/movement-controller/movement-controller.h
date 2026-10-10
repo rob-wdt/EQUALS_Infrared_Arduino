@@ -33,7 +33,8 @@ public:
     // deg of heading error from which the robot only turns, closer to align_angle it drives slower the further it is
     static const int TURN_FIRST_ANGLE = 60;
 
-    MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control);
+    // min_pwm: lowest PWM at which a wheel starts turning, smaller commands are stretched up to it
+    MovementController(motors motors, motorsLocAngles loc_angles, int min_pwm, Control *align_control);
     void init();
     void set_velocity(int16_t lin_speed, int16_t move_angle, int16_t align_angle, gyroData gyro_data);
     void move();
@@ -42,5 +43,6 @@ public:
 private:
     motors _motors;
     motorsLocAngles _loc_angles;
+    int _min_pwm;
     Control *_align_control;
 };

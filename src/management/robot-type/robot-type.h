@@ -19,6 +19,7 @@ struct motorsConfig
 {
     motorsLocAngles loc_angles;
     motorsDirections directions;
+    int min_pwm;
 };
 
 struct dribblerConfig

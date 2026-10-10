@@ -1,8 +1,8 @@
 #include "movement-controller.h"
 #include <Arduino.h>
 
-MovementController::MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control)
-    : _motors(motors), _loc_angles(loc_angles), _align_control(align_control)
+MovementController::MovementController(motors motors, motorsLocAngles loc_angles, int min_pwm, Control *align_control)
+    : _motors(motors), _loc_angles(loc_angles), _min_pwm(min_pwm), _align_control(align_control)
 {
 }
 
@@ -41,7 +41,16 @@ void MovementController::set_velocity(int16_t lin_speed, int16_t move_angle, int
     // A wheel can't go faster than 255: slow all of them down equally so the direction stays the same
     float scale = max_speed > 255 ? 255 / max_speed : 1;
     for (int i = 0; i < 4; i++)
-        m[i]->set_speed(speeds[i] * scale);
+    {
+        float speed = speeds[i] * scale;
+        // Below _min_pwm a wheel doesn't turn and Motor::run() actually brakes it, the other wheels then
+        // fight against it. Stretch every non-zero command to [_min_pwm, 255]
+        if (fabs(speed) >= 3)
+            speed = (speed > 0 ? 1 : -1) * (_min_pwm + fabs(speed) * (255 - _min_pwm) / 255.0);
+        else
+            speed = 0;
+        m[i]->set_speed(speed);
+    }
 }
 
 void MovementController::move()

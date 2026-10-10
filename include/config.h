@@ -54,6 +54,8 @@ const motorsDirections motors_directions_violet = {
     MotorDirection::backward,
     MotorDirection::forward};
 
+#define MOTOR_MIN_PWM_VIOLET 60 // lowest PWM at which a wheel starts turning with the robot standing on the field
+
 #define GYROSCOPE_ADDRESS_VIOLET 0x29
 
 const PIDCoefficients control_gyro_align_pid_violet = {2.0, 0.0, 0.0};
@@ -110,6 +112,8 @@ const motorsDirections motors_directions_white = {
     MotorDirection::forward,
     MotorDirection::backward,
     MotorDirection::forward};
+
+#define MOTOR_MIN_PWM_WHITE 60 // lowest PWM at which a wheel starts turning with the robot standing on the field
 
 #define GYROSCOPE_ADDRESS_WHITE 0x29
 

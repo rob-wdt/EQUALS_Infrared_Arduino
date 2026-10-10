@@ -118,6 +118,7 @@ MovementController movement_controller(
      Motor(config.pins().m3_1, config.pins().m3_2, config.motors_config().directions.m3_dir),
      Motor(config.pins().m4_1, config.pins().m4_2, config.motors_config().directions.m4_dir)},
     config.motors_config().loc_angles,
+    config.motors_config().min_pwm,
     new PDCControl(config.controls_config().pdc));
 CoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
