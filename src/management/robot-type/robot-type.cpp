@@ -37,7 +37,13 @@ pin pins_violet = {
 
 UARTConfig uart_config_violet = {UART_num_violet, UART_BAUDRATE_VIOLET, UART_BUFFER_SIZE_VIOLET, UART_BUFFER_STARTER_VIOLET};
 
-motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet};
+outsBounds outs_bounds_violet = {
+    static_cast<float>(OutsBoundsViolet::RIGHT),
+    static_cast<float>(OutsBoundsViolet::LEFT),
+    static_cast<float>(OutsBoundsViolet::FRONT_GOAL),
+    static_cast<float>(OutsBoundsViolet::REAR_GOAL)};
+
+motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet, MOTOR_MIN_PWM_VIOLET};
 
 controlsConfig controls_config_violet = {control_gyro_align_pid_violet, control_gyro_align_pdc_violet};
 
@@ -78,7 +84,13 @@ pin pins_white = {
 
 UARTConfig uart_config_white = {UART_num_white, UART_BAUDRATE_WHITE, UART_BUFFER_SIZE_WHITE, UART_BUFFER_STARTER_WHITE};
 
-motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white};
+outsBounds outs_bounds_white = {
+    static_cast<float>(OutsBoundsWhite::RIGHT),
+    static_cast<float>(OutsBoundsWhite::LEFT),
+    static_cast<float>(OutsBoundsWhite::FRONT_GOAL),
+    static_cast<float>(OutsBoundsWhite::REAR_GOAL)};
+
+motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white, MOTOR_MIN_PWM_WHITE};
 
 controlsConfig controls_config_white = {control_gyro_align_pid_white, control_gyro_align_pdc_white};
 

@@ -39,7 +39,14 @@ extern UARTNum UART_num_violet;
 #define UART_BUFFER_SIZE_VIOLET 7
 #define UART_BUFFER_STARTER_VIOLET 255
 
-const outsBounds outs_bounds_violet = {50, -55, 40, -65};
+// cm, field coordinates: +x to the right, +y towards the opponent goal
+enum class OutsBoundsViolet : int16_t
+{
+    RIGHT = 50,
+    LEFT = -55,
+    FRONT_GOAL = 40,
+    REAR_GOAL = -65
+};
 #define OUTS_HYSTERESIS_VIOLET 15 // cm back inside a bound before the out is cleared
 
 const motorsLocAngles motors_loc_angles_violet = {
@@ -98,7 +105,14 @@ extern UARTNum UART_num_white;
 #define UART_BUFFER_SIZE_WHITE 7
 #define UART_BUFFER_STARTER_WHITE 255
 
-const outsBounds outs_bounds_white = {55, -60, 40, -60};
+// cm, field coordinates: +x to the right, +y towards the opponent goal
+enum class OutsBoundsWhite : int16_t
+{
+    RIGHT = 55,
+    LEFT = -60,
+    FRONT_GOAL = 40,
+    REAR_GOAL = -50
+};
 #define OUTS_HYSTERESIS_WHITE 10 // cm back inside a bound before the out is cleared
 
 const motorsLocAngles motors_loc_angles_white = {
