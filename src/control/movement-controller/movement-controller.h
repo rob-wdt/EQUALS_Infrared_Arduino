@@ -30,6 +30,9 @@ struct motorsDirections
 class MovementController
 {
 public:
+    // deg of heading error from which the robot only turns, closer to align_angle it drives slower the further it is
+    static const int TURN_FIRST_ANGLE = 60;
+
     MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control);
     void init();
     void set_velocity(int16_t lin_speed, int16_t move_angle, int16_t align_angle, gyroData gyro_data);

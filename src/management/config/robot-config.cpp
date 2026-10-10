@@ -6,6 +6,7 @@ RobotConfig::RobotConfig(RobotType robot) : _robot(robot)
     _pins = _robot.pins();
     _uart_config = _robot.UART_config();
     _outs = _robot.outs_bounds();
+    _outs_hysteresis = _robot.outs_hysteresis();
     _motors_config = _robot.motors_config();
     _gyroscope_address = _robot.gyro_address();
     _controls_config = _robot.controls_config();
@@ -22,6 +23,7 @@ int RobotConfig::gyro_address() { return _gyroscope_address; }
 int RobotConfig::kicking_time_ms() { return _kicking_time_ms; }
 motorsConfig RobotConfig::motors_config() { return _motors_config; }
 outsBounds RobotConfig::outs_bounds() { return _outs; }
+float RobotConfig::outs_hysteresis() { return _outs_hysteresis; }
 int RobotConfig::phototransistor_threshold() { return _phototransistor_threshold; }
 pin RobotConfig::pins() { return _pins; }
 int RobotConfig::speed() { return _speed; }

@@ -30,26 +30,14 @@ void StateOutRecovery::set_resume(State *state) { _resume = state; }
 
 State *StateOutRecovery::update(StateContext &ctx, Command &cmd)
 {
-    cmd.lin_speed = ctx.params.speed;
-    cmd.align_angle = 0;
-
-    switch (ctx.out)
-    {
-    case OutType::NO:
+    // OutsHandler keeps the out until the robot is back inside by the hysteresis
+    if (ctx.out == OutType::NO)
         return _resume ? _resume : &ctx.states->idle;
-    case OutType::LEFT:
-        cmd.move_angle = 90;
-        break;
-    case OutType::RIGHT:
-        cmd.move_angle = -90;
-        break;
-    case OutType::FRONT_GOAL:
-        cmd.move_angle = 180;
-        break;
-    case OutType::REAR_GOAL:
-        cmd.move_angle = 0;
-        break;
-    }
+
+    cmd.lin_speed = ctx.params.speed;
+    // The escape angle is in field coordinates, move_angle is relative to the robot
+    cmd.move_angle = ctx.out_escape_angle - ctx.gyro.yaw;
+    cmd.align_angle = 0;
     return nullptr;
 }
 

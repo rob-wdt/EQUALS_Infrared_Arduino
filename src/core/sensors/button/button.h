@@ -11,6 +11,8 @@ public:
     void read() override;
     void reset();
     bool is_pressed();
+    // Blocks until the button is pressed and released again
+    void wait_click();
 
     int pin();
 

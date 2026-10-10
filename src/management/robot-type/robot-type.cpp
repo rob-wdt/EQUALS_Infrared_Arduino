@@ -12,6 +12,7 @@ int RobotType::gyro_address() { return _gyroscope_address; }
 int RobotType::kicking_time_ms() { return _kicking_time_ms; }
 motorsConfig RobotType::motors_config() { return _motors_config; }
 outsBounds RobotType::outs_bounds() { return _outs; }
+float RobotType::outs_hysteresis() { return _outs_hysteresis; }
 int RobotType::phototransistor_threshold() { return _phototransistor_threshold; }
 pin RobotType::pins() { return _pins; }
 int RobotType::speed() { return _speed; }
@@ -31,7 +32,8 @@ pin pins_violet = {
     static_cast<int>(PinViolet::PIN_M4_1),
     static_cast<int>(PinViolet::PIN_M4_2),
     static_cast<int>(PinViolet::PIN_SOLENOID),
-    static_cast<int>(PinViolet::PIN_DRIBBLER)};
+    static_cast<int>(PinViolet::PIN_DRIBBLER),
+    static_cast<int>(PinViolet::PIN_LED)};
 
 UARTConfig uart_config_violet = {UART_num_violet, UART_BAUDRATE_VIOLET, UART_BUFFER_SIZE_VIOLET, UART_BUFFER_STARTER_VIOLET};
 
@@ -47,6 +49,7 @@ RobotViolet::RobotViolet() : RobotType()
     _pins = pins_violet;
     _uart_config = uart_config_violet;
     _outs = outs_bounds_violet;
+    _outs_hysteresis = OUTS_HYSTERESIS_VIOLET;
     _motors_config = motors_config_violet;
     _gyroscope_address = GYROSCOPE_ADDRESS_VIOLET;
     _controls_config = controls_config_violet;
@@ -70,7 +73,8 @@ pin pins_white = {
     static_cast<int>(PinWhite::PIN_M4_1),
     static_cast<int>(PinWhite::PIN_M4_2),
     static_cast<int>(PinWhite::PIN_SOLENOID),
-    static_cast<int>(PinWhite::PIN_DRIBBLER)};
+    static_cast<int>(PinWhite::PIN_DRIBBLER),
+    static_cast<int>(PinWhite::PIN_LED)};
 
 UARTConfig uart_config_white = {UART_num_white, UART_BAUDRATE_WHITE, UART_BUFFER_SIZE_WHITE, UART_BUFFER_STARTER_WHITE};
 
@@ -86,6 +90,7 @@ RobotWhite::RobotWhite() : RobotType()
     _pins = pins_white;
     _uart_config = uart_config_white;
     _outs = outs_bounds_white;
+    _outs_hysteresis = OUTS_HYSTERESIS_WHITE;
     _motors_config = motors_config_white;
     _gyroscope_address = GYROSCOPE_ADDRESS_WHITE;
     _controls_config = controls_config_white;

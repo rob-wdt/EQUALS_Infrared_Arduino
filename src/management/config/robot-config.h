@@ -10,6 +10,7 @@ public:
     int speed();
     pin pins();
     outsBounds outs_bounds();
+    float outs_hysteresis();
     motorsConfig motors_config();
     int gyro_address();
     controlsConfig controls_config();
@@ -26,6 +27,7 @@ protected:
     pin _pins;
     UARTConfig _uart_config;
     outsBounds _outs;
+    float _outs_hysteresis;
     motorsConfig _motors_config;
     int _gyroscope_address;
     controlsConfig _controls_config;

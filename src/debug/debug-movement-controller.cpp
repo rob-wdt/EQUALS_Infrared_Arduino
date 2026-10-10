@@ -2,6 +2,7 @@
 #include "config.h"
 #include "control/movement-controller/movement-controller.h"
 #include "core/sensors/button/button.h"
+#include "core/led/led.h"
 #include "management/config/robot-config.h"
 
 // FEEL FREE TO CHANGE
@@ -11,35 +12,35 @@
 class MovementControllerTest
 {
 public:
-    MovementControllerTest(MovementController mc, BNO055 gyro, Button btn) : _m(mc), _gyro(gyro), _button(btn) {}
+    MovementControllerTest(MovementController mc, BNO055 gyro, Button btn, Led led) : _m(mc), _gyro(gyro), _button(btn), _led(led) {}
     void setup()
     {
         _gyro.init();
         _m.init();
+        _button.init();
+        _led.init();
         Serial.begin(115200);
 
         Serial.print("Press button #");
         Serial.print(_button.pin());
         Serial.println(" to calibrate the gyroscope.");
-        _button.reset();
-        while (!_button.is_pressed())
-        {
-            _button.read();
-        }
+        _button.wait_click();
 
         while (!_gyro.calibrated())
             ;
+        _led.on();
 
         Serial.println("Gyroscope calibrated");
         Serial.print("Press button #");
         Serial.print(_button.pin());
         Serial.println(" to set the zero angles.");
-        while (!_button.is_pressed())
-        {
-            _button.read();
-        }
-
+        _button.wait_click();
         _gyro.set_zero_angles();
+
+        Serial.print("Press button #");
+        Serial.print(_button.pin());
+        Serial.println(" to start.");
+        _button.wait_click();
 
         Serial.println("Zero angles set.");
     }
@@ -56,6 +57,7 @@ private:
     MovementController _m;
     BNO055 _gyro;
     Button _button;
+    Led _led;
 };
 
 RobotViolet robot_type;
@@ -71,8 +73,9 @@ MovementController movement_controller(
 
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
+Led led(config.pins().led);
 
-MovementControllerTest test(movement_controller, gyro, button);
+MovementControllerTest test(movement_controller, gyro, button, led);
 
 void setup()
 {

@@ -10,4 +10,13 @@ bool Button::is_pressed() { return !_is_pressed; }
 
 void Button::reset() { _is_pressed = true; }
 
+void Button::wait_click()
+{
+    reset();
+    while (!is_pressed())
+        read();
+    while (is_pressed())
+        read();
+}
+
 int Button::pin() { return _pin; }

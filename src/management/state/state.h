@@ -62,6 +62,7 @@ struct StateContext
     gyroData gyro;
     coordinates coords;
     OutType out;
+    int out_escape_angle; // where to drive to get back into the field
     bool ball_visible;
     bool ball_captured;
     bool start_pressed;

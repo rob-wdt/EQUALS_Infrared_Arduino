@@ -30,7 +30,8 @@ enum class PinViolet : uint8_t
     PIN_M4_1 = 5,
     PIN_M4_2 = 7,
     PIN_SOLENOID = 31,
-    PIN_DRIBBLER = 3
+    PIN_DRIBBLER = 3,
+    PIN_LED = 30
 };
 
 extern UARTNum UART_num_violet;
@@ -38,7 +39,8 @@ extern UARTNum UART_num_violet;
 #define UART_BUFFER_SIZE_VIOLET 7
 #define UART_BUFFER_STARTER_VIOLET 255
 
-const outsBounds outs_bounds_violet = {60, -60, 50, -60};
+const outsBounds outs_bounds_violet = {50, -55, 40, -65};
+#define OUTS_HYSTERESIS_VIOLET 15 // cm back inside a bound before the out is cleared
 
 const motorsLocAngles motors_loc_angles_violet = {
     MotorLocationAngle::ANGLE_315,
@@ -55,7 +57,7 @@ const motorsDirections motors_directions_violet = {
 #define GYROSCOPE_ADDRESS_VIOLET 0x29
 
 const PIDCoefficients control_gyro_align_pid_violet = {2.0, 0.0, 0.0};
-const PDCCoefficients control_gyro_align_pdc_violet = {0.5, 0.05, 0.1};
+const PDCCoefficients control_gyro_align_pdc_violet = {0.5, 0.6, 0.0};
 
 #define KICKING_TIME_MS_VIOLET 200
 
@@ -85,7 +87,8 @@ enum class PinWhite : uint8_t
     PIN_M4_1 = 5,
     PIN_M4_2 = 7,
     PIN_SOLENOID = 31,
-    PIN_DRIBBLER = 3
+    PIN_DRIBBLER = 3,
+    PIN_LED = 30
 };
 
 extern UARTNum UART_num_white;
@@ -93,7 +96,8 @@ extern UARTNum UART_num_white;
 #define UART_BUFFER_SIZE_WHITE 7
 #define UART_BUFFER_STARTER_WHITE 255
 
-const outsBounds outs_bounds_white = {0, 0, 0, 0};
+const outsBounds outs_bounds_white = {55, -60, 40, -60};
+#define OUTS_HYSTERESIS_WHITE 10 // cm back inside a bound before the out is cleared
 
 const motorsLocAngles motors_loc_angles_white = {
     MotorLocationAngle::ANGLE_315,
@@ -110,7 +114,7 @@ const motorsDirections motors_directions_white = {
 #define GYROSCOPE_ADDRESS_WHITE 0x29
 
 const PIDCoefficients control_gyro_align_pid_white = {2.0, 0.0, 0.0};
-const PDCCoefficients control_gyro_align_pdc_white = {0.5, 0.05, 0.1};
+const PDCCoefficients control_gyro_align_pdc_white = {0.5, 0.6, 0.0};
 
 #define KICKING_TIME_MS_WHITE 200
 

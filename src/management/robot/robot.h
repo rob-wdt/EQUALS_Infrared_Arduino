@@ -13,6 +13,7 @@
 
 #include "management/config/robot-config.h"
 #include "core/kicker/kicker.h"
+#include "core/led/led.h"
 #include "management/state-machine/state-machine.h"
 
 class Robot
@@ -41,6 +42,7 @@ private:
     Button _start_button;
     Button _stop_button;
     Kicker _kicker;
+    Led _led;
 
     StateMachine _fsm;
 
