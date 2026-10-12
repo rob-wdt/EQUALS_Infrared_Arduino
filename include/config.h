@@ -42,8 +42,8 @@ extern UARTNum UART_num_violet;
 // cm, field coordinates: +x to the right, +y towards the opponent goal
 enum class OutsBoundsViolet : int16_t
 {
-    RIGHT = 50,
-    LEFT = -55,
+    RIGHT = 43,
+    LEFT = -50,
     FRONT_GOAL = 40,
     REAR_GOAL = -65
 };
