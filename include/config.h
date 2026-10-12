@@ -42,10 +42,10 @@ extern UARTNum UART_num_violet;
 // cm, field coordinates: +x to the right, +y towards the opponent goal
 enum class OutsBoundsViolet : int16_t
 {
-    RIGHT = 45,
-    LEFT = -55,
-    FRONT_GOAL = 35,
-    REAR_GOAL = -60
+    RIGHT = 43,
+    LEFT = -50,
+    FRONT_GOAL = 40,
+    REAR_GOAL = -65
 };
 #define OUTS_HYSTERESIS_VIOLET 15 // cm back inside a bound before the out is cleared
 
