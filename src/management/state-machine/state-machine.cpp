@@ -4,7 +4,9 @@ StateMachine::StateMachine() : _current(&_states.calibrating) {}
 
 State *StateMachine::current() { return _current; }
 
-void StateMachine::update(StateContext &ctx, Command &cmd)
+StateSet &StateMachine::states() { return _states; }
+
+void StateMachine::_prepare(StateContext &ctx)
 {
     ctx.states = &_states;
 
@@ -15,7 +17,11 @@ void StateMachine::update(StateContext &ctx, Command &cmd)
     _ball_watcher.update(ctx.ball_visible, ball, ctx.params.ball_still_epsilon);
     ctx.ball_still_ms = _ball_watcher.still_ms();
     ctx.ball_lost_ms = _ball_watcher.lost_ms();
+}
 
+void StateMachine::update(StateContext &ctx, Command &cmd)
+{
+    _prepare(ctx);
     cmd = Command();
 
     // Priorities: global events > role swap > the state's own transitions
@@ -29,6 +35,21 @@ void StateMachine::update(StateContext &ctx, Command &cmd)
     next = _current->update(ctx, cmd);
     if (next)
         _transition_to(next, ctx);
+}
+
+void StateMachine::set_state(State *state, StateContext &ctx)
+{
+    _prepare(ctx);
+    _transition_to(state, ctx);
+}
+
+void StateMachine::run_state(State *state, StateContext &ctx, Command &cmd)
+{
+    _prepare(ctx);
+    // Entering it once, so its timers start like in a normal game
+    _transition_to(state, ctx);
+    cmd = Command();
+    state->update(ctx, cmd);
 }
 
 void StateMachine::_transition_to(State *next, StateContext &ctx)
@@ -74,7 +95,7 @@ State *StateMachine::_global_transition(StateContext &ctx)
 
 State *StateMachine::_role_switch(StateContext &ctx)
 {
-    if (!_current->can_switch_role() || ctx.ball_captured)
+    if (!ctx.can_change_role || !_current->can_switch_role() || ctx.ball_captured)
         return nullptr;
     if (millis() - _last_role_switch < ctx.params.role_cooldown_ms)
         return nullptr;

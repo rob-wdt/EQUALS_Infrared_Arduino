@@ -10,18 +10,21 @@ class StateCalibrating : public State
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "Calibrating"; }
 };
 
 class StateIdle : public State
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "Idle"; }
 };
 
 class StateOutRecovery : public State
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "OutRecovery"; }
     void set_resume(State *state);
 
 private:
@@ -37,10 +40,71 @@ public:
     RoleKind role() const override { return RoleKind::ATTACKER; }
 };
 
+// class StateAttackerSearch : public StateAttacker
+// {
+// public:
+//     State *update(StateContext &ctx, Command &cmd) override;
+//     const char *name() const override { return "AttackerSearch"; }
+//     bool can_switch_role() const override { return true; }
+// };
+
+// class StateAttackerApproach : public StateAttacker
+// {
+// public:
+//     State *update(StateContext &ctx, Command &cmd) override;
+//     const char *name() const override { return "AttackerApproach"; }
+//     bool can_switch_role() const override { return true; }
+// };
+
+// class StateAttackerOrbit : public StateAttacker
+// {
+// public:
+//     State *update(StateContext &ctx, Command &cmd) override;
+//     const char *name() const override { return "AttackerOrbit"; }
+//     bool can_switch_role() const override { return true; }
+// };
+
+// class StateAttackerCapture : public StateAttacker
+// {
+// public:
+//     void enter(StateContext &ctx) override;
+//     State *update(StateContext &ctx, Command &cmd) override;
+//     const char *name() const override { return "AttackerCapture"; }
+//     bool can_switch_role() const override { return false; }
+
+// private:
+//     Timer _timer;
+// };
+
+// class StateAttackerDrive : public StateAttacker
+// {
+// public:
+//     void enter(StateContext &ctx) override;
+//     State *update(StateContext &ctx, Command &cmd) override;
+//     const char *name() const override { return "AttackerDrive"; }
+//     bool can_switch_role() const override { return false; }
+
+// private:
+//     Timer _timer;
+// };
+
+// class StateAttackerKick : public StateAttacker
+// {
+// public:
+//     void enter(StateContext &ctx) override;
+//     State *update(StateContext &ctx, Command &cmd) override;
+//     const char *name() const override { return "AttackerKick"; }
+
+// private:
+//     Timer _timer;
+//     bool _fired;
+// };
+
 class StateAttackerSearch : public StateAttacker
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "AttackerSearch"; }
     bool can_switch_role() const override { return true; }
 };
 
@@ -48,14 +112,8 @@ class StateAttackerApproach : public StateAttacker
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
-    bool can_switch_role() const override { return true; }
-};
-
-class StateAttackerOrbit : public StateAttacker
-{
-public:
-    State *update(StateContext &ctx, Command &cmd) override;
-    bool can_switch_role() const override { return true; }
+    const char *name() const override { return "AttackerApproach"; }
+    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerCapture : public StateAttacker
@@ -63,21 +121,20 @@ class StateAttackerCapture : public StateAttacker
 public:
     void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "AttackerCapture"; }
     bool can_switch_role() const override { return false; }
 
 private:
     Timer _timer;
+    bool _holding = false; // the phototransistor sees the ball, _timer counts from that moment
 };
 
 class StateAttackerDrive : public StateAttacker
 {
 public:
-    void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "AttackerDrive"; }
     bool can_switch_role() const override { return false; }
-
-private:
-    Timer _timer;
 };
 
 class StateAttackerKick : public StateAttacker
@@ -85,6 +142,7 @@ class StateAttackerKick : public StateAttacker
 public:
     void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "AttackerKick"; }
 
 private:
     Timer _timer;
@@ -104,6 +162,7 @@ class StateDefenderReturn : public StateDefender
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "DefenderReturn"; }
     bool can_switch_role() const override { return true; }
 };
 
@@ -111,6 +170,7 @@ class StateDefenderGuard : public StateDefender
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "DefenderGuard"; }
     bool can_switch_role() const override { return true; }
 };
 
@@ -119,6 +179,7 @@ class StateDefenderClear : public StateDefender
 public:
     void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
+    const char *name() const override { return "DefenderClear"; }
 
 private:
     Timer _timer;
@@ -134,7 +195,6 @@ struct StateSet
 
     StateAttackerSearch attacker_search;
     StateAttackerApproach attacker_approach;
-    StateAttackerOrbit attacker_orbit;
     StateAttackerCapture attacker_capture;
     StateAttackerDrive attacker_drive;
     StateAttackerKick attacker_kick;

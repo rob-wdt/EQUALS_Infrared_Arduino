@@ -100,9 +100,9 @@ private:
     CoordinatesCalculator _coords;
     BNO055 _gyro;
     Button _button;
-    Led _led;
     UART _uart;
     CameraDataParser _c;
+    Led _led;
 };
 
 RobotViolet robot_type;

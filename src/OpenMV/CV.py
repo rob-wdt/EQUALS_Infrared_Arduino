@@ -53,6 +53,13 @@ class ObjectDetector:
         self.__dst_clc = dist_calc
         self.__strategy = init_strategy
 
+    def __constrain_angle(self, angle):
+        if angle < -180:
+            return angle + 360
+        if angle > 180:
+            return angle - 360
+        return angle
+
     def set_strategy(self, strategy: DetectingStrategy):
         self.__strategy = strategy
         return self
@@ -68,7 +75,7 @@ class ObjectDetector:
         distance: float = self.__dst_clc.linearize(
             robot_type, int(self.__dst_clc.euclidean_distance(w, h)))
 
-        angle: int = math.floor(math.degrees(math.atan2(w, h)))
+        angle: int = self.__constrain_angle(math.floor(math.degrees(math.atan2(w, h)) + 180))
 
         return ObjectData(maths.Point(max_blob.cx(), max_blob.cy()), angle, distance, maths.Point(max_blob.x(), max_blob.y()), max_blob.w(), max_blob.h(), self.__dst_clc.euclidean_distance(w, h))
 

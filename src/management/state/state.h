@@ -19,12 +19,13 @@ enum class RoleKind : uint8_t
 // What the active state wants the robot to do this tick
 struct Command
 {
-    int lin_speed = 0;
-    int move_angle = 0;
-    int align_angle = 0;
+    float lin_speed = 0;
+    int move_angle = 0;  // relative to the robot front
+    int align_angle = 0; // heading in the gyro frame (0 = the direction set at calibration), not a camera angle
     bool stop = false;
     bool kick = false;
     bool calibrate = false;
+    bool dribble = false;
 };
 
 // Initial values, tune on the field
@@ -37,7 +38,7 @@ struct StateParams
     int orbit_enter_angle = 30;           // deg, ball is this far from the front -> start orbiting
     int orbit_exit_angle = 15;            // deg, ball is this close to the front -> stop orbiting
     int orbit_distance = 40;              // cm, orbit only when the ball is closer than this
-    unsigned long capture_ms = 150;       // hold after the phototransistor triggers
+    unsigned long capture_ms = 500;       // the ball must stay captured this long before Drive (dribbler gets hold of it)
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
     int kick_goal_distance = 60;          // cm, kick when the opponent goal is closer than this
     unsigned long kick_cooldown_ms = 400; // pause after the kick
@@ -68,6 +69,7 @@ struct StateContext
     bool start_pressed;
     bool stop_pressed;
     RoleKind start_role;
+    bool can_change_role;
     StateParams params;
 
     // Derived by StateMachine
@@ -85,4 +87,6 @@ public:
     virtual RoleKind role() const { return RoleKind::NONE; }
     // Role swap is allowed only from "calm" states, not while capturing or kicking
     virtual bool can_switch_role() const { return false; }
+    // Name for printing and debugging
+    virtual const char *name() const = 0;
 };

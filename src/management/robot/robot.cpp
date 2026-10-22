@@ -1,18 +1,19 @@
 #include "robot.h"
 
-Robot::Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal) : _start_role(start_role),
-                                                                              _robot_type(robot_type),
-                                                                              _config(_robot_type),
-                                                                              _ball_detector(Phototransistor(_config.pins().phototransistor), _config.phototransistor_threshold()),
-                                                                              _outs_handler(_config.outs_hysteresis()),
-                                                                              _cam_parser(UART(_config.UART_config().num, _config.UART_config().baudrate, _config.UART_config().buffer_size, _config.UART_config().buffer_starter), GoalMapper(own_goal)),
-                                                                              _movement_controller(motors{
-                                                                                                       Motor(_config.pins().m1_1, _config.pins().m1_2, _config.motors_config().directions.m1_dir),
-                                                                                                       Motor(_config.pins().m2_1, _config.pins().m2_2, _config.motors_config().directions.m2_dir),
-                                                                                                       Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
-                                                                                                       Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
-                                                                                                   _config.motors_config().loc_angles, _config.motors_config().min_pwm, new PDCControl(_config.controls_config().pdc)),
-                                                                              _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn2), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led) {}
+Robot::Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool can_change_role) : _start_role(start_role),
+                                                                                                    _can_change_role(can_change_role),
+                                                                                                    _robot_type(robot_type),
+                                                                                                    _config(_robot_type),
+                                                                                                    _ball_detector(Phototransistor(_config.pins().phototransistor), _config.phototransistor_threshold()),
+                                                                                                    _outs_handler(_config.outs_hysteresis()),
+                                                                                                    _cam_parser(UART(_config.UART_config().num, _config.UART_config().baudrate, _config.UART_config().buffer_size, _config.UART_config().buffer_starter), GoalMapper(own_goal)),
+                                                                                                    _movement_controller(motors{
+                                                                                                                             Motor(_config.pins().m1_1, _config.pins().m1_2, _config.motors_config().directions.m1_dir),
+                                                                                                                             Motor(_config.pins().m2_1, _config.pins().m2_2, _config.motors_config().directions.m2_dir),
+                                                                                                                             Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
+                                                                                                                             Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
+                                                                                                                         _config.motors_config().loc_angles, new PDCControl(_config.controls_config().pdc)),
+                                                                                                    _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn2), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led), _dribbler(_config.pins().dribbler, _config.dribbler_config().min, _config.dribbler_config().max) {}
 
 void Robot::init()
 {
@@ -24,6 +25,7 @@ void Robot::init()
     _stop_button.init();
     _kicker.init();
     _led.init();
+    _dribbler.init();
 }
 
 void Robot::calibrate_gyro()
@@ -103,6 +105,12 @@ void Robot::_apply(Command cmd)
         _movement_controller.stop();
         return;
     }
+
+    if (cmd.dribble)
+        _dribbler.run();
+    else
+        _dribbler.stop();
+
     _movement_controller.set_velocity(cmd.lin_speed, cmd.move_angle, cmd.align_angle, _gyro.data());
     _movement_controller.move();
 }

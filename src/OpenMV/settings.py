@@ -9,9 +9,9 @@ UART_BAUDRATE: int = 230400
 ########################################################################################################################
 # ----------------------------------------------- ATTACKER ----------------------------------------------------------- #
 
-YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -25, 127, 39, 127)]
-BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -128, -10, -128, 6)]
-RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 2, 127, 21, 127)]
+YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -10, 4, 26, 76)]
+BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(32, 42, -20, -5, -10, 7)]
+RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 9, 127, 22, 127)]
 
 WHITE_ATTACKER = (63, 59, 61)
 
@@ -25,11 +25,11 @@ CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2 + 13, FRAME_H_ATTACKER // 2 
 
 MASK_RADIUS_ATTACKER: int = 120
 
-ROBOT_RADIUS_ATTACKER: int = 20
+ROBOT_RADIUS_ATTACKER: int = 15
 
 GAIN_ATTACKER = 25
 
-EXPOSURE_ATTACKER = 100_000
+EXPOSURE_ATTACKER = 10_000
 
 PIXELS_FORMAT_ATTACKER = sensor.RGB565
 

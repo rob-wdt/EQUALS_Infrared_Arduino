@@ -12,8 +12,10 @@ void CoordinatesCalculator::calculate_coordinates(gyroData gyro_data, cameraData
     float x_opp = data.opp_goal_distance * sin(angle_rad_opp);
     float y_opp = data.opp_goal_distance * cos(angle_rad_opp);
 
-    _coordinates.x = (x_own + x_opp) / 2;
-    _coordinates.y = (y_own + y_opp) / 2;
+    // The camera angle is 0 in front of the robot, so each vector points from the robot to a goal: (goal - robot).
+    // The goals are symmetric around the field center, so the average of the two vectors is minus the robot position
+    _coordinates.x = -(x_own + x_opp) / 2;
+    _coordinates.y = -(y_own + y_opp) / 2;
 }
 
 ::coordinates CoordinatesCalculator::coordinates() { return _coordinates; }

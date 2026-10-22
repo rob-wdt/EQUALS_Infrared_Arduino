@@ -43,7 +43,7 @@ outsBounds outs_bounds_violet = {
     static_cast<float>(OutsBoundsViolet::FRONT_GOAL),
     static_cast<float>(OutsBoundsViolet::REAR_GOAL)};
 
-motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet, MOTOR_MIN_PWM_VIOLET};
+motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet};
 
 controlsConfig controls_config_violet = {control_gyro_align_pid_violet, control_gyro_align_pdc_violet};
 
@@ -90,7 +90,7 @@ outsBounds outs_bounds_white = {
     static_cast<float>(OutsBoundsWhite::FRONT_GOAL),
     static_cast<float>(OutsBoundsWhite::REAR_GOAL)};
 
-motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white, MOTOR_MIN_PWM_WHITE};
+motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white};
 
 controlsConfig controls_config_white = {control_gyro_align_pid_white, control_gyro_align_pdc_white};
 

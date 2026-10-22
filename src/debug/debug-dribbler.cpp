@@ -11,6 +11,7 @@ public:
     {
         Serial.begin(115200);
         _dribbler.init();
+        Serial.println("Dribbler test initialized");
     }
     void loop()
     {

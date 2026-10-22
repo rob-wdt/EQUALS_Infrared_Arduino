@@ -13,7 +13,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------- VIOLET ------------------------------------------------------ //
-#define SPEED_VIOLET 100
+#define SPEED_VIOLET 150
 
 enum class PinViolet : uint8_t
 {
@@ -61,17 +61,15 @@ const motorsDirections motors_directions_violet = {
     MotorDirection::backward,
     MotorDirection::forward};
 
-#define MOTOR_MIN_PWM_VIOLET 60 // lowest PWM at which a wheel starts turning with the robot standing on the field
-
 #define GYROSCOPE_ADDRESS_VIOLET 0x29
 
 const PIDCoefficients control_gyro_align_pid_violet = {2.0, 0.0, 0.0};
-const PDCCoefficients control_gyro_align_pdc_violet = {0.5, 0.6, 0.0};
+const PDCCoefficients control_gyro_align_pdc_violet = {1.0, 0.0, 0.0};
 
 #define KICKING_TIME_MS_VIOLET 200
 
-#define DRIBBLER_MIN_VIOLET 1000
-#define DRIBBLER_MAX_VIOLET 1500
+#define DRIBBLER_MIN_VIOLET 1200
+#define DRIBBLER_MAX_VIOLET 2000
 
 #define PHOTOTRANSISTOR_THRESHOLD_VIOLET 1
 
@@ -110,7 +108,7 @@ enum class OutsBoundsWhite : int16_t
 {
     RIGHT = 55,
     LEFT = -60,
-    FRONT_GOAL = -45,
+    FRONT_GOAL = 50,
     REAR_GOAL = -57
 };
 #define OUTS_HYSTERESIS_WHITE 10 // cm back inside a bound before the out is cleared
@@ -126,8 +124,6 @@ const motorsDirections motors_directions_white = {
     MotorDirection::forward,
     MotorDirection::backward,
     MotorDirection::forward};
-
-#define MOTOR_MIN_PWM_WHITE 60 // lowest PWM at which a wheel starts turning with the robot standing on the field
 
 #define GYROSCOPE_ADDRESS_WHITE 0x29
 

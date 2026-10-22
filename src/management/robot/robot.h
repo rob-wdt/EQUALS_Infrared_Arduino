@@ -10,6 +10,7 @@
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
 #include "control/camera-data-parser/camera-data-parser.h"
+#include "core/dribbler/dribbler.h"
 
 #include "management/config/robot-config.h"
 #include "core/kicker/kicker.h"
@@ -19,16 +20,19 @@
 class Robot
 {
 public:
-    Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal);
+    // can_change_role: whether the robot may swap attacker / defender during the game (needs a teammate)
+    Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool can_change_role);
     void init();
     void calibrate_gyro();
     void listen();
     void calculate_coords();
     void update();
+    State *current_state() { return _fsm.current(); }
 
 private:
     // _config must be declared first: the members below are built from it
     RoleKind _start_role;
+    bool _can_change_role;
     RobotType _robot_type;
     RobotConfig _config;
 
@@ -43,6 +47,7 @@ private:
     Button _stop_button;
     Kicker _kicker;
     Led _led;
+    Dribbler _dribbler;
 
     StateMachine _fsm;
 
