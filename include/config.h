@@ -43,9 +43,9 @@ extern UARTNum UART_num_violet;
 enum class OutsBoundsViolet : int16_t
 {
     RIGHT = 43,
-    LEFT = -50,
-    FRONT_GOAL = 40,
-    REAR_GOAL = -65
+    LEFT = -55,
+    FRONT_GOAL = 50,
+    REAR_GOAL = -50
 };
 #define OUTS_HYSTERESIS_VIOLET 15 // cm back inside a bound before the out is cleared
 

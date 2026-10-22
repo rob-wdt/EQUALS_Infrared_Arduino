@@ -101,14 +101,14 @@ private:
     CoordinatesCalculator _coords;
     BNO055 _gyro;
     Button _button;
+    UART _uart;
     CameraDataParser _cam_parser;
     Led _led;
-    UART _uart;
 
     int _move_angle = 0;
 };
 
-RobotWhite robot_type;
+RobotViolet robot_type;
 RobotConfig config(robot_type);
 
 OutsHandler outs(config.outs_hysteresis());
