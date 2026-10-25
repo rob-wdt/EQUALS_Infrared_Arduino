@@ -14,9 +14,9 @@ void MovementController::init()
     _motors.m4.init();
 }
 
-void MovementController::set_velocity(movementData movement_data, gyroData gyro_data)
+void MovementController::set_velocity(int lin_speed, int move_angle, int align_angle, gyroData gyro_data)
 {
-    int16_t error = movement_data.align_angle - gyro_data.yaw;
+    int16_t error = align_angle - gyro_data.yaw;
     if (error > 180)
         error -= 360;
     else if (error < -180)
@@ -30,7 +30,7 @@ void MovementController::set_velocity(movementData movement_data, gyroData gyro_
     float max_speed = 0;
     for (int i = 0; i < 4; i++)
     {
-        speeds[i] = m[i]->direction() * (movement_data.lin_speed * cos(radians(movement_data.move_angle + loc[i])) + angular_speed);
+        speeds[i] = m[i]->direction() * (lin_speed * cos(radians(move_angle + loc[i])) + angular_speed);
         max_speed = max(max_speed, fabs(speeds[i]));
     }
 
