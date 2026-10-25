@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "config.h"
-#include "control/timer/timer.h"
+#include "utils/timer/timer.h"
 
 class TimerTest
 {

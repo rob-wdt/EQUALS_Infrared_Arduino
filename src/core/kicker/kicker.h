@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include "control/timer/timer.h"
+#include "utils/timer/timer.h"
 
 class Kicker
 {
