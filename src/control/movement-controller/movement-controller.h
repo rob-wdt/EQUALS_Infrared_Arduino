@@ -27,12 +27,17 @@ struct motorsDirections
     MotorDirection m1_dir, m2_dir, m3_dir, m4_dir;
 };
 
+struct movementData
+{
+    int16_t lin_speed, move_angle, align_angle;
+};
+
 class MovementController
 {
 public:
     MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control);
     void init();
-    void set_velocity(int16_t lin_speed, int16_t move_angle, int16_t align_angle, gyroData gyro_data);
+    void set_velocity(movementData movement_data, gyroData gyro_data);
     void move();
     void stop();
 
