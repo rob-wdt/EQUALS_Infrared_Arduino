@@ -13,8 +13,8 @@ public:
     void loop()
     {
         _robot.update();
-        Serial.print("Current state:\t");
-        Serial.println(_robot.current_state()->name());
+        // Serial.print("Current state:\t");
+        // Serial.println(_robot.current_state()->name());
     }
 
 private:

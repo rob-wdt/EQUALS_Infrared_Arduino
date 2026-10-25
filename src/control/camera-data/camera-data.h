@@ -7,7 +7,7 @@ struct rawCameraData
 
 struct cameraData
 {
-    int own_goal_angle,
+    float own_goal_angle,
         own_goal_distance,
         opp_goal_angle,
         opp_goal_distance,

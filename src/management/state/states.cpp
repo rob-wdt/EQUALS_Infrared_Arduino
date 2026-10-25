@@ -128,7 +128,7 @@ State *StateAttackerDrive::update(StateContext &ctx, Command &cmd)
 
     cmd.dribble = true;
     cmd.kick = false;
-    cmd.lin_speed = 1.2 * ctx.params.speed;
+    cmd.lin_speed = ctx.params.speed;
 
     return nullptr;
 }
@@ -226,6 +226,9 @@ State *StateAttackerKick::update(StateContext &ctx, Command &cmd)
 
 State *StateDefenderReturn::update(StateContext &ctx, Command &cmd)
 {
+    if (ctx.cam.own_goal_distance <= ctx.params.guard_distance)
+        return &ctx.states->defender_guard;
+
     cmd.align_angle = 0;
     cmd.dribble = false;
     cmd.kick = false;
@@ -236,10 +239,16 @@ State *StateDefenderReturn::update(StateContext &ctx, Command &cmd)
 
 State *StateDefenderGuard::update(StateContext &ctx, Command &cmd)
 {
+    // if (abs(ctx.cam.ball_distance) <= ctx.params.clear_distance)
+    //     return &ctx.states->defender_clear;
+
+    if (ctx.cam.own_goal_distance > ctx.params.guard_distance)
+        return &ctx.states->defender_return;
+
     cmd.align_angle = 0;
     cmd.dribble = false;
     cmd.kick = false;
-    cmd.lin_speed = ctx.params.defender_coef * (ctx.cam.ball_angle % 180);
+    cmd.lin_speed = ctx.params.defender_coef * (static_cast<int>(ctx.cam.ball_angle) % 180);
     cmd.move_angle = 90;
     return nullptr;
 }
@@ -248,6 +257,12 @@ void StateDefenderClear::enter(StateContext &ctx) { _timer.set_time_ms(ctx.param
 
 State *StateDefenderClear::update(StateContext &ctx, Command &cmd)
 {
+    if (ctx.cam.ball_angle > ctx.params.clear_distance)
+        return &ctx.states->defender_guard;
+
+    if (ctx.cam.own_goal_distance > ctx.params.guard_distance)
+        return &ctx.states->defender_return;
+
     cmd.align_angle = 0;
     cmd.dribble = false;
     cmd.kick = false;

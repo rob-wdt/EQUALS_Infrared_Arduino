@@ -124,4 +124,9 @@ void Robot::update()
     Command cmd;
     _fsm.update(ctx, cmd);
     _apply(cmd);
+
+    Serial.print("x:\t");
+    Serial.print(ctx.coords.x);
+    Serial.print("\t\ty:\t");
+    Serial.println(ctx.coords.y);
 }

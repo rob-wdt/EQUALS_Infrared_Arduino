@@ -32,7 +32,7 @@ struct Command
 struct StateParams
 {
     int speed = 100;
-    float defender_coef = 0.5;
+    float defender_coef = 1.5;
 
     // Attacker
     int orbit_enter_angle = 30;           // deg, ball is this far from the front -> start orbiting
@@ -44,7 +44,7 @@ struct StateParams
     unsigned long kick_cooldown_ms = 400; // pause after the kick
 
     // Defender
-    int guard_distance = 30;  // cm from own goal
+    int guard_distance = 80;  // cm from own goal
     int guard_tolerance = 10; // cm, hysteresis for leaving the guard position
     int clear_distance = 35;  // cm, ball is this close -> clear it
     int clear_tolerance = 10; // cm, hysteresis for giving up the clearance

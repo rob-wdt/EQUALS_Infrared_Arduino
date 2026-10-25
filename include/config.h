@@ -69,11 +69,11 @@ const PDCCoefficients control_gyro_align_pdc_violet = {1.0, 0.0, 0.0};
 #define KICKING_TIME_MS_VIOLET 200
 
 #define DRIBBLER_MIN_VIOLET 1200
-#define DRIBBLER_MAX_VIOLET 2000
+#define DRIBBLER_MAX_VIOLET 1400
 
 #define PHOTOTRANSISTOR_THRESHOLD_VIOLET 1
 
-#define DEFENDER_MOVE_COEF_VIOLET 0.5
+#define DEFENDER_MOVE_COEF_VIOLET 3.0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------- WHITE ------------------------------------------------------- //

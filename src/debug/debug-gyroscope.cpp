@@ -57,7 +57,7 @@ private:
     Led _led;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
 BNO055 gyro(config.gyro_address());
