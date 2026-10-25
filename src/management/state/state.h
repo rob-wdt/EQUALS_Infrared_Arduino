@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 #include "control/camera-data-parser/camera-data-parser.h"
-#include "control/coordinates-calculator/coordinates-calculator.h"
+#include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 #include "control/outs-handler/outs-handler.h"
 #include "core/sensors/BNO055/BNO055.h"
 

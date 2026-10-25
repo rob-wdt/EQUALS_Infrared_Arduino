@@ -4,7 +4,7 @@
 
 #include "control/ball-detector/ball-detector.h"
 #include "control/outs-handler/outs-handler.h"
-#include "control/coordinates-calculator/coordinates-calculator.h"
+#include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 #include "core/UART/UART.h"
 #include "control/movement-controller/movement-controller.h"
 #include "core/sensors/BNO055/BNO055.h"
@@ -38,7 +38,7 @@ private:
 
     BallDetector _ball_detector;
     OutsHandler _outs_handler;
-    CoordinatesCalculator _coords;
+    RobotCoordinatesCalculator _coords;
     CameraDataParser _cam_parser;
     MovementController _movement_controller;
     BNO055 _gyro;

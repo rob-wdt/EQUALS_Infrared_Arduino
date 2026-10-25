@@ -2,7 +2,7 @@
 #include "config.h"
 #include "control/outs-handler/outs-handler.h"
 #include "control/movement-controller/movement-controller.h"
-#include "control/coordinates-calculator/coordinates-calculator.h"
+#include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
 #include "core/led/led.h"
@@ -14,7 +14,7 @@
 class OutsMovementTest
 {
 public:
-    OutsMovementTest(OutsHandler outs, MovementController mc, CoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cdp, Led led) : _outs(outs), _m(mc), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _cam_parser(cdp), _led(led) {}
+    OutsMovementTest(OutsHandler outs, MovementController mc, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cdp, Led led) : _outs(outs), _m(mc), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _cam_parser(cdp), _led(led) {}
     void setup()
     {
         _gyro.init();
@@ -98,7 +98,7 @@ public:
 private:
     OutsHandler _outs;
     MovementController _m;
-    CoordinatesCalculator _coords;
+    RobotCoordinatesCalculator _coords;
     BNO055 _gyro;
     Button _button;
     UART _uart;
@@ -119,7 +119,7 @@ MovementController movement_controller(
      Motor(config.pins().m4_1, config.pins().m4_2, config.motors_config().directions.m4_dir)},
     config.motors_config().loc_angles,
     new PDCControl(config.controls_config().pdc));
-CoordinatesCalculator coords;
+RobotCoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 Led led(config.pins().led);

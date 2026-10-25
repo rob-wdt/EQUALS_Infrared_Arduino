@@ -1,6 +1,6 @@
 #pragma once
 
-#include "control/coordinates-calculator/coordinates-calculator.h"
+#include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 
 // Tracks how long the ball has been standing still (in field coordinates) and how long it has been out of sight
 class BallMotionWatcher

@@ -7,7 +7,7 @@ struct coordinates
     float x, y; // in cm
 };
 
-class CoordinatesCalculator
+class RobotCoordinatesCalculator
 {
 public:
     void calculate_coordinates(gyroData gyro_data, cameraData data);

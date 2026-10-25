@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "control/outs-handler/outs-handler.h"
-#include "control/coordinates-calculator/coordinates-calculator.h"
+#include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
 #include "core/led/led.h"
@@ -12,7 +12,7 @@
 class OutsCommonTest
 {
 public:
-    OutsCommonTest(OutsHandler outs, CoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cam_parser, Led led) : _outs(outs), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _c(cam_parser), _led(led) {}
+    OutsCommonTest(OutsHandler outs, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cam_parser, Led led) : _outs(outs), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _c(cam_parser), _led(led) {}
     void setup()
     {
         _gyro.init();
@@ -97,7 +97,7 @@ public:
 
 private:
     OutsHandler _outs;
-    CoordinatesCalculator _coords;
+    RobotCoordinatesCalculator _coords;
     BNO055 _gyro;
     Button _button;
     UART _uart;
@@ -109,7 +109,7 @@ RobotViolet robot_type;
 RobotConfig config(robot_type);
 
 OutsHandler outs(config.outs_hysteresis());
-CoordinatesCalculator coords;
+RobotCoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 Led led(config.pins().led);

@@ -1,7 +1,7 @@
-#include "coordinates-calculator.h"
+#include "robot-coordinates-calculator.h"
 #include <Arduino.h>
 
-void CoordinatesCalculator::calculate_coordinates(gyroData gyro_data, cameraData data)
+void RobotCoordinatesCalculator::calculate_coordinates(gyroData gyro_data, cameraData data)
 {
     float angle_rad_own = radians(gyro_data.yaw + data.own_goal_angle);
     float angle_rad_opp = radians(gyro_data.yaw + data.opp_goal_angle);
@@ -18,4 +18,4 @@ void CoordinatesCalculator::calculate_coordinates(gyroData gyro_data, cameraData
     _coordinates.y = -(y_own + y_opp) / 2;
 }
 
-::coordinates CoordinatesCalculator::coordinates() { return _coordinates; }
+::coordinates RobotCoordinatesCalculator::coordinates() { return _coordinates; }
