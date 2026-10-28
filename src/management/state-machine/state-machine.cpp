@@ -26,7 +26,7 @@ void StateMachine::_prepare(StateContext &ctx)
     ctx.own_goal_known = _own_goal_known;
     ctx.own_goal = _own_goal;
 
-    _ball_watcher.update(ctx.ball_visible, ctx.ball, ctx.params.ball_still_epsilon);
+    _ball_watcher.update(ctx.ball_visible, ctx.ball, ctx.params.role_switching.ball_still_epsilon);
     ctx.ball_still_ms = _ball_watcher.still_ms();
     ctx.ball_lost_ms = _ball_watcher.lost_ms();
 }
@@ -109,11 +109,11 @@ State *StateMachine::_role_switch(StateContext &ctx)
 {
     if (!ctx.can_change_role || !_current->can_switch_role() || ctx.ball_captured)
         return nullptr;
-    if (millis() - _last_role_switch < ctx.params.role_cooldown_ms)
+    if (millis() - _last_role_switch < ctx.params.role_switching.role_cooldown_ms)
         return nullptr;
 
-    bool still = ctx.ball_still_ms >= ctx.params.role_switch_ms;
-    bool lost = ctx.ball_lost_ms >= ctx.params.role_switch_ms;
+    bool still = ctx.ball_still_ms >= ctx.params.role_switching.role_switch_ms;
+    bool lost = ctx.ball_lost_ms >= ctx.params.role_switching.role_switch_ms;
 
     switch (_current->role())
     {

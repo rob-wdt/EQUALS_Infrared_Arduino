@@ -51,19 +51,4 @@ inline float dot(const MathVector &v1, const MathVector &v2) { return v1.x_proje
 // > 0 when v2 is turned counterclockwise from v1 (on the field: to the left), < 0 clockwise
 inline float cross(const MathVector &v1, const MathVector &v2) { return v1.x_projection() * v2.y_projection() - v1.y_projection() * v2.x_projection(); }
 
-// Intersection of two lines, each given by a vector: the line goes through its origin along it.
-// The point is a.origin() + a * t = b.origin() + b * u: t and u tell where it lies on each vector
-// (0..1 means between its origin and end). Returns false for parallel lines.
-// Unlike y = kx + b this works for vertical lines too
-inline bool intersect_lines(const MathVector &a, const MathVector &b, float &t, float &u)
-{
-    float denominator = cross(a, b);
-    if (fabs(denominator) < 1e-6)
-        return false;
-    MathVector between(a.origin(), b.origin());
-    t = cross(between, b) / denominator;
-    u = cross(between, a) / denominator;
-    return true;
-}
-
 inline MathVector parallel_transition(MathVector vector, point new_origin) { return MathVector(new_origin, vector.x_projection(), vector.y_projection()); }

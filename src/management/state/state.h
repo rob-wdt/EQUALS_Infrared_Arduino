@@ -37,12 +37,9 @@ struct Command
 };
 
 // Initial values, tune on the field
-struct StateParams
-{
-    int speed = 100;
-    float defender_coef = 1.5;
 
-    // Attacker
+struct AttackerStateParams
+{
     int orbit_enter_angle = 30;           // deg, ball is this far from the front -> start orbiting
     int orbit_exit_angle = 15;            // deg, ball is this close to the front -> stop orbiting
     int orbit_distance = 40;              // cm, orbit only when the ball is closer than this
@@ -54,30 +51,43 @@ struct StateParams
     int around_ball_distance = 30;        // cm, side shift of the approach point when the robot is in front of the ball
     int line_up_enter_angle = 25;         // deg, robot this close to the line behind the ball -> drive straight at the ball
     int line_up_exit_angle = 40;          // deg, hysteresis: further than this -> back to the approach point
+};
 
-    // Defender
-    int guard_distance = 80;  // cm from own goal
+struct DefenderStateParams
+{
+    int guard_distance = 80; // cm from own goal
     // Guard zone around the own goal (cm, relative to the goal center seen by the camera):
     // a front line y = guard_line_distance from -guard_half_width to +guard_half_width
     // and two side lines from its ends back to the goal line, at guard_side_angle to the goal line
-    int guard_line_distance = 30;
-    int guard_half_width = 25;
-    int guard_side_angle = 60;     // deg, 90 = straight back (a rectangle), less = wider at the goal line
-    int guard_slow_distance = 15;  // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
+    int guard_line_distance = 35;
+    int guard_half_width = 30;
+    int guard_side_angle = 60;    // deg, 90 = straight back (a rectangle), less = wider at the goal line
+    int guard_slow_distance = 15; // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
     // Coordinates are noisy: the guard point jumps by a few cm every frame and the robot would chase it forever.
     // Closer than guard_arrive_distance -> stop, move again only when the point is guard_hold_distance away
     int guard_arrive_distance = 3; // cm
     int guard_hold_distance = 5;   // cm
     float guard_smoothing = 0.3;   // 0..1, how much the guard point follows a new measurement each frame (1 = no smoothing)
-    int guard_tolerance = 10; // cm, hysteresis for leaving the guard position
-    int clear_distance = 35;  // cm, ball is this close -> clear it
-    int clear_tolerance = 10; // cm, hysteresis for giving up the clearance
+    int guard_tolerance = 10;      // cm, hysteresis for leaving the guard position
+    int clear_distance = 35;       // cm, ball is this close -> clear it
+    int clear_tolerance = 10;      // cm, hysteresis for giving up the clearance
     unsigned long clear_max_ms = 3000;
+};
 
-    // Role switching
+struct RoleSwitchingStateParams
+{
     float ball_still_epsilon = 5;          // cm, smaller displacement counts as "not moving"
     unsigned long role_switch_ms = 5000;   // ball not moving (or lost) for this long -> swap roles
     unsigned long role_cooldown_ms = 5000; // no swaps for this long after the previous one
+};
+struct StateParams
+{
+    int speed = 100;
+    float defender_coef = 1.5;
+
+    AttackerStateParams attacker;
+    DefenderStateParams defender;
+    RoleSwitchingStateParams role_switching;
 };
 
 // Everything a state may look at. Filled by Robot (inputs) and StateMachine (derived fields)
@@ -97,11 +107,11 @@ struct StateContext
     StateParams params;
 
     // Derived by StateMachine
-    point ball;            // field coordinates, valid while ball_visible
+    point ball; // field coordinates, valid while ball_visible
     bool opp_goal_visible;
-    point opp_goal;        // field coordinates, valid while opp_goal_visible
-    bool own_goal_known;   // the own goal has been seen at least once
-    point own_goal;        // field coordinates, the last place it was seen
+    point opp_goal;      // field coordinates, valid while opp_goal_visible
+    bool own_goal_known; // the own goal has been seen at least once
+    point own_goal;      // field coordinates, the last place it was seen
     unsigned long ball_still_ms;
     unsigned long ball_lost_ms;
     StateSet *states;
