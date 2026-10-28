@@ -18,7 +18,7 @@ int8_t OutsHandler::_update_axis(int8_t state, float value, float high, float lo
     return state;
 }
 
-void OutsHandler::handle(coordinates coords, outsBounds outs)
+void OutsHandler::handle(point coords, outsBounds outs)
 {
     _out_x = _update_axis(_out_x, coords.x, outs.right, outs.left);
     _out_y = _update_axis(_out_y, coords.y, outs.front_goal, outs.rear_goal);

@@ -5,15 +5,17 @@
 
 struct navigationData
 {
-    float move_angle;
+    float move_angle; // field heading to the target (0 = +y), subtract the gyro yaw to get it relative to the robot
+    float distance;   // cm
 };
 
 // Recieves robot and target point coordinates and computes movement-necessary data
 class PointNavigator
 {
 public:
-    void compute(coordinates robot_coords, coordinates target_coords);
+    void compute(point robot_coords, point target_coords);
     navigationData data();
+
 private:
     navigationData _data;
 };

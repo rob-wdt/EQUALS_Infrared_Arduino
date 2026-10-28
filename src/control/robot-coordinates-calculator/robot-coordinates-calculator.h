@@ -1,18 +1,14 @@
 #pragma once
 #include "core/sensors/BNO055/BNO055.h"
 #include "control/camera-data/camera-data.h"
-
-struct coordinates
-{
-    float x, y; // in cm
-};
+#include "utils/point/point.h"
 
 class RobotCoordinatesCalculator
 {
 public:
     void calculate_coordinates(gyroData gyro_data, cameraData data);
-    ::coordinates coordinates();
+    point coordinates();
 
 private:
-    ::coordinates _coordinates;
+    point _coordinates;
 };

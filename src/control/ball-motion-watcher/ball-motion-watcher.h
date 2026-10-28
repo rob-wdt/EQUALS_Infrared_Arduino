@@ -6,13 +6,13 @@
 class BallMotionWatcher
 {
 public:
-    void update(bool ball_visible, coordinates ball, float epsilon);
+    void update(bool ball_visible, point ball, float epsilon);
     void reset();
     unsigned long still_ms();
     unsigned long lost_ms();
 
 private:
-    coordinates _ref = {0, 0};
+    point _ref = {0, 0};
     bool _visible = false;
     bool _has_ref = false;
     unsigned long _still_since = 0;

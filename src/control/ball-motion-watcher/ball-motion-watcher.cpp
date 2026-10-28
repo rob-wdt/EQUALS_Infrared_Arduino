@@ -1,7 +1,7 @@
 #include "ball-motion-watcher.h"
 #include <Arduino.h>
 
-void BallMotionWatcher::update(bool ball_visible, coordinates ball, float epsilon)
+void BallMotionWatcher::update(bool ball_visible, point ball, float epsilon)
 {
     unsigned long now = millis();
 

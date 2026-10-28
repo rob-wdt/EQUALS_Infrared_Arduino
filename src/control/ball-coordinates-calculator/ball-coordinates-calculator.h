@@ -5,9 +5,9 @@
 class BallCoordinatesCalculator
 {
 public:
-    void calculate(gyroData gyro_data, cameraData cam_data, ::coordinates robot_coords);
-    ::coordinates coordinates();
+    void calculate(gyroData gyro_data, cameraData cam_data, point robot_coords);
+    point coordinates();
 
 private:
-    ::coordinates _coords;
+    point _coords;
 };

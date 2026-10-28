@@ -18,4 +18,4 @@ void RobotCoordinatesCalculator::calculate_coordinates(gyroData gyro_data, camer
     _coordinates.y = -(y_own + y_opp) / 2;
 }
 
-::coordinates RobotCoordinatesCalculator::coordinates() { return _coordinates; }
+point RobotCoordinatesCalculator::coordinates() { return _coordinates; }

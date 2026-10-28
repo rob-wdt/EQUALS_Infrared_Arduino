@@ -48,7 +48,7 @@ public:
         _c.parse();
         _coords.calculate_coordinates(_gyro.data(), _c.data());
 
-        coordinates cur_coords = _coords.coordinates();
+        point cur_coords = _coords.coordinates();
 
         _outs.handle(cur_coords, outs_bounds);
 

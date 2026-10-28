@@ -25,7 +25,7 @@ public:
     // hysteresis: cm the robot has to come back inside a bound before that out is cleared,
     // otherwise coordinate noise near the bound switches the out on and off every frame
     OutsHandler(float hysteresis);
-    void handle(coordinates coords, outsBounds outs);
+    void handle(point coords, outsBounds outs);
     bool in_out();
     // Move angle that leads back into the field, in a corner both bounds are handled at once (diagonally).
     // After the robot is back in the field it stays the same until the next out
