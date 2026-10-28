@@ -38,7 +38,10 @@ outsBounds outs_bounds_violet = {
     static_cast<float>(OutsBoundsViolet::RIGHT),
     static_cast<float>(OutsBoundsViolet::LEFT),
     static_cast<float>(OutsBoundsViolet::FRONT_GOAL),
-    static_cast<float>(OutsBoundsViolet::REAR_GOAL)};
+    static_cast<float>(OutsBoundsViolet::REAR_GOAL),
+    static_cast<float>(OutsBoundsViolet::FRONT_CORNERS),
+    static_cast<float>(OutsBoundsViolet::REAR_CORNERS),
+    static_cast<float>(OutsBoundsViolet::GOAL_ZONE_HALF_WIDTH)};
 
 motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet};
 
@@ -85,7 +88,10 @@ outsBounds outs_bounds_white = {
     static_cast<float>(OutsBoundsWhite::RIGHT),
     static_cast<float>(OutsBoundsWhite::LEFT),
     static_cast<float>(OutsBoundsWhite::FRONT_GOAL),
-    static_cast<float>(OutsBoundsWhite::REAR_GOAL)};
+    static_cast<float>(OutsBoundsWhite::REAR_GOAL),
+    static_cast<float>(OutsBoundsWhite::FRONT_CORNERS),
+    static_cast<float>(OutsBoundsWhite::REAR_CORNERS),
+    static_cast<float>(OutsBoundsWhite::GOAL_ZONE_HALF_WIDTH)};
 
 motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white};
 

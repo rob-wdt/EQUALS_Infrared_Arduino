@@ -91,13 +91,16 @@ def _robot(name: str, cfg: dict) -> str:
     line("// cm, field coordinates: +x to the right, +y towards the opponent goal")
     line(f"enum class OutsBounds{cap} : int16_t")
     line("{")
-    keys = ("right", "left", "front_goal", "rear_goal")
+    keys = ("right", "left", "front_goal", "rear_goal", "front_corners", "rear_corners", "goal_zone_half_width")
     for i, key in enumerate(keys):
         value = _get(outs, key, f"{name}.outs_bounds")
         if not isinstance(value, int) or isinstance(value, bool):
             raise ConfigError(f"{name}.outs_bounds.{key}: expected a whole number of cm, got {value!r}")
         line(f"    {key.upper()} = {value}{',' if i < len(keys) - 1 else ''}")
     line("};")
+    if outs["front_corners"] < outs["front_goal"] or outs["rear_corners"] > outs["rear_goal"]:
+        raise ConfigError(f"{name}.outs_bounds: the corners can't be closer to the field center than the bound in front "
+                          f"of the goal (front_corners >= front_goal, rear_corners <= rear_goal)")
     hysteresis = _number(_get(cfg, "outs_hysteresis", name), f"{name}.outs_hysteresis")
     line(f"#define OUTS_HYSTERESIS_{up} {hysteresis} // cm back inside a bound before the out is cleared")
     line()

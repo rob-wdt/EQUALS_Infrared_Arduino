@@ -28,7 +28,10 @@
             "right": 43,
             "left": -55,
             "front_goal": 50,
-            "rear_goal": -50
+            "rear_goal": -50,
+            "front_corners": 57,
+            "rear_corners": -57,
+            "goal_zone_half_width": 45
         },
         "outs_hysteresis": 5,
         "motors": {
@@ -97,9 +100,12 @@
         },
         "outs_bounds": {
             "right": 55,
-            "left": -60,
+            "left": -55,
             "front_goal": 50,
-            "rear_goal": -57
+            "rear_goal": -65,
+            "front_corners": 60,
+            "rear_corners": -75,
+            "goal_zone_half_width": 45
         },
         "outs_hysteresis": 0,
         "motors": {
