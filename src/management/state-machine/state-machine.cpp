@@ -10,11 +10,23 @@ void StateMachine::_prepare(StateContext &ctx)
 {
     ctx.states = &_states;
 
-    // Ball position in field coordinates, otherwise a moving robot makes a still ball look like it moves
-    float angle = radians(ctx.gyro.yaw + ctx.cam.ball_angle);
-    coordinates ball = {ctx.coords.x + ctx.cam.ball_distance * cos(angle),
-                        ctx.coords.y + ctx.cam.ball_distance * sin(angle)};
-    _ball_watcher.update(ctx.ball_visible, ball, ctx.params.ball_still_epsilon);
+    // Ball and goal in field coordinates: the vectors from the robot to them, moved to the robot position.
+    // A still ball has to stay still while the robot moves, otherwise the watcher thinks it moves
+    _ball_coords.calculate(ctx.gyro, ctx.cam, ctx.coords);
+    ctx.ball = _ball_coords.coordinates();
+    ctx.opp_goal_visible = ctx.cam.opp_goal_distance > 0;
+    ctx.opp_goal = MathVector::from_angle(ctx.coords, ctx.gyro.yaw + ctx.cam.opp_goal_angle, ctx.cam.opp_goal_distance).end();
+
+    // The defender works relative to its own goal. When it doesn't see the goal for a moment, the last place is used
+    if (ctx.cam.own_goal_distance > 0)
+    {
+        _own_goal = MathVector::from_angle(ctx.coords, ctx.gyro.yaw + ctx.cam.own_goal_angle, ctx.cam.own_goal_distance).end();
+        _own_goal_known = true;
+    }
+    ctx.own_goal_known = _own_goal_known;
+    ctx.own_goal = _own_goal;
+
+    _ball_watcher.update(ctx.ball_visible, ctx.ball, ctx.params.ball_still_epsilon);
     ctx.ball_still_ms = _ball_watcher.still_ms();
     ctx.ball_lost_ms = _ball_watcher.lost_ms();
 }

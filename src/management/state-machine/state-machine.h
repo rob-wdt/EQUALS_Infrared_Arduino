@@ -1,6 +1,8 @@
 #pragma once
 
 #include "control/ball-motion-watcher/ball-motion-watcher.h"
+#include "control/ball-coordinates-calculator/ball-coordinates-calculator.h"
+#include "utils/math-vector/math-vector.h"
 #include "management/state/states.h"
 
 class StateMachine
@@ -20,6 +22,9 @@ private:
     StateSet _states;
     State *_current;
     BallMotionWatcher _ball_watcher;
+    BallCoordinatesCalculator _ball_coords;
+    bool _own_goal_known = false;
+    point _own_goal;
     RoleKind _role = RoleKind::NONE;
     unsigned long _last_role_switch = 0;
 

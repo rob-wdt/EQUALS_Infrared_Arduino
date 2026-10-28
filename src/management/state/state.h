@@ -16,12 +16,20 @@ enum class RoleKind : uint8_t
     DEFENDER
 };
 
+// Which regulator turns the robot to Command::align_angle
+enum class AlignMode : uint8_t
+{
+    NORMAL,
+    BALL_HOLD // the dribbler holds the ball: softer and slower, so the ball isn't lost on the turn
+};
+
 // What the active state wants the robot to do this tick
 struct Command
 {
     float lin_speed = 0;
     int move_angle = 0;  // relative to the robot front
     int align_angle = 0; // heading in the gyro frame (0 = the direction set at calibration), not a camera angle
+    AlignMode align_mode = AlignMode::NORMAL;
     bool stop = false;
     bool kick = false;
     bool calibrate = false;
@@ -42,9 +50,25 @@ struct StateParams
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
     int kick_goal_distance = 60;          // cm, kick when the opponent goal is closer than this
     unsigned long kick_cooldown_ms = 400; // pause after the kick
+    int behind_ball_distance = 20;        // cm, the approach point lies this far behind the ball (on the goal -> ball line)
+    int around_ball_distance = 30;        // cm, side shift of the approach point when the robot is in front of the ball
+    int line_up_enter_angle = 25;         // deg, robot this close to the line behind the ball -> drive straight at the ball
+    int line_up_exit_angle = 40;          // deg, hysteresis: further than this -> back to the approach point
 
     // Defender
     int guard_distance = 80;  // cm from own goal
+    // Guard zone around the own goal (cm, relative to the goal center seen by the camera):
+    // a front line y = guard_line_distance from -guard_half_width to +guard_half_width
+    // and two side lines from its ends back to the goal line, at guard_side_angle to the goal line
+    int guard_line_distance = 30;
+    int guard_half_width = 25;
+    int guard_side_angle = 60;     // deg, 90 = straight back (a rectangle), less = wider at the goal line
+    int guard_slow_distance = 15;  // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
+    // Coordinates are noisy: the guard point jumps by a few cm every frame and the robot would chase it forever.
+    // Closer than guard_arrive_distance -> stop, move again only when the point is guard_hold_distance away
+    int guard_arrive_distance = 3; // cm
+    int guard_hold_distance = 5;   // cm
+    float guard_smoothing = 0.3;   // 0..1, how much the guard point follows a new measurement each frame (1 = no smoothing)
     int guard_tolerance = 10; // cm, hysteresis for leaving the guard position
     int clear_distance = 35;  // cm, ball is this close -> clear it
     int clear_tolerance = 10; // cm, hysteresis for giving up the clearance
@@ -61,7 +85,7 @@ struct StateContext
 {
     cameraData cam;
     gyroData gyro;
-    coordinates coords;
+    point coords;
     OutType out;
     int out_escape_angle; // where to drive to get back into the field
     bool ball_visible;
@@ -73,6 +97,11 @@ struct StateContext
     StateParams params;
 
     // Derived by StateMachine
+    point ball;            // field coordinates, valid while ball_visible
+    bool opp_goal_visible;
+    point opp_goal;        // field coordinates, valid while opp_goal_visible
+    bool own_goal_known;   // the own goal has been seen at least once
+    point own_goal;        // field coordinates, the last place it was seen
     unsigned long ball_still_ms;
     unsigned long ball_lost_ms;
     StateSet *states;
