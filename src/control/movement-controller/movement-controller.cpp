@@ -1,8 +1,8 @@
 #include "movement-controller.h"
 #include <Arduino.h>
 
-MovementController::MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control)
-    : _motors(motors), _loc_angles(loc_angles), _align_control(align_control)
+MovementController::MovementController(motors motors, motorsLocAngles loc_angles)
+    : _motors(motors), _loc_angles(loc_angles)
 {
 }
 
@@ -14,16 +14,8 @@ void MovementController::init()
     _motors.m4.init();
 }
 
-void MovementController::set_velocity(int lin_speed, int move_angle, int align_angle, gyroData gyro_data)
+void MovementController::set_velocity(int lin_speed, int move_angle, float angular_speed)
 {
-    int16_t error = align_angle - gyro_data.yaw;
-    if (error > 180)
-        error -= 360;
-    else if (error < -180)
-        error += 360;
-
-    float angular_speed = _align_control->calculate(error);
-
     Motor *m[4] = {&_motors.m1, &_motors.m2, &_motors.m3, &_motors.m4};
     int16_t loc[4] = {_loc_angles.m1_angle, _loc_angles.m2_angle, _loc_angles.m3_angle, _loc_angles.m4_angle};
     float speeds[4];

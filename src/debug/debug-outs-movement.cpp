@@ -2,6 +2,7 @@
 #include "config.h"
 #include "control/outs-handler/outs-handler.h"
 #include "control/movement-controller/movement-controller.h"
+#include "control/heading-controller/heading-controller.h"
 #include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
@@ -14,7 +15,7 @@
 class OutsMovementTest
 {
 public:
-    OutsMovementTest(OutsHandler outs, MovementController mc, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cdp, Led led) : _outs(outs), _m(mc), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _cam_parser(cdp), _led(led) {}
+    OutsMovementTest(OutsHandler outs, MovementController mc, HeadingController align, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cdp, Led led) : _outs(outs), _m(mc), _align(align), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _cam_parser(cdp), _led(led) {}
     void setup()
     {
         _gyro.init();
@@ -79,7 +80,7 @@ public:
         }
 
         // The escape angle is in field coordinates, set_velocity wants it relative to the robot
-        _m.set_velocity(speed, _move_angle - _gyro.data().yaw, 0, _gyro.data());
+        _m.set_velocity(speed, _move_angle - _gyro.data().yaw, _align.calculate(0, _gyro.data()));
         _m.move();
 
         Serial.print("In out: ");
@@ -98,6 +99,7 @@ public:
 private:
     OutsHandler _outs;
     MovementController _m;
+    HeadingController _align;
     RobotCoordinatesCalculator _coords;
     BNO055 _gyro;
     Button _button;
@@ -117,8 +119,8 @@ MovementController movement_controller(
      Motor(config.pins().m2_1, config.pins().m2_2, config.motors_config().directions.m2_dir),
      Motor(config.pins().m3_1, config.pins().m3_2, config.motors_config().directions.m3_dir),
      Motor(config.pins().m4_1, config.pins().m4_2, config.motors_config().directions.m4_dir)},
-    config.motors_config().loc_angles,
-    new PDCControl(config.controls_config().pdc));
+    config.motors_config().loc_angles);
+HeadingController align(new PDCControl(config.controls_config().pdc));
 RobotCoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
@@ -127,7 +129,7 @@ UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_c
 GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 
-OutsMovementTest test(outs, movement_controller, coords, gyro, button, uart, cam_parser, led);
+OutsMovementTest test(outs, movement_controller, align, coords, gyro, button, uart, cam_parser, led);
 
 void setup()
 {

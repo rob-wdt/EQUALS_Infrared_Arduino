@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "control/movement-controller/movement-controller.h"
+#include "control/heading-controller/heading-controller.h"
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
 #include "core/led/led.h"
@@ -18,7 +19,7 @@
 class GoalAlignTest
 {
 public:
-    GoalAlignTest(MovementController mc, BNO055 gyro, Button button, CameraDataParser cam_parser, Led led) : _m(mc), _gyro(gyro), _button(button), _cam_parser(cam_parser), _led(led) {}
+    GoalAlignTest(MovementController mc, HeadingController align, BNO055 gyro, Button button, CameraDataParser cam_parser, Led led) : _m(mc), _align(align), _gyro(gyro), _button(button), _cam_parser(cam_parser), _led(led) {}
     void setup()
     {
         _gyro.init();
@@ -66,7 +67,7 @@ public:
             _target = _wrap(_gyro.data().yaw + to_goal);
         }
 
-        _m.set_velocity(lin_speed, move_angle, _target, _gyro.data());
+        _m.set_velocity(lin_speed, move_angle, _align.calculate(_target, _gyro.data()));
         _m.move();
 
         Serial.print("Goal angle: ");
@@ -81,6 +82,7 @@ public:
 
 private:
     MovementController _m;
+    HeadingController _align;
     BNO055 _gyro;
     Button _button;
     CameraDataParser _cam_parser;
@@ -106,8 +108,8 @@ MovementController movement_controller(
      Motor(config.pins().m2_1, config.pins().m2_2, config.motors_config().directions.m2_dir),
      Motor(config.pins().m3_1, config.pins().m3_2, config.motors_config().directions.m3_dir),
      Motor(config.pins().m4_1, config.pins().m4_2, config.motors_config().directions.m4_dir)},
-    config.motors_config().loc_angles,
-    new PDCControl(config.controls_config().pdc));
+    config.motors_config().loc_angles);
+HeadingController align(new PDCControl(config.controls_config().pdc));
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 Led led(config.pins().led);
@@ -115,7 +117,7 @@ UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_c
 GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 
-GoalAlignTest test(movement_controller, gyro, button, cam_parser, led);
+GoalAlignTest test(movement_controller, align, gyro, button, cam_parser, led);
 
 void setup()
 {

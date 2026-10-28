@@ -12,7 +12,9 @@ Robot::Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool
                                                                                                                              Motor(_config.pins().m2_1, _config.pins().m2_2, _config.motors_config().directions.m2_dir),
                                                                                                                              Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
                                                                                                                              Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
-                                                                                                                         _config.motors_config().loc_angles, new PDCControl(_config.controls_config().pdc)),
+                                                                                                                         _config.motors_config().loc_angles),
+                                                                                                    _align(new PDCControl(_config.controls_config().pdc)),
+                                                                                                    _with_ball_align(new PDCControl(_config.controls_config().with_ball_pdc), _config.controls_config().with_ball_max_speed),
                                                                                                     _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn2), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led), _dribbler(_config.pins().dribbler, _config.dribbler_config().min, _config.dribbler_config().max) {}
 
 void Robot::init()
@@ -77,6 +79,10 @@ StateContext Robot::_make_context()
 {
     StateContext ctx = {};
     ctx.cam = _cam_parser.data();
+    // The camera sees the ball a little off (the robot misses it to one side): correct it once here,
+    // so the states, the ball coordinates and the alignment all get the same angle. Not when the ball isn't seen (0)
+    if (ctx.cam.ball_distance > 0)
+        ctx.cam.ball_angle -= _config.ball_angle_offset();
     ctx.gyro = _gyro.data();
     ctx.coords = _coords.coordinates();
     ctx.out = _outs_handler.out_type();
@@ -111,7 +117,12 @@ void Robot::_apply(Command cmd)
     else
         _dribbler.stop();
 
-    _movement_controller.set_velocity(cmd.lin_speed, cmd.move_angle, cmd.align_angle, _gyro.data());
+    // Both regulators run every tick, so the D term of the other one is up to date when the mode switches
+    float align_speed = _align.calculate(cmd.align_angle, _gyro.data());
+    float with_ball_align_speed = _with_ball_align.calculate(cmd.align_angle, _gyro.data());
+    float angular_speed = cmd.align_mode == AlignMode::BALL_HOLD ? with_ball_align_speed : align_speed;
+
+    _movement_controller.set_velocity(cmd.lin_speed, cmd.move_angle, angular_speed);
     _movement_controller.move();
 }
 

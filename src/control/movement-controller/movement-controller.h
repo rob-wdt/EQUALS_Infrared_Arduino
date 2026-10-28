@@ -1,8 +1,6 @@
 #pragma once
 
 #include "core/motor/motor.h"
-#include "core/sensors/BNO055/BNO055.h"
-#include "utils/control/control.h"
 
 enum MotorLocationAngle : int16_t
 {
@@ -30,14 +28,14 @@ struct motorsDirections
 class MovementController
 {
 public:
-    MovementController(motors motors, motorsLocAngles loc_angles, Control *align_control);
+    MovementController(motors motors, motorsLocAngles loc_angles);
     void init();
-    void set_velocity(int lin_speed, int move_angle, int align_angle, gyroData gyro_data);
+    // move_angle: relative to the robot front. angular_speed: PWM, > 0 makes the gyro yaw grow (HeadingController calculates it)
+    void set_velocity(int lin_speed, int move_angle, float angular_speed);
     void move();
     void stop();
 
 private:
     motors _motors;
     motorsLocAngles _loc_angles;
-    Control *_align_control;
 };
