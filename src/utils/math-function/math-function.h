@@ -16,3 +16,14 @@ private:
     float _k_coef;
     float _b_koef;
 };
+
+// vertical line: x = const (parallel to Oy). It can't be written as y = kx + b, k would be infinite
+class VerticalLine : public MathFunction
+{
+public:
+    VerticalLine(float x) : _x(x) {}
+    float x() { return _x; }
+
+private:
+    float _x;
+};

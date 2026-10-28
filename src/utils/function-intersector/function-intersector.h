@@ -20,4 +20,20 @@ public:
 
         return res;
     }
+
+    // A vertical line always crosses a non-vertical one: at its x
+    point intersect(LinearFunction f, VerticalLine v)
+    {
+        point res = {v.x(), f.k_coef() * v.x() + f.b_koef()}; // y(x = const)
+        return res;
+    }
+
+    point intersect(VerticalLine v, LinearFunction f) { return intersect(f, v); }
+
+    // returns (0, 0): two vertical lines are parallel or the same
+    point intersect(VerticalLine v1, VerticalLine v2)
+    {
+        point res = {0, 0};
+        return res;
+    }
 };
