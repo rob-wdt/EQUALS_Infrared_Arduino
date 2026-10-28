@@ -110,7 +110,7 @@ private:
     int _move_angle = 0;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
 OutsHandler outs(config.outs_hysteresis());
@@ -126,7 +126,7 @@ BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
 Led led(config.pins().led);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
-GoalColor own_goal = GoalColor::BLUE;
+GoalColor own_goal = GoalColor::YELLOW;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 
 OutsMovementTest test(outs, movement_controller, align, coords, gyro, button, uart, cam_parser, led);

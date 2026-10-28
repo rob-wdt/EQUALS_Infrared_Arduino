@@ -13,17 +13,17 @@ public:
     void loop()
     {
         _robot.update();
-        // Serial.print("Current state:\t");
-        // Serial.println(_robot.current_state()->name());
+        Serial.print("Current state:\t");
+        Serial.println(_robot.current_state()->name());
     }
 
 private:
     Robot _robot;
 };
 
-RobotViolet robot_type;
-GoalColor own_goal = GoalColor::BLUE;
-Robot robot(RoleKind::ATTACKER, robot_type, own_goal, false);
+RobotWhite robot_type;
+GoalColor own_goal = GoalColor::YELLOW;
+Robot robot(RoleKind::DEFENDER, robot_type, own_goal, false);
 
 RobotTest test(robot);
 

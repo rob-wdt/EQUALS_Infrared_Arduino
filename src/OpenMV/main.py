@@ -3,7 +3,7 @@ from containers import RobotViolet, RobotWhite
 
 
 def main() -> None:
-    robot_type = RobotViolet()
+    robot_type = RobotWhite()
     vision = CV.VisionSystem(robot_type)
 
     vision.init()

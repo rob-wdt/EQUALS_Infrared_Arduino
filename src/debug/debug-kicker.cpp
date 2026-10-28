@@ -28,7 +28,7 @@ private:
     Timer _kicking_timer;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
 Kicker kicker(config.pins().solenoid, config.kicking_time_ms());
