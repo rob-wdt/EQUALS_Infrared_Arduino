@@ -1,19 +1,16 @@
 #include "robot-type.h"
 
-UARTNum UART_num_violet = UARTNum::UART_3;
-UARTNum UART_num_white = UARTNum::UART_3;
-
 RobotType::RobotType() {}
 
 controlsConfig RobotType::controls_config() { return _controls_config; }
 dribblerConfig RobotType::dribbler_config() { return _dribbler_config; }
-int RobotType::defender_move_coef() { return _defender_move_coef; }
 int RobotType::gyro_address() { return _gyroscope_address; }
 int RobotType::kicking_time_ms() { return _kicking_time_ms; }
 motorsConfig RobotType::motors_config() { return _motors_config; }
 outsBounds RobotType::outs_bounds() { return _outs; }
 float RobotType::outs_hysteresis() { return _outs_hysteresis; }
 int RobotType::phototransistor_threshold() { return _phototransistor_threshold; }
+float RobotType::ball_angle_offset() { return _ball_angle_offset; }
 pin RobotType::pins() { return _pins; }
 int RobotType::speed() { return _speed; }
 UARTConfig RobotType::UART_config() { return _uart_config; }
@@ -45,7 +42,7 @@ outsBounds outs_bounds_violet = {
 
 motorsConfig motors_config_violet = {motors_loc_angles_violet, motors_directions_violet};
 
-controlsConfig controls_config_violet = {control_gyro_align_pid_violet, control_gyro_align_pdc_violet};
+controlsConfig controls_config_violet = {control_gyro_align_pid_violet, control_gyro_align_pdc_violet, control_with_ball_align_pdc_violet, WITH_BALL_ALIGN_MAX_SPEED_VIOLET};
 
 dribblerConfig dribbler_config_violet = {DRIBBLER_MIN_VIOLET, DRIBBLER_MAX_VIOLET};
 
@@ -62,7 +59,7 @@ RobotViolet::RobotViolet() : RobotType()
     _kicking_time_ms = KICKING_TIME_MS_VIOLET;
     _dribbler_config = dribbler_config_violet;
     _phototransistor_threshold = PHOTOTRANSISTOR_THRESHOLD_VIOLET;
-    _defender_move_coef = DEFENDER_MOVE_COEF_VIOLET;
+    _ball_angle_offset = BALL_ANGLE_OFFSET_VIOLET;
 }
 
 pin pins_white = {
@@ -92,7 +89,7 @@ outsBounds outs_bounds_white = {
 
 motorsConfig motors_config_white = {motors_loc_angles_white, motors_directions_white};
 
-controlsConfig controls_config_white = {control_gyro_align_pid_white, control_gyro_align_pdc_white};
+controlsConfig controls_config_white = {control_gyro_align_pid_white, control_gyro_align_pdc_white, control_with_ball_align_pdc_white, WITH_BALL_ALIGN_MAX_SPEED_WHITE};
 
 dribblerConfig dribbler_config_white = {DRIBBLER_MIN_WHITE, DRIBBLER_MAX_WHITE};
 
@@ -109,5 +106,5 @@ RobotWhite::RobotWhite() : RobotType()
     _kicking_time_ms = KICKING_TIME_MS_WHITE;
     _dribbler_config = dribbler_config_white;
     _phototransistor_threshold = PHOTOTRANSISTOR_THRESHOLD_WHITE;
-    _defender_move_coef = DEFENDER_MOVE_COEF_WHITE;
+    _ball_angle_offset = BALL_ANGLE_OFFSET_WHITE;
 }

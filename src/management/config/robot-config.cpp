@@ -13,7 +13,7 @@ RobotConfig::RobotConfig(RobotType robot) : _robot(robot)
     _kicking_time_ms = _robot.kicking_time_ms();
     _dribbler_config = _robot.dribbler_config();
     _phototransistor_threshold = _robot.phototransistor_threshold();
-    _defender_move_coef = _robot.defender_move_coef();
+    _ball_angle_offset = _robot.ball_angle_offset();
 }
 
 controlsConfig RobotConfig::controls_config() { return _controls_config; }
@@ -25,6 +25,7 @@ motorsConfig RobotConfig::motors_config() { return _motors_config; }
 outsBounds RobotConfig::outs_bounds() { return _outs; }
 float RobotConfig::outs_hysteresis() { return _outs_hysteresis; }
 int RobotConfig::phototransistor_threshold() { return _phototransistor_threshold; }
+float RobotConfig::ball_angle_offset() { return _ball_angle_offset; }
 pin RobotConfig::pins() { return _pins; }
 int RobotConfig::speed() { return _speed; }
 UARTConfig RobotConfig::UART_config() { return _uart_config; }

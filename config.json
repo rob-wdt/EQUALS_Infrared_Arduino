@@ -1,0 +1,144 @@
+{
+    "violet": {
+        "speed": 200,
+        "pins": {
+            "phototransistor": "A14",
+            "btn_1": 36,
+            "btn_2": 32,
+            "btn_3": 34,
+            "m1_1": 12,
+            "m1_2": 10,
+            "m2_1": 11,
+            "m2_2": 9,
+            "m3_1": 8,
+            "m3_2": 6,
+            "m4_1": 5,
+            "m4_2": 7,
+            "solenoid": 31,
+            "dribbler": 3,
+            "led": 30
+        },
+        "uart": {
+            "num": 3,
+            "baudrate": 230400,
+            "buffer_size": 7,
+            "buffer_starter": 255
+        },
+        "outs_bounds": {
+            "right": 43,
+            "left": -55,
+            "front_goal": 50,
+            "rear_goal": -50
+        },
+        "outs_hysteresis": 5,
+        "motors": {
+            "location_angles": [
+                315,
+                45,
+                135,
+                225
+            ],
+            "directions": [
+                "backward",
+                "forward",
+                "backward",
+                "forward"
+            ]
+        },
+        "gyroscope_address": "0x29",
+        "gyro_align_pid": {
+            "kp": 2.0,
+            "ki": 0.0,
+            "kd": 0.0
+        },
+        "gyro_align_pdc": {
+            "kp": 0.8,
+            "kd": 0.0,
+            "kc": 0.0
+        },
+        "with_ball_align_pdc": {
+            "kp": 0.4,
+            "kd": 0.0,
+            "kc": 0.0
+        },
+        "with_ball_align_max_speed": 80,
+        "kicking_time_ms": 200,
+        "dribbler": {
+            "min": 1200,
+            "max": 1400
+        },
+        "phototransistor_threshold": 1,
+        "ball_angle_offset": 2
+    },
+    "white": {
+        "speed": 200,
+        "pins": {
+            "phototransistor": "A14",
+            "btn_1": 36,
+            "btn_2": 32,
+            "btn_3": 34,
+            "m1_1": 12,
+            "m1_2": 10,
+            "m2_1": 11,
+            "m2_2": 9,
+            "m3_1": 8,
+            "m3_2": 6,
+            "m4_1": 5,
+            "m4_2": 7,
+            "solenoid": 31,
+            "dribbler": 3,
+            "led": 30
+        },
+        "uart": {
+            "num": 3,
+            "baudrate": 230400,
+            "buffer_size": 7,
+            "buffer_starter": 255
+        },
+        "outs_bounds": {
+            "right": 55,
+            "left": -60,
+            "front_goal": 50,
+            "rear_goal": -57
+        },
+        "outs_hysteresis": 0,
+        "motors": {
+            "location_angles": [
+                315,
+                45,
+                135,
+                225
+            ],
+            "directions": [
+                "backward",
+                "forward",
+                "backward",
+                "forward"
+            ]
+        },
+        "gyroscope_address": "0x29",
+        "gyro_align_pid": {
+            "kp": 2.0,
+            "ki": 0.0,
+            "kd": 0.0
+        },
+        "gyro_align_pdc": {
+            "kp": 0.5,
+            "kd": 0.6,
+            "kc": 0.0
+        },
+        "with_ball_align_pdc": {
+            "kp": 0.5,
+            "kd": 0.0,
+            "kc": 0.0
+        },
+        "with_ball_align_max_speed": 80,
+        "kicking_time_ms": 200,
+        "dribbler": {
+            "min": 1000,
+            "max": 1500
+        },
+        "phototransistor_threshold": 1,
+        "ball_angle_offset": 0
+    }
+}

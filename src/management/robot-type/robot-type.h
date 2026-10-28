@@ -30,6 +30,8 @@ struct controlsConfig
 {
     PIDCoefficients pid;
     PDCCoefficients pdc;
+    PDCCoefficients with_ball_pdc; // turning while the dribbler holds the ball
+    int with_ball_max_speed;
 };
 
 class RobotType
@@ -48,7 +50,7 @@ public:
     int kicking_time_ms();
     dribblerConfig dribbler_config();
     int phototransistor_threshold();
-    int defender_move_coef();
+    float ball_angle_offset();
 
 protected:
     int _speed;
@@ -62,7 +64,7 @@ protected:
     int _kicking_time_ms;
     dribblerConfig _dribbler_config;
     int _phototransistor_threshold;
-    int _defender_move_coef;
+    float _ball_angle_offset;
 };
 
 // Robot types are distinguished by the color of the cube beneath the gyro

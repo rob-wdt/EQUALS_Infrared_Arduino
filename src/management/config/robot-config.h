@@ -17,6 +17,7 @@ public:
     int kicking_time_ms();
     dribblerConfig dribbler_config();
     int phototransistor_threshold();
+    float ball_angle_offset();
     int defender_move_coef();
     UARTConfig UART_config();
 
@@ -34,5 +35,6 @@ protected:
     int _kicking_time_ms;
     dribblerConfig _dribbler_config;
     int _phototransistor_threshold;
+    float _ball_angle_offset;
     int _defender_move_coef;
 };
