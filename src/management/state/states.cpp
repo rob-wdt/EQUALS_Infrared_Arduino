@@ -417,7 +417,7 @@ void StateDefenderGuard::_guard(StateContext &ctx, Command &cmd, point target)
 
     move_to(ctx, cmd, target);
     cmd.lin_speed = _holding ? 0 : ctx.params.speed * min(1.0f, distance / ctx.params.defender.guard_slow_distance);
-    cmd.align_angle = 0; // facing the opponent goal, the kicker looks at the ball coming from there (keeps turning while standing)
+    cmd.align_angle = 0;
     cmd.dribble = false;
     cmd.kick = false;
 }

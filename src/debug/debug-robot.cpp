@@ -22,7 +22,7 @@ private:
 };
 
 RobotWhite robot_type;
-GoalColor own_goal = GoalColor::YELLOW;
+GoalColor own_goal = GoalColor::BLUE;
 Robot robot(RoleKind::DEFENDER, robot_type, own_goal, false);
 
 RobotTest test(robot);

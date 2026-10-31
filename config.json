@@ -99,13 +99,13 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 55,
-            "left": -55,
-            "front_goal": 50,
-            "rear_goal": -65,
-            "front_corners": 60,
-            "rear_corners": -75,
-            "goal_zone_half_width": 45
+            "right": 70,
+            "left": -60,
+            "front_goal": 85,
+            "rear_goal": -90,
+            "front_corners": 95,
+            "rear_corners": -95,
+            "goal_zone_half_width": 50
         },
         "outs_hysteresis": 0,
         "motors": {

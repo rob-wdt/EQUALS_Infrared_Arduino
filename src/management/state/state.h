@@ -59,8 +59,8 @@ struct DefenderStateParams
     // Guard zone around the own goal (cm, relative to the goal center seen by the camera):
     // a front line y = guard_line_distance from -guard_half_width to +guard_half_width
     // and two side lines from its ends back to the goal line, at guard_side_angle to the goal line
-    int guard_line_distance = 35;
-    int guard_half_width = 30;
+    int guard_line_distance = 40;
+    int guard_half_width = 35;
     int guard_side_angle = 60;    // deg, 90 = straight back (a rectangle), less = wider at the goal line
     int guard_slow_distance = 15; // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
     // Coordinates are noisy: the guard point jumps by a few cm every frame and the robot would chase it forever.

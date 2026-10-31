@@ -27,14 +27,14 @@ ROBOT = "DEFENDER"
 # "distance"  - pixels from the center to TARGET, for filling PX_TO_CM: put the object at 10, 15, 20 ... cm
 # "exposure"  - automatic gain, white balance and exposure: the terminal shows what the camera picked,
 #               use it as a starting point for GAIN, WHITE and EXPOSURE
-MODE = "distance"
+MODE = "center"
 
 # Object for the "mask", "threshold" and "distance" modes: "yellow", "blue" or "ball"
 TARGET = "yellow"
 
 # "threshold" mode: center of the sampling square (image pixels) and its size
-SAMPLE_POS = (137, 107)
-SAMPLE_SIZE = 3
+SAMPLE_POS = (133, 118)
+SAMPLE_SIZE = 5
 
 # How often the terminal is updated, ms
 PRINT_EVERY_MS = 300
@@ -43,7 +43,7 @@ PRINT_EVERY_MS = 300
 # ------------------------------------- PARAMETERS (the same as in settings.py) -------------------------------------- #
 
 # LAB thresholds: (L min, L max, A min, A max, B min, B max)
-YELLOW_THRESHOLD = [(0, 100, -20, 127, 29, 127)]
+YELLOW_THRESHOLD = [(0, 100, -128, 127, 22, 127)]
 BLUE_THRESHOLD = [(0, 100, -128, 16, -128, -10)]
 RED_THRESHOLD = [(0, 100, 12, 127, -5, 127)]
 
@@ -52,46 +52,58 @@ GAIN = 24
 EXPOSURE = 21_450
 
 # Shift of the mirror center from the middle of the frame, pixels: CENTER = (W // 2 + x, H // 2 + y)
-CENTER_OFFSET = (-8, -14)
+CENTER_OFFSET = (-9, -14)
 
-MASK_RADIUS = 120
+MASK_RADIUS = 105
 ROBOT_RADIUS = 13
 
 PX_TO_CM = (
     # PX CM
-    (12, 10),
+    (11, 10),
+    (12, 11),
+    (13, 12),
+    (14, 13),
+    (15, 14),
     (17, 15),
-    (23, 20),
+    (22, 20),
     (29, 25),
-    (36, 30),
-    (40, 35),
-    (45, 40),
-    (50, 45),
-    (56, 50),
-    (60, 55),
-    (65, 60),
-    (70, 65),
-    (74, 70),
-    (77, 75),
-    (81, 80),
-    (84, 85),
-    (86, 90),
-    (88, 95),
-    (91, 100),
-    (92, 105),
-    (93, 110),
-    (94, 115),
-    (95, 120),
-    (97, 125),
-    (98, 130),
-    (99, 135),
-    (101, 140),
-    (102, 145),
-    (103, 150),
-    (103, 155),
-    (104, 160),
-    (104, 165),
-    (120, 210))
+    (35, 30),
+    (41, 35),
+    (46, 40),
+    (49, 45),
+    (53, 50),
+    (56, 55),
+    (59, 60),
+    (62, 65),
+    (66, 70),
+    (69, 75),
+    (72, 80),
+    (73, 85),
+    (76, 90),
+    (77, 95),
+    (79, 100),
+    (81, 105),
+    (82, 110),
+    (83, 115),
+    (83, 120),
+    (84, 125),
+    (85, 130),
+    (85, 135),
+    (86, 140),
+    (87, 145),
+    (87, 150),
+    (87, 155),
+    (88, 160),
+    (89, 165),
+    (90, 170),
+    (90, 175),
+    (91, 180),
+    (91, 185),
+    (92, 190),
+    (92, 195),
+    (92, 200),
+    (92, 205),
+    (92, 210))
 
 ########################################################################################################################
 # ---------------------------------------------------- CODE ---------------------------------------------------------- #
@@ -152,7 +164,7 @@ def linearize(pixels):
     res = (0, 0)
     for i in range(len(PX_TO_CM)):
         if i < len(PX_TO_CM) - 1:
-            if PX_TO_CM[i][0] <= abs(pixels) <= PX_TO_CM[i + 1][0]:
+            if PX_TO_CM[i][0] <= abs(pixels) < PX_TO_CM[i + 1][0]:
                 res = PX_TO_CM[i]
                 break
         else:
