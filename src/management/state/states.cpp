@@ -4,9 +4,6 @@
 #include "utils/function-intersector/function-intersector.h"
 #include "utils/function-intersector/function-intersector.h"
 
-// Camera reports 0 when an object is not seen
-static bool seen(int distance) { return distance > 0; }
-
 // Heading at which an object seen at relative_angle (camera angle, 0 = in front of the robot) is straight ahead.
 // Command::align_angle is a heading in the gyro frame, a camera angle has to be turned into it
 static int heading_to(StateContext &ctx, int relative_angle) { return ctx.gyro.yaw + relative_angle; }
