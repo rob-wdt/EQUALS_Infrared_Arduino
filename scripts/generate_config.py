@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 PIN_NAMES = ["phototransistor", "btn_1", "btn_2", "btn_3", "m1_1", "m1_2", "m2_1", "m2_2", "m3_1", "m3_2",
-             "m4_1", "m4_2", "solenoid", "dribbler", "led"]
+             "m4_1", "m4_2", "solenoid", "dribbler", "led", "distance_sensor"]
 MOTOR_ANGLES = (45, 135, 225, 315)
 MOTOR_DIRECTIONS = ("forward", "backward")
 

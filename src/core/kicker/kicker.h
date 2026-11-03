@@ -2,8 +2,9 @@
 
 #include <Arduino.h>
 #include "utils/timer/timer.h"
+#include "core/device.h"
 
-class Kicker
+class Kicker : public Device
 {
 public:
     Kicker(uint8_t pin, int kicking_time_ms);

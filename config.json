@@ -16,7 +16,8 @@
             "m4_2": 7,
             "solenoid": 31,
             "dribbler": 3,
-            "led": 30
+            "led": 30,
+            "distance_sensor": "A1"
         },
         "uart": {
             "num": 3,
@@ -90,7 +91,8 @@
             "m4_2": 7,
             "solenoid": 31,
             "dribbler": 3,
-            "led": 30
+            "led": 30,
+            "distance_sensor": "A1"
         },
         "uart": {
             "num": 3,

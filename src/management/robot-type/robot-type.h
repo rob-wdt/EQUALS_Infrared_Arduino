@@ -5,7 +5,7 @@
 
 struct pin
 {
-    int phototransistor, btn1, btn2, btn3, m1_1, m1_2, m2_1, m2_2, m3_1, m3_2, m4_1, m4_2, solenoid, dribbler, led;
+    int phototransistor, btn1, btn2, btn3, m1_1, m1_2, m2_1, m2_2, m3_1, m3_2, m4_1, m4_2, solenoid, dribbler, led, distane_sensor;
 };
 
 struct UARTConfig

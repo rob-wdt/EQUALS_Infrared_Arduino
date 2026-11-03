@@ -1,5 +1,6 @@
 #pragma once
 #include <Arduino.h>
+#include "core/device.h"
 
 enum MotorDirection : int8_t
 {
@@ -7,7 +8,7 @@ enum MotorDirection : int8_t
     backward = -1
 };
 
-class Motor
+class Motor : public Device
 {
 public:
     Motor(uint8_t pin1, uint8_t pin2, MotorDirection direction);

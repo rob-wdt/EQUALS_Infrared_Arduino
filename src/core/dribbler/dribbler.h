@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Servo.h"
+#include "core/device.h"
 
-class Dribbler
+class Dribbler : public Device
 {
 public:
     Dribbler(int pin, int min_val, int max_val);
