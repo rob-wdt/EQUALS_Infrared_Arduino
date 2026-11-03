@@ -3,7 +3,7 @@
 #include "config.h"
 
 #include "control/ball-detector/ball-detector.h"
-#include "control/outs-handler/outs-handler.h"
+#include "control/outs-handler-coords/outs-handler-coords.h"
 #include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
 #include "core/UART/UART.h"
 #include "control/movement-controller/movement-controller.h"
@@ -37,7 +37,7 @@ private:
     RobotConfig _config;
 
     BallDetector _ball_detector;
-    OutsHandler _outs_handler;
+    OutsHandlerCoords _outs_handler;
     RobotCoordinatesCalculator _coords;
     CameraDataParser _cam_parser;
     MovementController _movement_controller;

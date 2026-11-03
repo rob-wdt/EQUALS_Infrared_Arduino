@@ -25,7 +25,7 @@ HEADER = """\
 
 #include "utils/control/PID-control/PID-control.h"
 #include "utils/control/PDC-control/PDC-control.h"
-#include "control/outs-handler/outs-handler.h"
+#include "control/outs-handler-coords/outs-handler-coords.h"
 #include "control/movement-controller/movement-controller.h"
 #include "management/robot-type/robot-type.h"
 #include "core/UART/UART.h"
