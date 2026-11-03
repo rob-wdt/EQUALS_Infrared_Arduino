@@ -119,10 +119,19 @@ State *StateMachine::_role_switch(StateContext &ctx)
     {
     case RoleKind::DEFENDER:
         if (still)
-            return &_states.attacker_search;
+        {
+            if (ctx.start_role == RoleKind::ATTACKER_DRIBBLER)
+                return &_states.attacker_dribbler_search;
+                
+            if (ctx.start_role == RoleKind::ATTACKER_SIMPLE)
+                return &_states.attacker_simple_search;
+        }
         break;
-    case RoleKind::ATTACKER:
-        // Attacker can't make progress: the ball neither moves nor is reachable
+    case RoleKind::ATTACKER_DRIBBLER:
+        if (still || lost)
+            return &_states.defender_return;
+        break;
+    case RoleKind::ATTACKER_SIMPLE:
         if (still || lost)
             return &_states.defender_return;
         break;

@@ -60,7 +60,12 @@ State *StateIdle::update(StateContext &ctx, Command &cmd)
     {
         if (ctx.start_role == RoleKind::DEFENDER)
             return &ctx.states->defender_return;
-        return &ctx.states->attacker_search;
+
+        if (ctx.start_role == RoleKind::ATTACKER_DRIBBLER)
+            return &ctx.states->attacker_dribbler_search;
+
+        if (ctx.start_role == RoleKind::ATTACKER_SIMPLE)
+            return &ctx.states->attacker_simple_search;
     }
     return nullptr;
 }
@@ -81,12 +86,12 @@ State *StateOutRecovery::update(StateContext &ctx, Command &cmd)
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ----------------------------------------------------------- ATTACKER ------------------------------------------------------ //
+// ------------------------------------------------------ ATTACKER DRIBBLER -------------------------------------------------- //
 
-State *StateAttackerSearch::update(StateContext &ctx, Command &cmd)
+State *StateAttackerDribblerSearch::update(StateContext &ctx, Command &cmd)
 {
     if (ctx.ball_visible)
-        return &ctx.states->attacker_approach;
+        return &ctx.states->attacker_dribbler_approach;
 
     cmd.align_angle = 0;
     cmd.dribble = false;
@@ -97,12 +102,12 @@ State *StateAttackerSearch::update(StateContext &ctx, Command &cmd)
     return nullptr;
 }
 
-void StateAttackerApproach::enter(StateContext &ctx) { _lined_up = false; }
+void StateAttackerDribblerApproach::enter(StateContext &ctx) { _lined_up = false; }
 
-State *StateAttackerApproach::update(StateContext &ctx, Command &cmd)
+State *StateAttackerDribblerApproach::update(StateContext &ctx, Command &cmd)
 {
     if (!ctx.ball_visible)
-        return &ctx.states->attacker_search;
+        return &ctx.states->attacker_dribbler_search;
 
     point target = ctx.ball;
 
@@ -122,7 +127,7 @@ State *StateAttackerApproach::update(StateContext &ctx, Command &cmd)
     }
 
     if (_lined_up && ctx.cam.ball_distance <= 20)
-        return &ctx.states->attacker_capture;
+        return &ctx.states->attacker_dribbler_capture;
 
     move_to(ctx, cmd, target);
 
@@ -134,9 +139,9 @@ State *StateAttackerApproach::update(StateContext &ctx, Command &cmd)
     return nullptr;
 }
 
-void StateAttackerCapture::enter(StateContext &ctx) { _holding = false; }
+void StateAttackerDribblerCapture::enter(StateContext &ctx) { _holding = false; }
 
-State *StateAttackerCapture::update(StateContext &ctx, Command &cmd)
+State *StateAttackerDribblerCapture::update(StateContext &ctx, Command &cmd)
 {
     // Drive only when the ball has been captured for capture_ms without a break,
     // so the dribbler has time to get hold of it. Losing the ball starts the count again
@@ -148,10 +153,10 @@ State *StateAttackerCapture::update(StateContext &ctx, Command &cmd)
         _timer.set_time_ms(ctx.params.attacker.capture_ms);
     }
     else if (_timer.time_is_up())
-        return &ctx.states->attacker_align_to_goal;
+        return &ctx.states->attacker_dribbler_align_to_goal;
 
     if (ctx.cam.ball_distance > 20)
-        return &ctx.states->attacker_approach;
+        return &ctx.states->attacker_dribbler_approach;
 
     cmd.align_angle = heading_to(ctx, ctx.cam.ball_angle);
     cmd.dribble = true;
@@ -162,10 +167,10 @@ State *StateAttackerCapture::update(StateContext &ctx, Command &cmd)
     return nullptr;
 }
 
-State *StateAttackerAlignToGoal::update(StateContext &ctx, Command &cmd)
+State *StateAttackerDribblerAlignToGoal::update(StateContext &ctx, Command &cmd)
 {
     if (abs(ctx.cam.opp_goal_angle) <= 30)
-        return &ctx.states->attacker_drive;
+        return &ctx.states->attacker_dribbler_drive;
 
     if (ctx.opp_goal_visible)
     {
@@ -186,13 +191,13 @@ State *StateAttackerAlignToGoal::update(StateContext &ctx, Command &cmd)
     return nullptr;
 }
 
-State *StateAttackerDrive::update(StateContext &ctx, Command &cmd)
+State *StateAttackerDribblerDrive::update(StateContext &ctx, Command &cmd)
 {
-    if (seen(ctx.cam.opp_goal_distance) && ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
-        return &ctx.states->attacker_kick;
+    if (ctx.opp_goal_visible && ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
+        return &ctx.states->attacker_dribbler_kick;
 
     if (!ctx.ball_captured)
-        return &ctx.states->attacker_approach;
+        return &ctx.states->attacker_dribbler_approach;
 
     if (ctx.opp_goal_visible)
     {
@@ -213,16 +218,16 @@ State *StateAttackerDrive::update(StateContext &ctx, Command &cmd)
     return nullptr;
 }
 
-void StateAttackerKick::enter(StateContext &ctx)
+void StateAttackerDribblerKick::enter(StateContext &ctx)
 {
     _timer.set_time_ms(ctx.params.attacker.kick_cooldown_ms);
     _fired = false;
 }
 
-State *StateAttackerKick::update(StateContext &ctx, Command &cmd)
+State *StateAttackerDribblerKick::update(StateContext &ctx, Command &cmd)
 {
     if (_timer.time_is_up())
-        return &ctx.states->attacker_search;
+        return &ctx.states->attacker_dribbler_search;
 
     if (ctx.opp_goal_visible)
     {
@@ -241,6 +246,138 @@ State *StateAttackerKick::update(StateContext &ctx, Command &cmd)
         _fired = true;
     }
 
+    cmd.dribble = true;
+    cmd.lin_speed = ctx.params.speed;
+    cmd.stop = false;
+
+    return nullptr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------- ATTACKER SIMPLE --------------------------------------------------- //
+
+State *StateAttackerSimpleSearch::update(StateContext &ctx, Command &cmd)
+{
+    if (ctx.ball_visible)
+        return &ctx.states->attacker_simple_approach;
+
+    cmd.align_angle = 0;
+    cmd.align_mode = AlignMode::NORMAL;
+    cmd.dribble = false;
+    cmd.kick = false;
+    cmd.lin_speed = ctx.params.speed;
+    cmd.move_angle = ctx.cam.own_goal_angle;
+
+    return nullptr;
+}
+
+State *StateAttackerSimpleApproach::update(StateContext &ctx, Command &cmd)
+{
+    if (!ctx.ball_visible)
+        return &ctx.states->attacker_simple_search;
+
+    if (ctx.cam.ball_distance <= ctx.params.attacker.orbit_distance && fabs(ctx.cam.ball_angle) > ctx.params.attacker.orbit_enter_angle)
+        return &ctx.states->attacker_simple_orbit;
+
+    cmd.align_angle = 0;
+    cmd.align_mode = AlignMode::NORMAL;
+    cmd.dribble = false;
+    cmd.kick = false;
+    cmd.lin_speed = ctx.params.speed;
+    cmd.move_angle = ctx.cam.ball_angle;
+
+    return nullptr;
+}
+
+State *StateAttackerSimpleOrbit::update(StateContext &ctx, Command &cmd)
+{
+    if (!ctx.ball_visible)
+        return &ctx.states->attacker_simple_search;
+
+    if (fabs(ctx.cam.ball_angle) <= ctx.params.attacker.orbit_exit_angle)
+        return &ctx.states->attacker_simple_capture;
+
+    if (ctx.ball_visible)
+    {
+        if (ctx.cam.ball_angle < 0)
+            cmd.move_angle = ctx.cam.ball_angle - 90;
+
+        if (ctx.cam.ball_angle > 0)
+            cmd.move_angle = ctx.cam.ball_angle + 90;
+    }
+
+    cmd.align_angle = 0;
+    cmd.align_mode = AlignMode::NORMAL;
+    cmd.dribble = false;
+    cmd.kick = false;
+    cmd.lin_speed = ctx.params.speed;
+
+    return nullptr;
+}
+
+State *StateAttackerSimpleCapture::update(StateContext &ctx, Command &cmd)
+{
+    if (!ctx.ball_visible)
+        return &ctx.states->attacker_simple_search;
+
+    if (ctx.cam.ball_distance > ctx.params.attacker.orbit_distance)
+        return &ctx.states->attacker_simple_approach;
+
+    if (fabs(ctx.cam.ball_angle) > ctx.params.attacker.orbit_enter_angle)
+        return &ctx.states->attacker_simple_orbit;
+
+    if (ctx.ball_captured)
+        return &ctx.states->attacker_simple_drive;
+
+    cmd.align_angle = 0;
+    cmd.align_mode = AlignMode::NORMAL;
+    cmd.dribble = false;
+    cmd.kick = false;
+    cmd.lin_speed = ctx.params.speed;
+    cmd.move_angle = ctx.cam.ball_angle;
+
+    return nullptr;
+}
+
+State *StateAttackerSimpleDrive::update(StateContext &ctx, Command &cmd)
+{
+    if (!ctx.ball_captured)
+        return &ctx.states->attacker_simple_search;
+
+    if (ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
+        return &ctx.states->attacker_simple_kick;
+
+    cmd.align_angle = 0;
+    cmd.move_angle = 0;
+    cmd.align_mode = AlignMode::BALL_HOLD;
+    cmd.dribble = false;
+    cmd.kick = false;
+    cmd.lin_speed = ctx.params.speed;
+
+    return nullptr;
+}
+
+void StateAttackerSimpleKick::enter(StateContext &ctx)
+{
+    _timer.set_time_ms(ctx.params.attacker.kick_cooldown_ms);
+    _fired = false;
+}
+
+State *StateAttackerSimpleKick::update(StateContext &ctx, Command &cmd)
+{
+    if (_timer.time_is_up())
+        return &ctx.states->attacker_simple_search;
+
+    cmd.align_angle = 0;
+    cmd.move_angle = 0;
+
+    if (!_fired)
+    {
+        cmd.kick = true;
+        _fired = true;
+    }
+
+    cmd.align_mode = AlignMode::BALL_HOLD;
     cmd.dribble = true;
     cmd.lin_speed = ctx.params.speed;
     cmd.stop = false;

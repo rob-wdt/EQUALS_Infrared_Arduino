@@ -31,7 +31,6 @@ public:
     State *current_state() { return _fsm.current(); }
 
 private:
-    // _config must be declared first: the members below are built from it
     RoleKind _start_role;
     bool _can_change_role;
     RobotType _robot_type;

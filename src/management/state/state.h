@@ -12,7 +12,8 @@ struct StateSet;
 enum class RoleKind : uint8_t
 {
     NONE,
-    ATTACKER,
+    ATTACKER_DRIBBLER,
+    ATTACKER_SIMPLE,
     DEFENDER
 };
 
@@ -83,7 +84,6 @@ struct RoleSwitchingStateParams
 struct StateParams
 {
     int speed = 100;
-    float defender_coef = 1.5;
 
     AttackerStateParams attacker;
     DefenderStateParams defender;
