@@ -46,7 +46,7 @@
                 "backward",
                 "forward",
                 "backward",
-                "forward"
+                "backward"
             ]
         },
         "gyroscope_address": "0x29",

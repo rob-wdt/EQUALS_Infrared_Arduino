@@ -63,7 +63,7 @@ private:
     Led _led;
 };
 
-RobotWhite robot_type;
+RobotViolet robot_type;
 RobotConfig config(robot_type);
 
 MovementController movement_controller(
