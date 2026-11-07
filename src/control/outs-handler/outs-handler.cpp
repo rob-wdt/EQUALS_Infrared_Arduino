@@ -1,9 +1,9 @@
-#include "outs-handler-coords.h"
+#include "outs-handler.h"
 #include <Arduino.h>
 
-OutsHandlerCoords::OutsHandlerCoords(float hysteresis) : _hysteresis(hysteresis) {}
+OutsHandler::OutsHandler(float hysteresis) : _hysteresis(hysteresis) {}
 
-int8_t OutsHandlerCoords::_update_axis(int8_t state, float value, float high, float low)
+int8_t OutsHandler::_update_axis(int8_t state, float value, float high, float low)
 {
     if (value >= high)
         return 1;
@@ -18,7 +18,7 @@ int8_t OutsHandlerCoords::_update_axis(int8_t state, float value, float high, fl
     return state;
 }
 
-void OutsHandlerCoords::_update_zone(point coords, outsBounds outs)
+void OutsHandler::_update_zone(point coords, outsBounds outs)
 {
     float side_depth = outs.goal_zone_half_width - fabs(coords.x); // how far inside the pocket from its side
     int8_t side = coords.x >= 0 ? 1 : -1;
@@ -46,7 +46,7 @@ void OutsHandlerCoords::_update_zone(point coords, outsBounds outs)
         _zone = 0;
 }
 
-void OutsHandlerCoords::handle(point coords, outsBounds outs)
+void OutsHandler::handle(point coords, outsBounds outs)
 {
     _out_x = _update_axis(_out_x, coords.x, outs.right, outs.left);
     _out_y = _update_axis(_out_y, coords.y, outs.front_corners, outs.rear_corners);
@@ -59,11 +59,20 @@ void OutsHandlerCoords::handle(point coords, outsBounds outs)
         _escape_angle = round(degrees(atan2(escape_x, escape_y)));
 }
 
-bool OutsHandlerCoords::in_out() { return _out_x != 0 || _out_y != 0 || _zone != 0; }
+void OutsHandler::handle(int rear_range, int threshold)
+{
+    if (rear_range < threshold)
+    {
+        _out_y = -1;
+        _escape_angle = 0;
+    }
+}
 
-int OutsHandlerCoords::escape_angle() { return _escape_angle; }
+bool OutsHandler::in_out() { return _out_x != 0 || _out_y != 0 || _zone != 0; }
 
-OutType OutsHandlerCoords::out_type()
+int OutsHandler::escape_angle() { return _escape_angle; }
+
+OutType OutsHandler::out_type()
 {
     if (_out_x == 1)
         return OutType::RIGHT;

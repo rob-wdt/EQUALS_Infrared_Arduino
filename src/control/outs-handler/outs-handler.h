@@ -29,13 +29,14 @@ enum OutType
     REAR_GOAL
 };
 
-class OutsHandlerCoords
+class OutsHandler
 {
 public:
     // hysteresis: cm the robot has to come back inside a bound before that out is cleared,
     // otherwise coordinate noise near the bound switches the out on and off every frame
-    OutsHandlerCoords(float hysteresis);
+    OutsHandler(float hysteresis);
     void handle(point coords, outsBounds outs);
+    void handle(int rear_range, int threshold);
     bool in_out();
     // Move angle that leads back into the field, in a corner both bounds are handled at once (diagonally).
     // After the robot is back in the field it stays the same until the next out
