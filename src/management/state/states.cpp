@@ -294,6 +294,9 @@ State *StateAttackerSimpleOrbit::update(StateContext &ctx, Command &cmd)
     if (!ctx.ball_visible)
         return &ctx.states->attacker_simple_search;
 
+    if (ctx.cam.ball_distance > ctx.params.attacker.orbit_distance)
+        return &ctx.states->attacker_simple_approach;
+
     if (fabs(ctx.cam.ball_angle) <= ctx.params.attacker.orbit_exit_angle)
         return &ctx.states->attacker_simple_capture;
 
