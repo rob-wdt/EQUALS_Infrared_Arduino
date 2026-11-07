@@ -102,7 +102,9 @@ def _robot(name: str, cfg: dict) -> str:
         raise ConfigError(f"{name}.outs_bounds: the corners can't be closer to the field center than the bound in front "
                           f"of the goal (front_corners >= front_goal, rear_corners <= rear_goal)")
     hysteresis = _number(_get(cfg, "outs_hysteresis", name), f"{name}.outs_hysteresis")
+    rear_threshold = _number(_get(cfg, "rear_distance_sensor_threshold", name), f"{name}.rear_distance_sensor_threshold")
     line(f"#define OUTS_HYSTERESIS_{up} {hysteresis} // cm back inside a bound before the out is cleared")
+    line(f"#define REAR_DISTANCE_SENSOR_THRESHOLD_{up} {rear_threshold}")
     line()
 
     motors = _get(cfg, "motors", name)

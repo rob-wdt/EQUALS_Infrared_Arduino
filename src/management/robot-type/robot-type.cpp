@@ -9,6 +9,7 @@ int RobotType::kicking_time_ms() { return _kicking_time_ms; }
 motorsConfig RobotType::motors_config() { return _motors_config; }
 outsBounds RobotType::outs_bounds() { return _outs; }
 float RobotType::outs_hysteresis() { return _outs_hysteresis; }
+int RobotType::rear_distance_sensor_threshold() { return _rear_distance_sensor_threshold; }
 int RobotType::phototransistor_threshold() { return _phototransistor_threshold; }
 float RobotType::ball_angle_offset() { return _ball_angle_offset; }
 pin RobotType::pins() { return _pins; }
@@ -57,6 +58,7 @@ RobotViolet::RobotViolet() : RobotType()
     _uart_config = uart_config_violet;
     _outs = outs_bounds_violet;
     _outs_hysteresis = OUTS_HYSTERESIS_VIOLET;
+    _rear_distance_sensor_threshold = REAR_DISTANCE_SENSOR_THRESHOLD_VIOLET;
     _motors_config = motors_config_violet;
     _gyroscope_address = GYROSCOPE_ADDRESS_VIOLET;
     _controls_config = controls_config_violet;
@@ -108,6 +110,7 @@ RobotWhite::RobotWhite() : RobotType()
     _uart_config = uart_config_white;
     _outs = outs_bounds_white;
     _outs_hysteresis = OUTS_HYSTERESIS_WHITE;
+    _rear_distance_sensor_threshold = REAR_DISTANCE_SENSOR_THRESHOLD_WHITE;
     _motors_config = motors_config_white;
     _gyroscope_address = GYROSCOPE_ADDRESS_WHITE;
     _controls_config = controls_config_white;

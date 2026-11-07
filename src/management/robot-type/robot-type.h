@@ -44,6 +44,7 @@ public:
     UARTConfig UART_config();
     outsBounds outs_bounds();
     float outs_hysteresis();
+    int rear_distance_sensor_threshold();
     motorsConfig motors_config();
     int gyro_address();
     controlsConfig controls_config();
@@ -58,6 +59,7 @@ protected:
     UARTConfig _uart_config;
     outsBounds _outs;
     float _outs_hysteresis;
+    int _rear_distance_sensor_threshold;
     motorsConfig _motors_config;
     int _gyroscope_address;
     controlsConfig _controls_config;
