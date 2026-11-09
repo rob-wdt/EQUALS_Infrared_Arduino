@@ -29,20 +29,20 @@ class DistanceCalculator:
 
 
 class DetectingStrategy:
-    def get_blobs(self, img, threshold):
+    def get_blobs(self, img, threshold, pix_threshold: int, area_threshold: int):
         pass
 
 
 class DetectingBlob(DetectingStrategy):
-    def get_blobs(self, img: sensor.image.Image, threshold):
-        blobs = img.find_blobs(threshold)
+    def get_blobs(self, img: sensor.image.Image, threshold, pix_threshold: int, area_threshold: int):
+        blobs = img.find_blobs(threshold, pixels_threshold=pix_threshold, area_threshold=area_threshold)
         blobs = sorted(blobs, key=lambda b: b.area(), reverse=True)
         return blobs
 
 
 class DetectingRound(DetectingStrategy):
-    def get_blobs(self, img: sensor.image.Image, threshold):
-        blobs = img.find_blobs(threshold)
+    def get_blobs(self, img: sensor.image.Image, threshold, pix_threshold: int, area_threshold: int):
+        blobs = img.find_blobs(threshold, pixels_threshold=pix_threshold, area_threshold=area_threshold)
         blobs = sorted(blobs, key=lambda b: b.roundness(), reverse=True)
         return blobs
 
@@ -65,7 +65,7 @@ class ObjectDetector:
         return self
 
     def find_object(self, img: sensor.image.Image, threshold, robot_type: RobotType) -> ObjectData:
-        blobs = self.__strategy.get_blobs(img, threshold)
+        blobs = self.__strategy.get_blobs(img, threshold, self.__cm_cfg.obj_detect_px_thr(), self.__cm_cfg.obj_detect_area_thr())
         if not blobs:
             return ObjectData(maths.Point(0, 0), 0, 0, maths.Point(0, 0), 0, 0, 0)
 

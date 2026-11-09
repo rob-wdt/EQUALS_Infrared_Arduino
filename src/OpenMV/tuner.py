@@ -30,11 +30,11 @@ ROBOT = "ATTACKER"
 MODE = "center"
 
 # Object for the "mask", "threshold" and "distance" modes: "yellow", "blue" or "ball"
-TARGET = "yellow"
+TARGET = "ball"
 
 # "threshold" mode: center of the sampling square (image pixels) and its size
-SAMPLE_POS = (175, 187)
-SAMPLE_SIZE = 15
+SAMPLE_POS = (170, 88)
+SAMPLE_SIZE = 2
 
 # How often the terminal is updated, ms
 PRINT_EVERY_MS = 300
@@ -43,16 +43,16 @@ PRINT_EVERY_MS = 300
 # ------------------------------------- PARAMETERS (the same as in settings.py) -------------------------------------- #
 
 # LAB thresholds: (L min, L max, A min, A max, B min, B max)
-YELLOW_THRESHOLD = [(0, 100, -128, 127, 29, 127)]
+YELLOW_THRESHOLD = [(0, 100, -6, 5, 20, 127)]
 BLUE_THRESHOLD = [(0, 100, -128, 16, -128, -10)]
-RED_THRESHOLD = [(0, 100, 12, 127, -5, 127)]
+RED_THRESHOLD = [(45, 61, 8, 35, 15, 34)]
 
 WHITE = (64, 60, 64)  # rgb_gain_db
 GAIN = 24
 EXPOSURE = 21_450
 
 # Shift of the mirror center from the middle of the frame, pixels: CENTER = (W // 2 + x, H // 2 + y)
-CENTER_OFFSET = (9, -12)
+CENTER_OFFSET = (10, -12)
 
 MASK_RADIUS = 115
 ROBOT_RADIUS = 13
@@ -182,7 +182,7 @@ def constrain_angle(angle):
 
 def find(img, name):
     """Biggest goal blob or the roundest ball blob, like ObjectDetector.find_object(). None if not found."""
-    blobs = img.find_blobs(THRESHOLDS[name])
+    blobs = img.find_blobs(THRESHOLDS[name], pixels_threshold=10, area_threshold=9)
     if not blobs:
         return None
     key = (lambda b: b.roundness()) if name == "ball" else (lambda b: b.area())
