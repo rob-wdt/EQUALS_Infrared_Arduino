@@ -42,6 +42,12 @@ class RobotType:
     def px_to_cm_table(self) -> tuple[tuple[float, float], ...]:
         return self.__pixels_to_cm_table
 
+    def obj_detect_px_thr(self) -> int:
+        return self.__od_px_thr
+
+    def obj_detect_area_thr(self) -> int:
+        return self.__od_area_thr
+
     __yellow_threshold: tuple[list[int]]
     __blue_threshold: tuple[list[int]]
     __red_threshold: tuple[list[int]]
@@ -55,6 +61,9 @@ class RobotType:
     __robot_radius: int
 
     __pixels_to_cm_table: tuple[tuple[float, float], ...]
+
+    __od_px_thr: int
+    __od_area_thr: int
 
 
 class RobotViolet(RobotType):
@@ -73,6 +82,8 @@ class RobotViolet(RobotType):
         self.__mask_radius = settings.MASK_RADIUS_ATTACKER
         self.__robot_radius = settings.ROBOT_RADIUS_ATTACKER
         self.__pixels_to_cm_table = settings.PX_TO_CM_ATTACKER
+        self.__od_px_thr = settings.OBJECT_DETECTING_PIX_THRESHOLD_ATTACKER
+        self.__od_area_thr = settings.OBJECT_DETECTING_AREA_THRESHOLD_ATTACKER
 
 
 class RobotWhite(RobotType):
@@ -91,6 +102,8 @@ class RobotWhite(RobotType):
         self.__mask_radius = settings.MASK_RADIUS_DEFENDER
         self.__robot_radius = settings.ROBOT_RADIUS_DEFENDER
         self.__pixels_to_cm_table = settings.PX_TO_CM_DEFENDER
+        self.__od_px_thr = settings.OBJECT_DETECTING_PIX_THRESHOLD_DEFENDER
+        self.__od_area_thr = settings.OBJECT_DETECTING_AREA_THRESHOLD_DEFENDER
 
 
 class CameraConfig:
@@ -107,6 +120,9 @@ class CameraConfig:
         self.__mask_radius = robot_type.mask_radius()
         self.__robot_radius = robot_type.robot_radius()
         self.__pixels_to_cm_table = robot_type.px_to_cm_table()
+        self.__od_px_thr = robot_type.obj_detect_px_thr()
+        self.__od_area_thr = robot_type.obj_detect_area_thr()
+
 
     def yellow_threshold(self) -> tuple[list[int]]:
         return self.__yellow_threshold
@@ -144,6 +160,12 @@ class CameraConfig:
     def px_to_cm_table(self) -> tuple[tuple[float, float], ...]:
         return self.__pixels_to_cm_table
 
+    def obj_detect_px_thr(self) -> int:
+        return self.__od_px_thr
+
+    def obj_detect_area_thr(self) -> int:
+        return self.__od_area_thr
+
     __yellow_threshold: tuple[list[int]]
     __blue_threshold: tuple[list[int]]
     __red_threshold: tuple[list[int]]
@@ -156,6 +178,9 @@ class CameraConfig:
     __robot_radius: int
 
     __pixels_to_cm_table: tuple[tuple[float, float], ...]
+
+    __od_px_thr: int
+    __od_area_thr: int
 
 
 class ObjectData:

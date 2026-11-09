@@ -15,15 +15,18 @@ if FRAMESIZE_ATTACKER == sensor.QVGA:
     FRAME_H_ATTACKER = 240
     FRAME_W_ATTACKER = 320
 
-YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(85, 100, -13, 12, 16, 37)]
-BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(58, 72, -17, 2, -27, -7)]
-RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 19, 58, -41, 127)]
+    OBJECT_DETECTING_PIX_THRESHOLD_ATTACKER = 9
+    OBJECT_DETECTING_AREA_THRESHOLD_ATTACKER = 9
+
+YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -6, 5, 20, 127)]
+BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -128, 16, -128, -10)]
+RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 12, 127, -5, 127)]
 
 WHITE_ATTACKER = (64, 60, 64)
 
 CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2 + 10, FRAME_H_ATTACKER // 2 - 12)
-MASK_RADIUS_ATTACKER: int = 120
-ROBOT_RADIUS_ATTACKER: int = 15
+MASK_RADIUS_ATTACKER: int = 115
+ROBOT_RADIUS_ATTACKER: int = 13
 GAIN_ATTACKER = 24
 EXPOSURE_ATTACKER = 21450
 
@@ -31,39 +34,51 @@ PIXELS_FORMAT_ATTACKER = sensor.RGB565
 
 PX_TO_CM_ATTACKER = (
     # PX CM
-    (11, 10),
-    (17, 15),
-    (24, 20),
-    (30, 25),
-    (35, 30),
-    (41, 35),
-    (45, 40),
-    (50, 45),
-    (56, 50),
-    (60, 55),
+    (13, 10),
+    (14, 11),
+    (15, 12),
+    (16, 13),
+    (17, 14),
+    (19, 15),
+    (26, 20),
+    (33, 25),
+    (39, 30),
+    (45, 35),
+    (50, 40),
+    (54, 45),
+    (58, 50),
+    (61, 55),
     (65, 60),
-    (70, 65),
-    (74, 70),
-    (77, 75),
-    (81, 80),
-    (84, 85),
-    (86, 90),
-    (88, 95),
-    (91, 100),
-    (92, 105),
-    (93, 110),
-    (94, 115),
-    (95, 120),
-    (97, 125),
-    (98, 130),
-    (99, 135),
-    (101, 140),
-    (102, 145),
-    (103, 150),
-    (103, 155),
-    (104, 160),
-    (104, 165),
-    (120, 210))
+    (68, 65),
+    (71, 70),
+    (74, 75),
+    (78, 80),
+    (79, 85),
+    (82, 90),
+    (84, 95),
+    (85, 100),
+    (89, 105),
+    (91, 110),
+    (92, 115),
+    (93, 120),
+    (94, 125),
+    (94, 130),
+    (95, 135),
+    (95, 140),
+    (96, 145),
+    (97, 150),
+    (98, 155),
+    (98, 160),
+    (99, 165),
+    (100, 170),
+    (100, 175),
+    (101, 180),
+    (102, 185),
+    (103, 190),
+    (104, 195),
+    (104, 200),
+    (104, 205),
+    (105, 210))
 
 
 ########################################################################################################################
@@ -74,6 +89,9 @@ FRAMESIZE_DEFENDER: int = sensor.QVGA
 if FRAMESIZE_DEFENDER == sensor.QVGA:
     FRAME_H_DEFENDER = 240
     FRAME_W_DEFENDER = 320
+
+    OBJECT_DETECTING_PIX_THRESHOLD_DEFENDER = 9
+    OBJECT_DETECTING_AREA_THRESHOLD_DEFENDER = 9
 
 YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, -128, 127, 22, 127)]
 BLUE_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, -128, 16, -128, -10)]

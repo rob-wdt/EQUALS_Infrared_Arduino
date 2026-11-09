@@ -51,7 +51,7 @@ public:
         _gyro.read();
         gyroData data = _gyro.data();
 
-        _m.set_velocity(speed, MOVE_ANGLE, _align.calculate(ALIGN_ANGLE, data));
+        _m.set_velocity(speed, MOVE_ANGLE - _gyro.data().yaw, _align.calculate(ALIGN_ANGLE, data));
         _m.move();
     }
 
@@ -63,7 +63,7 @@ private:
     Led _led;
 };
 
-RobotWhite robot_type;
+RobotViolet robot_type;
 RobotConfig config(robot_type);
 
 MovementController movement_controller(
@@ -76,7 +76,7 @@ HeadingController align(new PIDControl(config.controls_config().pid));
 
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 
 MovementControllerTest test(movement_controller, align, gyro, button, led);
 

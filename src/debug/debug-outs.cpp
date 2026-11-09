@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "config.h"
-#include "control/outs-handler/outs-handler.h"
+#include "control/outs-handler-coords/outs-handler-coords.h"
 #include "control/movement-controller/movement-controller.h"
 #include "control/heading-controller/heading-controller.h"
 #include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
@@ -23,7 +23,7 @@
 class OutsMovementTest
 {
 public:
-    OutsMovementTest(OutsHandler outs, MovementController mc, HeadingController align, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cdp, DistanceSensor ds, Led led) : _outs(outs), _m(mc), _align(align), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _cam_parser(cdp), _ds(ds), _led(led) {}
+    OutsMovementTest(OutsHandlerCoords outs, MovementController mc, HeadingController align, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cdp, Led led) : _outs(outs), _m(mc), _align(align), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _cam_parser(cdp), _led(led) {}
     void setup()
     {
         _gyro.init();
@@ -115,7 +115,7 @@ public:
     }
 
 private:
-    OutsHandler _outs;
+    OutsHandlerCoords _outs;
     MovementController _m;
     HeadingController _align;
     RobotCoordinatesCalculator _coords;
@@ -132,7 +132,7 @@ private:
 RobotWhite robot_type;
 RobotConfig config(robot_type);
 
-OutsHandler outs(config.outs_hysteresis());
+OutsHandlerCoords outs(config.outs_hysteresis());
 MovementController movement_controller(
     {Motor(config.pins().m1_1, config.pins().m1_2, config.motors_config().directions.m1_dir),
      Motor(config.pins().m2_1, config.pins().m2_2, config.motors_config().directions.m2_dir),
@@ -143,9 +143,9 @@ HeadingController align(new PDCControl(config.controls_config().pdc));
 RobotCoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
-GoalColor own_goal = GoalColor::YELLOW;
+GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 DistanceSensor ds(config.pins().distane_sensor);
 

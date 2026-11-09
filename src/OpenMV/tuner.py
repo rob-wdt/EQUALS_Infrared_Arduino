@@ -17,7 +17,7 @@ import sensor
 # ------------------------------------------------- WHAT TO DO ------------------------------------------------------- #
 
 # Suffix of the variables in settings.py: "ATTACKER" (violet robot) or "DEFENDER" (white robot)
-ROBOT = "DEFENDER"
+ROBOT = "ATTACKER"
 
 # "objects"   - all objects as the robot sees them: frames, lines, angles and distances (like main.py)
 # "mask"      - only the pixels that fall into the threshold of TARGET are white: tune the thresholds here
@@ -30,11 +30,11 @@ ROBOT = "DEFENDER"
 MODE = "center"
 
 # Object for the "mask", "threshold" and "distance" modes: "yellow", "blue" or "ball"
-TARGET = "yellow"
+TARGET = "ball"
 
 # "threshold" mode: center of the sampling square (image pixels) and its size
-SAMPLE_POS = (133, 118)
-SAMPLE_SIZE = 5
+SAMPLE_POS = (170, 88)
+SAMPLE_SIZE = 2
 
 # How often the terminal is updated, ms
 PRINT_EVERY_MS = 300
@@ -43,67 +43,67 @@ PRINT_EVERY_MS = 300
 # ------------------------------------- PARAMETERS (the same as in settings.py) -------------------------------------- #
 
 # LAB thresholds: (L min, L max, A min, A max, B min, B max)
-YELLOW_THRESHOLD = [(0, 100, -128, 127, 22, 127)]
+YELLOW_THRESHOLD = [(0, 100, -6, 5, 20, 127)]
 BLUE_THRESHOLD = [(0, 100, -128, 16, -128, -10)]
-RED_THRESHOLD = [(0, 100, 12, 127, -5, 127)]
+RED_THRESHOLD = [(45, 61, 8, 35, 15, 34)]
 
 WHITE = (64, 60, 64)  # rgb_gain_db
 GAIN = 24
 EXPOSURE = 21_450
 
 # Shift of the mirror center from the middle of the frame, pixels: CENTER = (W // 2 + x, H // 2 + y)
-CENTER_OFFSET = (-9, -14)
+CENTER_OFFSET = (10, -12)
 
-MASK_RADIUS = 105
+MASK_RADIUS = 115
 ROBOT_RADIUS = 13
 
 PX_TO_CM = (
     # PX CM
-    (11, 10),
-    (12, 11),
-    (13, 12),
-    (14, 13),
-    (15, 14),
-    (17, 15),
-    (22, 20),
-    (29, 25),
-    (35, 30),
-    (41, 35),
-    (46, 40),
-    (49, 45),
-    (53, 50),
-    (56, 55),
-    (59, 60),
-    (62, 65),
-    (66, 70),
-    (69, 75),
-    (72, 80),
-    (73, 85),
-    (76, 90),
-    (77, 95),
-    (79, 100),
-    (81, 105),
-    (82, 110),
-    (83, 115),
-    (83, 120),
-    (84, 125),
-    (85, 130),
-    (85, 135),
-    (86, 140),
-    (87, 145),
-    (87, 150),
-    (87, 155),
-    (88, 160),
-    (89, 165),
-    (90, 170),
-    (90, 175),
-    (91, 180),
-    (91, 185),
-    (92, 190),
-    (92, 195),
-    (92, 200),
-    (92, 205),
-    (92, 210))
+    (13, 10),
+    (14, 11),
+    (15, 12),
+    (16, 13),
+    (17, 14),
+    (19, 15),
+    (26, 20),
+    (33, 25),
+    (39, 30),
+    (45, 35),
+    (50, 40),
+    (54, 45),
+    (58, 50),
+    (61, 55),
+    (65, 60),
+    (68, 65),
+    (71, 70),
+    (74, 75),
+    (78, 80),
+    (79, 85),
+    (82, 90),
+    (84, 95),
+    (85, 100),
+    (89, 105),
+    (91, 110),
+    (92, 115),
+    (93, 120),
+    (94, 125),
+    (94, 130),
+    (95, 135),
+    (95, 140),
+    (96, 145),
+    (97, 150),
+    (98, 155),
+    (98, 160),
+    (99, 165),
+    (100, 170),
+    (100, 175),
+    (101, 180),
+    (102, 185),
+    (103, 190),
+    (104, 195),
+    (104, 200),
+    (104, 205),
+    (105, 210))
 
 ########################################################################################################################
 # ---------------------------------------------------- CODE ---------------------------------------------------------- #
@@ -182,7 +182,7 @@ def constrain_angle(angle):
 
 def find(img, name):
     """Biggest goal blob or the roundest ball blob, like ObjectDetector.find_object(). None if not found."""
-    blobs = img.find_blobs(THRESHOLDS[name])
+    blobs = img.find_blobs(THRESHOLDS[name], pixels_threshold=10, area_threshold=9)
     if not blobs:
         return None
     key = (lambda b: b.roundness()) if name == "ball" else (lambda b: b.area())

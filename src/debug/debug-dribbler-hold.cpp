@@ -19,7 +19,7 @@
 #define ALIGN_OPP_GOAL 0 // turn to the opponent goal (camera)
 #define ALIGN_OWN_GOAL 1 // turn to the own goal (camera)
 #define ALIGN_FIXED 2    // keep FIXED_ANGLE (gyro, 0 = the heading at the zero angles setup)
-#define ALIGN_SWEEP 3    // turn to SWEEP_ANGLES one after another: the hardest test, the ball is lost on turns
+#define ALIGN_SWEEP 3    // turn to SWEEP_ANGLES one after another
 
 #define ALIGN_MODE ALIGN_OWN_GOAL
 
@@ -100,7 +100,7 @@ public:
         _update_ball();
 
         _dribbler.run();
-        _m.set_velocity(lin_speed, move_angle, _align.calculate(_target, _gyro.data()));
+        _m.set_velocity(lin_speed, move_angle - _gyro.data().yaw, _align.calculate(_target, _gyro.data()));
         _m.move();
 
         if (millis() - _last_print >= PRINT_EVERY_MS)
@@ -230,7 +230,7 @@ MovementController movement_controller(
 HeadingController align(new PDCControl(config.controls_config().with_ball_pdc), config.controls_config().with_ball_max_speed);
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));

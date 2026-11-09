@@ -28,7 +28,7 @@ enum class AlignMode : uint8_t
 struct Command
 {
     float lin_speed = 0;
-    int move_angle = 0;  // relative to the robot front
+    int move_angle = 0;  // global
     int align_angle = 0; // heading in the gyro frame (0 = the direction set at calibration), not a camera angle
     AlignMode align_mode = AlignMode::NORMAL;
     bool stop = false;
@@ -43,10 +43,11 @@ struct AttackerStateParams
 {
     int orbit_enter_angle = 30;           // deg, ball is this far from the front -> start orbiting
     int orbit_exit_angle = 15;            // deg, ball is this close to the front -> stop orbiting
-    int orbit_distance = 40;              // cm, orbit only when the ball is closer than this
-    unsigned long capture_ms = 500;       // the ball must stay captured this long before Drive (dribbler gets hold of it)
+    int orbit_distance = 20;              // cm, orbit only when the ball is closer than this
+    unsigned long capture_ms = 200;       // the ball must stay captured this long before Drive (dribbler gets hold of it)
+    int capture_speed = 100;
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
-    int kick_goal_distance = 60;          // cm, kick when the opponent goal is closer than this
+    int kick_goal_distance = 80;          // cm, kick when the opponent goal is closer than this
     unsigned long kick_cooldown_ms = 400; // pause after the kick
     int behind_ball_distance = 20;        // cm, the approach point lies this far behind the ball (on the goal -> ball line)
     int around_ball_distance = 30;        // cm, side shift of the approach point when the robot is in front of the ball

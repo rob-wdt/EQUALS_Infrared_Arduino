@@ -16,7 +16,9 @@
             "m4_2": 7,
             "solenoid": 31,
             "dribbler": 3,
-            "led": 30,
+            "led1": 30,
+            "led2": 22,
+            "led3": 24,
             "distance_sensor": "A1"
         },
         "uart": {
@@ -26,12 +28,12 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 43,
-            "left": -55,
-            "front_goal": 50,
-            "rear_goal": -50,
-            "front_corners": 57,
-            "rear_corners": -57,
+            "right": 60,
+            "left": -60,
+            "front_goal": 65,
+            "rear_goal": -85,
+            "front_corners": 70,
+            "rear_corners": -90,
             "goal_zone_half_width": 45
         },
         "rear_distance_sensor_threshold": 10,
@@ -47,7 +49,7 @@
                 "backward",
                 "forward",
                 "backward",
-                "forward"
+                "backward"
             ]
         },
         "gyroscope_address": "0x29",
@@ -92,7 +94,9 @@
             "m4_2": 7,
             "solenoid": 31,
             "dribbler": 3,
-            "led": 30,
+            "led1": 30,
+            "led2": 22,
+            "led3": 24,
             "distance_sensor": "A1"
         },
         "uart": {

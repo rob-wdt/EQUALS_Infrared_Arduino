@@ -16,32 +16,6 @@ static void move_to(StateContext &ctx, Command &cmd, point target)
     cmd.move_angle = navigator.data().move_angle - ctx.gyro.yaw;
 }
 
-// Angle between the ball -> robot vector and the line behind the ball (pointing away from the goal), 0..180 deg.
-// 0: the robot is right behind the ball and faces the goal through it, 180: the robot is between the ball and the goal
-static float angle_behind_ball(StateContext &ctx)
-{
-    MathVector from_goal = MathVector(ctx.opp_goal, ctx.ball).unit();
-    MathVector to_robot = MathVector(ctx.ball, ctx.coords).unit();
-    return degrees(acos(constrain(dot(from_goal, to_robot), -1.0f, 1.0f)));
-}
-
-// Where to drive to get behind the ball. In front of the ball the point is shifted to the robot's side,
-// so the robot goes around the ball and doesn't push it towards its own goal
-static point approach_point(StateContext &ctx)
-{
-    MathVector from_goal = MathVector(ctx.opp_goal, ctx.ball).unit();
-    MathVector behind = parallel_transition(from_goal, ctx.ball) * ctx.params.attacker.behind_ball_distance;
-
-    if (angle_behind_ball(ctx) < 90)
-        return behind.end();
-
-    // Perpendicular to the goal -> ball line, on the side where the robot is
-    MathVector side(ctx.ball, from_goal.y_projection(), -from_goal.x_projection());
-    if (dot(side, MathVector(ctx.ball, ctx.coords)) < 0)
-        side = side * -1;
-    return (behind + side * ctx.params.attacker.around_ball_distance).end();
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------------------------------------------------------ COMMON ------------------------------------------------------- //
 
@@ -79,7 +53,7 @@ State *StateOutRecovery::update(StateContext &ctx, Command &cmd)
         return _resume ? _resume : &ctx.states->idle;
 
     cmd.lin_speed = ctx.params.speed;
-    // The escape angle is in field coordinates, move_angle is relative to the robot
+
     cmd.move_angle = ctx.out_escape_angle - ctx.gyro.yaw;
     cmd.align_angle = 0;
     return nullptr;
@@ -93,43 +67,25 @@ State *StateAttackerDribblerSearch::update(StateContext &ctx, Command &cmd)
     if (ctx.ball_visible)
         return &ctx.states->attacker_dribbler_approach;
 
+    move_to(ctx, cmd, ctx.own_goal);
+
     cmd.align_angle = 0;
     cmd.dribble = false;
     cmd.kick = false;
     cmd.lin_speed = ctx.params.speed;
-    cmd.move_angle = 180;
 
     return nullptr;
 }
-
-void StateAttackerDribblerApproach::enter(StateContext &ctx) { _lined_up = false; }
 
 State *StateAttackerDribblerApproach::update(StateContext &ctx, Command &cmd)
 {
     if (!ctx.ball_visible)
         return &ctx.states->attacker_dribbler_search;
 
-    point target = ctx.ball;
-
-    // Without the goal there is no "behind the ball": drive straight at it
-    if (!ctx.opp_goal_visible)
-        _lined_up = true;
-    else
-    {
-        float angle = angle_behind_ball(ctx);
-        if (angle < ctx.params.attacker.line_up_enter_angle)
-            _lined_up = true;
-        else if (angle > ctx.params.attacker.line_up_exit_angle)
-            _lined_up = false;
-
-        if (!_lined_up)
-            target = approach_point(ctx);
-    }
-
-    if (_lined_up && ctx.cam.ball_distance <= 20)
+    if (ctx.cam.ball_distance <= 20)
         return &ctx.states->attacker_dribbler_capture;
 
-    move_to(ctx, cmd, target);
+    move_to(ctx, cmd, ctx.ball);
 
     cmd.align_angle = heading_to(ctx, ctx.cam.ball_angle);
     cmd.dribble = false;
@@ -153,40 +109,17 @@ State *StateAttackerDribblerCapture::update(StateContext &ctx, Command &cmd)
         _timer.set_time_ms(ctx.params.attacker.capture_ms);
     }
     else if (_timer.time_is_up())
-        return &ctx.states->attacker_dribbler_align_to_goal;
+        return &ctx.states->attacker_dribbler_drive;
 
     if (ctx.cam.ball_distance > 20)
         return &ctx.states->attacker_dribbler_approach;
 
+    move_to(ctx, cmd, ctx.ball);
+
     cmd.align_angle = heading_to(ctx, ctx.cam.ball_angle);
     cmd.dribble = true;
     cmd.kick = false;
-    cmd.lin_speed = 0.7 * ctx.params.speed;
-    cmd.move_angle = 0;
-
-    return nullptr;
-}
-
-State *StateAttackerDribblerAlignToGoal::update(StateContext &ctx, Command &cmd)
-{
-    if (abs(ctx.cam.opp_goal_angle) <= 30)
-        return &ctx.states->attacker_dribbler_drive;
-
-    if (ctx.opp_goal_visible)
-    {
-        cmd.align_angle = MathVector(ctx.coords, ctx.opp_goal).angle();
-        move_to(ctx, cmd, ctx.opp_goal);
-    }
-    else
-    {
-        cmd.align_angle = 0;
-        cmd.move_angle = 0;
-    }
-
-    cmd.align_mode = AlignMode::BALL_HOLD;
-    cmd.dribble = true;
-    cmd.kick = false;
-    cmd.lin_speed = 0;
+    cmd.lin_speed = ctx.params.attacker.capture_speed;
 
     return nullptr;
 }
@@ -293,6 +226,9 @@ State *StateAttackerSimpleOrbit::update(StateContext &ctx, Command &cmd)
 {
     if (!ctx.ball_visible)
         return &ctx.states->attacker_simple_search;
+
+    if (ctx.cam.ball_distance > ctx.params.attacker.orbit_distance)
+        return &ctx.states->attacker_simple_approach;
 
     if (fabs(ctx.cam.ball_angle) <= ctx.params.attacker.orbit_exit_angle)
         return &ctx.states->attacker_simple_capture;

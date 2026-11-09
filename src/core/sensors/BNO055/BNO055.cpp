@@ -27,6 +27,7 @@ void BNO055::init()
     }
 
     _bno.setExtCrystalUse(true);
+    _bno.setMode(adafruit_bno055_opmode_t::OPERATION_MODE_IMUPLUS);
 }
 
 bool BNO055::calibrated()

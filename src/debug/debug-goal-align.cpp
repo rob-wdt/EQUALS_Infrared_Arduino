@@ -67,7 +67,7 @@ public:
             _target = _wrap(_gyro.data().yaw + to_goal);
         }
 
-        _m.set_velocity(lin_speed, move_angle, _align.calculate(_target, _gyro.data()));
+        _m.set_velocity(lin_speed, move_angle - _gyro.data().yaw, _align.calculate(_target, _gyro.data()));
         _m.move();
 
         Serial.print("Goal angle: ");
@@ -112,7 +112,7 @@ MovementController movement_controller(
 HeadingController align(new PDCControl(config.controls_config().pdc));
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));

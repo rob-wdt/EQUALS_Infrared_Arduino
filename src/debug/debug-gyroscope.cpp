@@ -62,7 +62,7 @@ RobotConfig config(robot_type);
 
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 GyroscopeTest test(gyro, button, led);
 
 void setup()
