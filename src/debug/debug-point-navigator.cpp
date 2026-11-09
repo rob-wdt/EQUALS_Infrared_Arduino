@@ -14,6 +14,7 @@
 #define SPEED 150
 #define TARGET_POINT {0, -40}
 #define GO_TO_BALL false
+#define HYSTERESIS 10
 
 class PointNavigatorTest
 {
@@ -49,7 +50,7 @@ public:
         Serial.println(" to start.");
         _button.wait_click();
     }
-    void loop(bool go_to_ball, point target_point, int speed)
+    void loop(bool go_to_ball, point target_point, int speed, float hysteresis)
     {
         _gyro.read();
         _cd.parse();
@@ -66,8 +67,15 @@ public:
 
         _pn.compute(_rc.coordinates(), target);
 
-        _mc.set_velocity(speed, _pn.data().move_angle - _gyro.data().yaw, _align.calculate(0, _gyro.data()));
-        _mc.move();
+        if (abs(abs(_rc.coordinates().x) - abs(target.x)) < hysteresis && abs(abs(_rc.coordinates().y) - abs(target.y)) < hysteresis)
+        {
+            _mc.stop();
+        }
+        else
+        {
+            _mc.set_velocity(speed, _pn.data().move_angle - _gyro.data().yaw, _align.calculate(0, _gyro.data()));
+            _mc.move();
+        }
 
         Serial.print("Move angle:\t");
         Serial.println(_pn.data().move_angle);
@@ -111,5 +119,5 @@ void setup()
 
 void loop()
 {
-    test.loop(GO_TO_BALL, TARGET_POINT, SPEED);
+    test.loop(GO_TO_BALL, TARGET_POINT, SPEED, HYSTERESIS);
 }
