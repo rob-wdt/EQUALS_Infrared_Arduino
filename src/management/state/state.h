@@ -28,7 +28,7 @@ enum class AlignMode : uint8_t
 struct Command
 {
     float lin_speed = 0;
-    int move_angle = 0;  // relative to the robot front
+    int move_angle = 0;  // global
     int align_angle = 0; // heading in the gyro frame (0 = the direction set at calibration), not a camera angle
     AlignMode align_mode = AlignMode::NORMAL;
     bool stop = false;

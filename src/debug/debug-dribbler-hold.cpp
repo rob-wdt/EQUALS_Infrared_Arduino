@@ -100,7 +100,7 @@ public:
         _update_ball();
 
         _dribbler.run();
-        _m.set_velocity(lin_speed, move_angle, _align.calculate(_target, _gyro.data()));
+        _m.set_velocity(lin_speed, move_angle - _gyro.data().yaw, _align.calculate(_target, _gyro.data()));
         _m.move();
 
         if (millis() - _last_print >= PRINT_EVERY_MS)

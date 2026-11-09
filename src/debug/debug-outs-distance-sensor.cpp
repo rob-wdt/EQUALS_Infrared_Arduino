@@ -56,9 +56,16 @@ public:
         float angular_speed = _align.calculate(0, _gyro.data());
 
         if (_oh.in_out())
-            _mc.set_velocity(lin_speed, 0, angular_speed);
+            _mc.set_velocity(lin_speed, 0 - _gyro.data().yaw, angular_speed);
         else
-            _mc.set_velocity(lin_speed, 180, angular_speed);
+            _mc.set_velocity(lin_speed, 180 - _gyro.data().yaw, angular_speed);
+
+        _mc.move();
+
+        Serial.print("In out: ");
+        Serial.print(_oh.in_out());
+        Serial.print("\tRear range: ");
+        Serial.println(_ds.data());
     }
 
 private:

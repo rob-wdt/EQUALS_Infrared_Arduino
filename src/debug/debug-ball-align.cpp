@@ -67,7 +67,7 @@ public:
             _target = _wrap(_gyro.data().yaw + to_ball);
         }
 
-        _m.set_velocity(lin_speed, move_angle, _align.calculate(_target, _gyro.data()));
+        _m.set_velocity(lin_speed, move_angle - _gyro.data().yaw, _align.calculate(_target, _gyro.data()));
         _m.move();
 
         Serial.print("Ball angle: ");

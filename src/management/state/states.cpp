@@ -158,6 +158,8 @@ State *StateAttackerDribblerCapture::update(StateContext &ctx, Command &cmd)
     if (ctx.cam.ball_distance > 20)
         return &ctx.states->attacker_dribbler_approach;
 
+    move_to(ctx, cmd, ctx.ball);
+
     cmd.align_angle = heading_to(ctx, ctx.cam.ball_angle);
     cmd.dribble = true;
     cmd.kick = false;

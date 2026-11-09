@@ -51,7 +51,7 @@ public:
         _gyro.read();
         gyroData data = _gyro.data();
 
-        _m.set_velocity(speed, MOVE_ANGLE, _align.calculate(ALIGN_ANGLE, data));
+        _m.set_velocity(speed, MOVE_ANGLE - _gyro.data().yaw, _align.calculate(ALIGN_ANGLE, data));
         _m.move();
     }
 
