@@ -52,9 +52,7 @@ public:
     void loop(bool go_to_ball, point target_point, int speed)
     {
         _gyro.read();
-        Serial.println("Gyro read");
         _cd.parse();
-        Serial.println("Camera data parsed");
 
         _rc.calculate_coordinates(_gyro.data(), _cd.data());
 

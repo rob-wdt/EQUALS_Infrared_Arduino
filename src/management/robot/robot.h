@@ -1,21 +1,18 @@
 #pragma once
 
-#include "config.h"
-
 #include "control/ball-detector/ball-detector.h"
 #include "control/outs-handler-coords/outs-handler-coords.h"
 #include "control/robot-coordinates-calculator/robot-coordinates-calculator.h"
-#include "core/UART/UART.h"
 #include "control/movement-controller/movement-controller.h"
 #include "control/heading-controller/heading-controller.h"
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/sensors/button/button.h"
 #include "control/camera-data-parser/camera-data-parser.h"
 #include "core/dribbler/dribbler.h"
-
-#include "management/config/robot-config.h"
 #include "core/kicker/kicker.h"
 #include "core/led/led.h"
+
+#include "management/config/robot-config.h"
 #include "management/state-machine/state-machine.h"
 #include "management/state-indicator/state-indicator.h"
 

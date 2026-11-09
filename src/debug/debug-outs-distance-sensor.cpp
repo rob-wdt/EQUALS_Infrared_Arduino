@@ -1,5 +1,3 @@
-#pragma once
-
 #include <Arduino.h>
 
 #include "control/outs-handler-distance-sensor/outs-handler-distance-sensor.h"

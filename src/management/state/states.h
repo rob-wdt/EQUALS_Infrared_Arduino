@@ -31,20 +31,16 @@ private:
     State *_resume = nullptr;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ----------------------------------------------------------- ATTACKER ------------------------------------------------------ //
-
 class StateAttacker : public State
 {
 };
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------- ATTACKER_DRIBBLER --------------------------------------------------- //
+
 class StateAttackerDribbler : public StateAttacker
 {
     RoleKind role() const override { return RoleKind::ATTACKER_DRIBBLER; }
-};
-
-class StateAttackerSimple : public StateAttacker
-{
 };
 
 class StateAttackerDribblerSearch : public StateAttackerDribbler
@@ -106,6 +102,14 @@ public:
 private:
     Timer _timer;
     bool _fired;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------ ATTACKER_SIMPLE ---------------------------------------------------- //
+
+class StateAttackerSimple : public StateAttacker
+{
+    RoleKind role() const override { return RoleKind::ATTACKER_SIMPLE; }
 };
 
 class StateAttackerSimpleSearch : public StateAttackerSimple

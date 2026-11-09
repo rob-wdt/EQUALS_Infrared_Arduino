@@ -79,7 +79,7 @@ State *StateOutRecovery::update(StateContext &ctx, Command &cmd)
         return _resume ? _resume : &ctx.states->idle;
 
     cmd.lin_speed = ctx.params.speed;
-    // The escape angle is in field coordinates, move_angle is relative to the robot
+
     cmd.move_angle = ctx.out_escape_angle - ctx.gyro.yaw;
     cmd.align_angle = 0;
     return nullptr;

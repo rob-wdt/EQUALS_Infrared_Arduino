@@ -19,7 +19,7 @@
 #define ALIGN_OPP_GOAL 0 // turn to the opponent goal (camera)
 #define ALIGN_OWN_GOAL 1 // turn to the own goal (camera)
 #define ALIGN_FIXED 2    // keep FIXED_ANGLE (gyro, 0 = the heading at the zero angles setup)
-#define ALIGN_SWEEP 3    // turn to SWEEP_ANGLES one after another: the hardest test, the ball is lost on turns
+#define ALIGN_SWEEP 3    // turn to SWEEP_ANGLES one after another
 
 #define ALIGN_MODE ALIGN_OWN_GOAL
 
