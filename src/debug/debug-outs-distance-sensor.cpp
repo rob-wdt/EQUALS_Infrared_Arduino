@@ -87,7 +87,7 @@ HeadingController align(new PIDControl(config.controls_config().pid));
 
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 
 OutsDistanceSensorTest test(ds, oh, movement_controller, align, gyro, button, led);
 

@@ -67,7 +67,7 @@ GoalMapper goal(GoalColor::YELLOW);
 RobotCoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CameraDataParser cam_parser(uart, goal);
 

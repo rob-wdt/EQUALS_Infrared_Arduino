@@ -102,7 +102,7 @@ BNO055 gyro(config.gyro_address());
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CameraDataParser cd(uart, GoalMapper(own_goal));
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 
 PointNavigatorTest test(mc, align, gyro, cd, button, led);
 

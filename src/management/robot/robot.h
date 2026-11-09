@@ -17,6 +17,7 @@
 #include "core/kicker/kicker.h"
 #include "core/led/led.h"
 #include "management/state-machine/state-machine.h"
+#include "management/state-indicator/state-indicator.h"
 
 class Robot
 {
@@ -50,6 +51,8 @@ private:
     Kicker _kicker;
     Led _led;
     Dribbler _dribbler;
+
+    StateIndicator _state_indicator;
 
     StateMachine _fsm;
 

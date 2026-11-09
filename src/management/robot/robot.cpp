@@ -13,7 +13,7 @@ Robot::Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool
                                                                                                                              Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
                                                                                                                              Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
                                                                                                                          _config.motors_config().loc_angles),
-                                                                                                    _align(new PDCControl(_config.controls_config().pdc)), _with_ball_align(new PDCControl(_config.controls_config().with_ball_pdc), _config.controls_config().with_ball_max_speed), _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn2), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led), _dribbler(_config.pins().dribbler, _config.dribbler_config().min, _config.dribbler_config().max) {}
+                                                                                                    _align(new PDCControl(_config.controls_config().pdc)), _with_ball_align(new PDCControl(_config.controls_config().with_ball_pdc), _config.controls_config().with_ball_max_speed), _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn2), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led1), _dribbler(_config.pins().dribbler, _config.dribbler_config().min, _config.dribbler_config().max), _state_indicator(Led(_config.pins().led1), Led(_config.pins().led2), Led(_config.pins().led3)) {}
 
 void Robot::init()
 {
@@ -26,6 +26,7 @@ void Robot::init()
     _kicker.init();
     _led.init();
     _dribbler.init();
+    _state_indicator.init();
 }
 
 void Robot::calibrate_gyro()
@@ -132,4 +133,6 @@ void Robot::update()
     Command cmd;
     _fsm.update(ctx, cmd);
     _apply(cmd);
+
+    _state_indicator.indicate(*_fsm.current(), ctx);
 }
