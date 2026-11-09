@@ -54,13 +54,9 @@ public:
 class StateAttackerDribblerApproach : public StateAttackerDribbler
 {
 public:
-    void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerDribblerApproach"; }
     bool can_switch_role() const override { return false; }
-
-private:
-    bool _lined_up = false; // behind the ball on the goal -> ball line: drive straight at the ball
 };
 
 class StateAttackerDribblerCapture : public StateAttackerDribbler
@@ -74,14 +70,6 @@ public:
 private:
     Timer _timer;
     bool _holding = false; // the phototransistor sees the ball, _timer counts from that moment
-};
-
-class StateAttackerDribblerAlignToGoal : public StateAttackerDribbler
-{
-public:
-    State *update(StateContext &ctx, Command &cmd) override;
-    const char *name() const override { return "AttackerDribblerAlignToGoal"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerDribblerDrive : public StateAttackerDribbler
@@ -232,7 +220,6 @@ struct StateSet
     StateAttackerDribblerSearch attacker_dribbler_search;
     StateAttackerDribblerApproach attacker_dribbler_approach;
     StateAttackerDribblerCapture attacker_dribbler_capture;
-    StateAttackerDribblerAlignToGoal attacker_dribbler_align_to_goal;
     StateAttackerDribblerDrive attacker_dribbler_drive;
     StateAttackerDribblerKick attacker_dribbler_kick;
 
