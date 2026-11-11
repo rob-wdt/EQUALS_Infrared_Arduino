@@ -17,7 +17,7 @@ import sensor
 # ------------------------------------------------- WHAT TO DO ------------------------------------------------------- #
 
 # Suffix of the variables in settings.py: "ATTACKER" (violet robot) or "DEFENDER" (white robot)
-ROBOT = "ATTACKER"
+ROBOT = "DEFENDER"
 
 # "objects"   - all objects as the robot sees them: frames, lines, angles and distances (like main.py)
 # "mask"      - only the pixels that fall into the threshold of TARGET are white: tune the thresholds here
@@ -52,9 +52,9 @@ GAIN = 24
 EXPOSURE = 21_450
 
 # Shift of the mirror center from the middle of the frame, pixels: CENTER = (W // 2 + x, H // 2 + y)
-CENTER_OFFSET = (10, -12)
+CENTER_OFFSET = (-5, -12)
 
-MASK_RADIUS = 115
+MASK_RADIUS = 105
 ROBOT_RADIUS = 13
 
 PX_TO_CM = (

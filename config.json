@@ -105,12 +105,12 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 70,
-            "left": -60,
-            "front_goal": 85,
-            "rear_goal": -90,
-            "front_corners": 95,
-            "rear_corners": -95,
+            "right": 55,
+            "left": -55,
+            "front_goal": 55,
+            "rear_goal": -60,
+            "front_corners": 65,
+            "rear_corners": -70,
             "goal_zone_half_width": 50
         },
         "outs_hysteresis": 0,
