@@ -28,12 +28,12 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 60,
-            "left": -60,
-            "front_goal": 65,
-            "rear_goal": -85,
-            "front_corners": 70,
-            "rear_corners": -90,
+            "right": 50,
+            "left": -50,
+            "front_goal": 60,
+            "rear_goal": -60,
+            "front_corners": 65,
+            "rear_corners": -65,
             "goal_zone_half_width": 45
         },
         "rear_distance_sensor_threshold": 10,
@@ -72,9 +72,9 @@
         "kicking_time_ms": 200,
         "dribbler": {
             "min": 1200,
-            "max": 1400
+            "max": 1700
         },
-        "phototransistor_threshold": 1,
+        "phototransistor_threshold": 3,
         "ball_angle_offset": 2
     },
     "white": {
@@ -106,12 +106,12 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 70,
-            "left": -60,
-            "front_goal": 85,
-            "rear_goal": -90,
-            "front_corners": 95,
-            "rear_corners": -95,
+            "right": 55,
+            "left": -55,
+            "front_goal": 55,
+            "rear_goal": -60,
+            "front_corners": 65,
+            "rear_corners": -70,
             "goal_zone_half_width": 50
         },
         "outs_hysteresis": 0,

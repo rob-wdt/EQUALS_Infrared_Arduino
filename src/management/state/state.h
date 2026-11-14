@@ -41,11 +41,12 @@ struct Command
 
 struct AttackerStateParams
 {
-    int orbit_enter_angle = 30;           // deg, ball is this far from the front -> start orbiting
-    int orbit_exit_angle = 15;            // deg, ball is this close to the front -> stop orbiting
-    int orbit_distance = 20;              // cm, orbit only when the ball is closer than this
-    unsigned long capture_ms = 200;       // the ball must stay captured this long before Drive (dribbler gets hold of it)
-    int capture_speed = 100;
+    int orbit_enter_angle = 30;     // deg, ball is this far from the front -> start orbiting
+    int orbit_exit_angle = 15;      // deg, ball is this close to the front -> stop orbiting
+    int orbit_distance = 20;        // cm, orbit only when the ball is closer than this
+    unsigned long capture_ms = 200; // the ball must stay captured this long before Drive (dribbler gets hold of it)
+    int capture_speed_dribbler = 100;
+    int capture_speed_simple = 150;
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
     int kick_goal_distance = 80;          // cm, kick when the opponent goal is closer than this
     unsigned long kick_cooldown_ms = 400; // pause after the kick
@@ -110,6 +111,7 @@ struct StateContext
     // Derived by StateMachine
     point ball; // field coordinates, valid while ball_visible
     bool opp_goal_visible;
+    bool own_goal_visible;
     point opp_goal;      // field coordinates, valid while opp_goal_visible
     bool own_goal_known; // the own goal has been seen at least once
     point own_goal;      // field coordinates, the last place it was seen

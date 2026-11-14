@@ -87,6 +87,7 @@ StateContext Robot::_make_context()
     ctx.out = _outs_handler.out_type();
     ctx.out_escape_angle = _outs_handler.escape_angle();
     ctx.ball_visible = ctx.cam.ball_distance > 0;
+    ctx.own_goal_visible = ctx.cam.own_goal_distance > 0;
     ctx.ball_captured = _ball_detector.ball_detected();
     ctx.start_pressed = _start_button.is_pressed();
     ctx.stop_pressed = _stop_button.is_pressed();

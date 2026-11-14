@@ -119,7 +119,7 @@ State *StateAttackerDribblerCapture::update(StateContext &ctx, Command &cmd)
     cmd.align_angle = heading_to(ctx, ctx.cam.ball_angle);
     cmd.dribble = true;
     cmd.kick = false;
-    cmd.lin_speed = ctx.params.attacker.capture_speed;
+    cmd.lin_speed = ctx.params.attacker.capture_speed_dribbler;
 
     return nullptr;
 }
@@ -194,12 +194,16 @@ State *StateAttackerSimpleSearch::update(StateContext &ctx, Command &cmd)
     if (ctx.ball_visible)
         return &ctx.states->attacker_simple_approach;
 
+    if (ctx.opp_goal_visible)
+        move_to(ctx, cmd, ctx.own_goal);
+    else
+        cmd.move_angle = 0;
+
     cmd.align_angle = 0;
     cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;
     cmd.lin_speed = ctx.params.speed;
-    cmd.move_angle = ctx.cam.own_goal_angle;
 
     return nullptr;
 }
@@ -209,15 +213,19 @@ State *StateAttackerSimpleApproach::update(StateContext &ctx, Command &cmd)
     if (!ctx.ball_visible)
         return &ctx.states->attacker_simple_search;
 
-    if (ctx.cam.ball_distance <= ctx.params.attacker.orbit_distance && fabs(ctx.cam.ball_angle) > ctx.params.attacker.orbit_enter_angle)
+    if (ctx.cam.ball_distance <= ctx.params.attacker.orbit_distance && fabs(ctx.cam.ball_angle) >= ctx.params.attacker.orbit_enter_angle)
         return &ctx.states->attacker_simple_orbit;
+
+    if (ctx.own_goal_visible)
+        move_to(ctx, cmd, ctx.ball);
+    else
+        cmd.move_angle = 0;
 
     cmd.align_angle = 0;
     cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;
     cmd.lin_speed = ctx.params.speed;
-    cmd.move_angle = ctx.cam.ball_angle;
 
     return nullptr;
 }
@@ -253,24 +261,25 @@ State *StateAttackerSimpleOrbit::update(StateContext &ctx, Command &cmd)
 
 State *StateAttackerSimpleCapture::update(StateContext &ctx, Command &cmd)
 {
-    if (!ctx.ball_visible)
-        return &ctx.states->attacker_simple_search;
+    if (ctx.ball_captured)
+        return &ctx.states->attacker_simple_drive;
 
     if (ctx.cam.ball_distance > ctx.params.attacker.orbit_distance)
         return &ctx.states->attacker_simple_approach;
 
-    if (fabs(ctx.cam.ball_angle) > ctx.params.attacker.orbit_enter_angle)
+    if (ctx.cam.ball_distance <= ctx.params.attacker.orbit_distance && ctx.cam.ball_angle >= ctx.params.attacker.orbit_enter_angle)
         return &ctx.states->attacker_simple_orbit;
 
-    if (ctx.ball_captured)
-        return &ctx.states->attacker_simple_drive;
+    if (ctx.opp_goal_visible)
+        move_to(ctx, cmd, ctx.ball);
+    else
+        cmd.move_angle = 0;
 
     cmd.align_angle = 0;
     cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;
-    cmd.lin_speed = ctx.params.speed;
-    cmd.move_angle = ctx.cam.ball_angle;
+    cmd.lin_speed = ctx.params.attacker.capture_speed_simple;
 
     return nullptr;
 }
@@ -278,14 +287,22 @@ State *StateAttackerSimpleCapture::update(StateContext &ctx, Command &cmd)
 State *StateAttackerSimpleDrive::update(StateContext &ctx, Command &cmd)
 {
     if (!ctx.ball_captured)
-        return &ctx.states->attacker_simple_search;
+        return &ctx.states->attacker_simple_capture;
 
-    if (ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
-        return &ctx.states->attacker_simple_kick;
+    // if (ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
+    //     return &ctx.states->attacker_simple_kick;
+
+    if (ctx.opp_goal_visible)
+    {
+        move_to(ctx, cmd, ctx.opp_goal);
+    }
+    else
+    {
+        cmd.move_angle = 0;
+    }
 
     cmd.align_angle = 0;
-    cmd.move_angle = 0;
-    cmd.align_mode = AlignMode::BALL_HOLD;
+    cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;
     cmd.lin_speed = ctx.params.speed;
@@ -304,8 +321,16 @@ State *StateAttackerSimpleKick::update(StateContext &ctx, Command &cmd)
     if (_timer.time_is_up())
         return &ctx.states->attacker_simple_search;
 
-    cmd.align_angle = 0;
-    cmd.move_angle = 0;
+    if (ctx.opp_goal_visible)
+    {
+        cmd.align_angle = heading_to(ctx, ctx.cam.opp_goal_angle);
+        move_to(ctx, cmd, ctx.opp_goal);
+    }
+    else
+    {
+        cmd.align_angle = 0;
+        cmd.move_angle = 0;
+    }
 
     if (!_fired)
     {
@@ -313,8 +338,8 @@ State *StateAttackerSimpleKick::update(StateContext &ctx, Command &cmd)
         _fired = true;
     }
 
-    cmd.align_mode = AlignMode::BALL_HOLD;
-    cmd.dribble = true;
+    cmd.align_mode = AlignMode::NORMAL;
+    cmd.dribble = false;
     cmd.lin_speed = ctx.params.speed;
     cmd.stop = false;
 
