@@ -112,7 +112,7 @@ class StateAttackerSimpleApproach : public StateAttackerSimple
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
-    const char *name() const override { return "AttackerSimpleSearch"; }
+    const char *name() const override { return "AttackerSimpleApproach"; }
     bool can_switch_role() const override { return false; }
 };
 
@@ -136,7 +136,7 @@ class StateAttackerSimpleDrive : public StateAttackerSimple
 {
 public:
     State *update(StateContext &ctx, Command &cmd) override;
-    const char *name() const override { return "AttackerSimpleOrbit"; }
+    const char *name() const override { return "AttackerSimpleDrive"; }
     bool can_switch_role() const override { return false; }
 };
 
@@ -145,7 +145,7 @@ class StateAttackerSimpleKick : public StateAttackerSimple
 public:
     void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
-    const char *name() const override { return "AttackerSimpleOrbit"; }
+    const char *name() const override { return "AttackerSimpleKick"; }
     bool can_switch_role() const override { return false; }
 
 private:
