@@ -49,7 +49,7 @@ struct AttackerStateParams
     int capture_speed_simple = 150;
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
     int kick_goal_distance = 80;          // cm, kick when the opponent goal is closer than this
-    unsigned long kick_cooldown_ms = 400; // pause after the kick
+    unsigned long kick_cooldown_ms = 100; // pause after the kick
     int behind_ball_distance = 20;        // cm, the approach point lies this far behind the ball (on the goal -> ball line)
     int around_ball_distance = 30;        // cm, side shift of the approach point when the robot is in front of the ball
     int line_up_enter_angle = 25;         // deg, robot this close to the line behind the ball -> drive straight at the ball
