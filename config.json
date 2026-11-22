@@ -28,12 +28,12 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 50,
-            "left": -50,
-            "front_goal": 60,
-            "rear_goal": -60,
-            "front_corners": 65,
-            "rear_corners": -65,
+            "right": 60,
+            "left": -60,
+            "front_goal": 100,
+            "rear_goal": -75,
+            "front_corners": 100,
+            "rear_corners": -80,
             "goal_zone_half_width": 45
         },
         "rear_distance_sensor_threshold": 10,
@@ -47,9 +47,9 @@
             ],
             "directions": [
                 "backward",
-                "forward",
                 "backward",
-                "backward"
+                "forward",
+                "forward"
             ]
         },
         "gyroscope_address": "0x29",
@@ -109,9 +109,9 @@
             "right": 55,
             "left": -55,
             "front_goal": 55,
-            "rear_goal": -60,
+            "rear_goal": -100,
             "front_corners": 65,
-            "rear_corners": -70,
+            "rear_corners": -100,
             "goal_zone_half_width": 50
         },
         "outs_hysteresis": 0,
@@ -124,7 +124,7 @@
                 225
             ],
             "directions": [
-                "backward",
+                "forward",
                 "forward",
                 "backward",
                 "forward"

@@ -289,8 +289,8 @@ State *StateAttackerSimpleDrive::update(StateContext &ctx, Command &cmd)
     if (!ctx.ball_captured)
         return &ctx.states->attacker_simple_capture;
 
-    // if (ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
-    //     return &ctx.states->attacker_simple_kick;
+    if (ctx.cam.opp_goal_distance <= ctx.params.attacker.kick_goal_distance)
+        return &ctx.states->attacker_simple_kick;
 
     if (ctx.opp_goal_visible)
     {
