@@ -62,7 +62,7 @@ RobotConfig config(robot_type);
 PIDControl pid(config.controls_config().pid);
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 
 PIDControlTest test(pid, gyro, button, led);
 

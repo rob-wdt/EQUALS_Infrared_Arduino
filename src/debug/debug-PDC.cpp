@@ -62,7 +62,7 @@ RobotConfig config(robot_type);
 PDCControl pdc(config.controls_config().pdc);
 BNO055 gyro(config.gyro_address());
 Button button(config.pins().btn1);
-Led led(config.pins().led);
+Led led(config.pins().led1);
 
 PDCControlTest test(pdc, gyro, button, led);
 
