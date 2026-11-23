@@ -2,7 +2,7 @@
 #include "config.h"
 #include "management/robot/robot.h"
 
-RoleKind start_role = RoleKind::ATTACKER;
+RoleKind start_role = RoleKind::ATTACKER_SIMPLE;
 GoalColor own_goal = GoalColor::YELLOW;
 RobotViolet robot_type;
 
