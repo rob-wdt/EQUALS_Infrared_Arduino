@@ -213,7 +213,7 @@ State *StateAttackerSimpleApproach::update(StateContext &ctx, Command &cmd)
     if (!ctx.ball_visible)
         return &ctx.states->attacker_simple_search;
 
-    if (ctx.cam.ball_distance <= ctx.params.attacker.orbit_distance && fabs(ctx.cam.ball_angle) >= ctx.params.attacker.orbit_enter_angle)
+    if (ctx.cam.ball_distance <= ctx.params.attacker.orbit_distance)
         return &ctx.states->attacker_simple_orbit;
 
     if (ctx.own_goal_visible)
@@ -221,7 +221,7 @@ State *StateAttackerSimpleApproach::update(StateContext &ctx, Command &cmd)
     else
         cmd.move_angle = 0;
 
-    cmd.align_angle = 0;
+    cmd.align_angle = heading_to(ctx, ctx.cam.opp_goal_angle);
     cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;
@@ -250,7 +250,7 @@ State *StateAttackerSimpleOrbit::update(StateContext &ctx, Command &cmd)
             cmd.move_angle = ctx.cam.ball_angle + 90;
     }
 
-    cmd.align_angle = 0;
+    cmd.align_angle = heading_to(ctx, ctx.cam.opp_goal_angle);
     cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;
@@ -262,7 +262,7 @@ State *StateAttackerSimpleOrbit::update(StateContext &ctx, Command &cmd)
 State *StateAttackerSimpleCapture::update(StateContext &ctx, Command &cmd)
 {
     if (ctx.ball_captured)
-        return &ctx.states->attacker_simple_drive;
+        return &ctx.states->attacker_simple_kick;
 
     if (ctx.cam.ball_distance > ctx.params.attacker.orbit_distance)
         return &ctx.states->attacker_simple_approach;
@@ -275,7 +275,7 @@ State *StateAttackerSimpleCapture::update(StateContext &ctx, Command &cmd)
     else
         cmd.move_angle = 0;
 
-    cmd.align_angle = 0;
+    cmd.align_angle = heading_to(ctx, ctx.cam.opp_goal_angle);
     cmd.align_mode = AlignMode::NORMAL;
     cmd.dribble = false;
     cmd.kick = false;

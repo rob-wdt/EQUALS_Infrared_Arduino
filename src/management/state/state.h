@@ -43,10 +43,10 @@ struct AttackerStateParams
 {
     int orbit_enter_angle = 30;     // deg, ball is this far from the front -> start orbiting
     int orbit_exit_angle = 15;      // deg, ball is this close to the front -> stop orbiting
-    int orbit_distance = 20;        // cm, orbit only when the ball is closer than this
+    int orbit_distance = 30;        // cm, orbit only when the ball is closer than this
     unsigned long capture_ms = 200; // the ball must stay captured this long before Drive (dribbler gets hold of it)
     int capture_speed_dribbler = 100;
-    int capture_speed_simple = 150;
+    int capture_speed_simple = 100;
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
     int kick_goal_distance = 80;          // cm, kick when the opponent goal is closer than this
     unsigned long kick_cooldown_ms = 100; // pause after the kick
@@ -58,11 +58,11 @@ struct AttackerStateParams
 
 struct DefenderStateParams
 {
-    int guard_distance = 80; // cm from own goal
+    int guard_distance = 50; // cm from own goal
     // Guard zone around the own goal (cm, relative to the goal center seen by the camera):
     // a front line y = guard_line_distance from -guard_half_width to +guard_half_width
     // and two side lines from its ends back to the goal line, at guard_side_angle to the goal line
-    int guard_line_distance = 40;
+    int guard_line_distance = 30;
     int guard_half_width = 35;
     int guard_side_angle = 60;    // deg, 90 = straight back (a rectangle), less = wider at the goal line
     int guard_slow_distance = 15; // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
