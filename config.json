@@ -19,7 +19,8 @@
             "led1": 30,
             "led2": 22,
             "led3": 24,
-            "distance_sensor": "A1"
+            "distance_sensor": "A1",
+            "robocup_module": 47
         },
         "uart": {
             "num": 3,
@@ -96,7 +97,8 @@
             "led1": 30,
             "led2": 22,
             "led3": 24,
-            "distance_sensor": "A1"
+            "distance_sensor": "A1",
+            "robocup_module": 47
         },
         "uart": {
             "num": 3,

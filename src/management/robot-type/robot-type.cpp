@@ -33,7 +33,8 @@ pin pins_violet = {
     static_cast<int>(PinViolet::PIN_LED1),
     static_cast<int>(PinViolet::PIN_LED2),
     static_cast<int>(PinViolet::PIN_LED3),
-    static_cast<int>(PinViolet::PIN_DISTANCE_SENSOR)};
+    static_cast<int>(PinViolet::PIN_DISTANCE_SENSOR),
+    static_cast<int>(PinViolet::PIN_ROBOCUP_MODULE)};
 
 UARTConfig uart_config_violet = {UART_num_violet, UART_BAUDRATE_VIOLET, UART_BUFFER_SIZE_VIOLET, UART_BUFFER_STARTER_VIOLET};
 
@@ -86,7 +87,8 @@ pin pins_white = {
     static_cast<int>(PinWhite::PIN_LED1),
     static_cast<int>(PinWhite::PIN_LED2),
     static_cast<int>(PinWhite::PIN_LED3),
-    static_cast<int>(PinWhite::PIN_DISTANCE_SENSOR)};
+    static_cast<int>(PinWhite::PIN_DISTANCE_SENSOR),
+    static_cast<int>(PinWhite::PIN_ROBOCUP_MODULE)};
 
 UARTConfig uart_config_white = {UART_num_white, UART_BAUDRATE_WHITE, UART_BUFFER_SIZE_WHITE, UART_BUFFER_STARTER_WHITE};
 
