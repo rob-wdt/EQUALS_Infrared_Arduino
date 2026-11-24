@@ -22,9 +22,10 @@ public:
     void loop()
     {
         _module.read();
-        int state = _module.data();
 
-        if (state == HIGH)
+        bool state = _module.start();
+
+        if (state)
             _led.on();
         else
             _led.off();
@@ -40,7 +41,7 @@ public:
 private:
     RCModule _module;
     Led _led;
-    int _last_state = -1;
+    bool _last_state = 0;
 };
 
 RobotViolet robot_type;

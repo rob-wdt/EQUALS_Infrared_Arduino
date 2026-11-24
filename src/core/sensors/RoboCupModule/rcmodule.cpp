@@ -7,4 +7,4 @@ void RCModule::init() { pinMode(_pin, INPUT); }
 
 void RCModule::read() { _data = digitalRead(_pin); }
 
-int RCModule::data() { return _data; }
+bool RCModule::start() { return _data == 1; }

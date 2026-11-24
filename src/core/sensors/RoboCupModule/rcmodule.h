@@ -7,7 +7,7 @@ public:
     RCModule(int pin);
     void init() override;
     void read() override;
-    int data();
+    bool start();
 
 private:
     int _pin;
