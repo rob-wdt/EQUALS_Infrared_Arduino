@@ -11,6 +11,7 @@
 #include "core/dribbler/dribbler.h"
 #include "core/kicker/kicker.h"
 #include "core/led/led.h"
+#include "core/sensors/RoboCupModule/rcmodule.h"
 
 #include "management/config/robot-config.h"
 #include "management/state-machine/state-machine.h"
@@ -48,6 +49,7 @@ private:
     Kicker _kicker;
     Led _led;
     Dribbler _dribbler;
+    RCModule _rcmodule;
 
     StateIndicator _state_indicator;
 
