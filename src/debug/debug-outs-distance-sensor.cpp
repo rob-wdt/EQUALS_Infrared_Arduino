@@ -8,45 +8,33 @@
 #include "core/sensors/BNO055/BNO055.h"
 #include "core/led/led.h"
 #include "core/sensors/distance-sensor/distance-sensor.h"
+#include "debug/debug-controls.h"
 
 #define SPEED 0
 
 class OutsDistanceSensorTest
 {
 public:
-    OutsDistanceSensorTest(DistanceSensor ds, OutsHandlerDistanceSensor oh, MovementController mc, HeadingController align, BNO055 gyro, Button btn, Led led) : _ds(ds), _oh(oh), _mc(mc), _align(align), _gyro(gyro), _button(btn), _led(led) {}
+    OutsDistanceSensorTest(DistanceSensor ds, OutsHandlerDistanceSensor oh, MovementController mc, HeadingController align, BNO055 gyro, DebugControls controls, Led led) : _ds(ds), _oh(oh), _mc(mc), _align(align), _gyro(gyro), _controls(controls), _led(led) {}
     void setup()
     {
         _mc.init();
 
         _gyro.init();
-        _button.init();
+        _controls.init();
         _led.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
-
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start.");
-        _button.wait_click();
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        _controls.wait_start();
     }
     void loop(int lin_speed)
     {
+        if (!_controls.update(_gyro))
+        {
+            _mc.stop();
+            return;
+        }
         _gyro.read();
         _ds.read();
         _oh.handle(_ds.data(), 0);
@@ -72,7 +60,7 @@ private:
     MovementController _mc;
     HeadingController _align;
     BNO055 _gyro;
-    Button _button;
+    DebugControls _controls;
     Led _led;
 };
 
@@ -91,10 +79,10 @@ MovementController movement_controller(
 HeadingController align(new PIDControl(config.controls_config().pid));
 
 BNO055 gyro(config.gyro_address());
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 
-OutsDistanceSensorTest test(ds, oh, movement_controller, align, gyro, button, led);
+OutsDistanceSensorTest test(ds, oh, movement_controller, align, gyro, controls, led);
 
 void setup()
 {

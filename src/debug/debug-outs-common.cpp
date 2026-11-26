@@ -8,42 +8,27 @@
 #include "core/UART/UART.h"
 #include "control/camera-data-parser/camera-data-parser.h"
 #include "management/config/robot-config.h"
+#include "debug/debug-controls.h"
 
 class OutsCommonTest
 {
 public:
-    OutsCommonTest(OutsHandlerCoords outs, RobotCoordinatesCalculator coords, BNO055 gyro, Button button, UART uart, CameraDataParser cam_parser, Led led) : _outs(outs), _coords(coords), _gyro(gyro), _button(button), _uart(uart), _c(cam_parser), _led(led) {}
+    OutsCommonTest(OutsHandlerCoords outs, RobotCoordinatesCalculator coords, BNO055 gyro, DebugControls controls, UART uart, CameraDataParser cam_parser, Led led) : _outs(outs), _coords(coords), _gyro(gyro), _controls(controls), _uart(uart), _c(cam_parser), _led(led) {}
     void setup()
     {
         _gyro.init();
         _c.init();
-        _button.init();
+        _controls.init();
         _led.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
-
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start.");
-        _button.wait_click();
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        _controls.wait_start();
     }
     void loop(outsBounds outs_bounds)
     {
+        if (!_controls.update(_gyro, &_c))
+            return;
         _gyro.read();
         _c.parse();
         _coords.calculate_coordinates(_gyro.data(), _c.data());
@@ -99,7 +84,7 @@ private:
     OutsHandlerCoords _outs;
     RobotCoordinatesCalculator _coords;
     BNO055 _gyro;
-    Button _button;
+    DebugControls _controls;
     UART _uart;
     CameraDataParser _c;
     Led _led;
@@ -111,13 +96,13 @@ RobotConfig config(robot_type);
 OutsHandlerCoords outs(config.outs_hysteresis());
 RobotCoordinatesCalculator coords;
 BNO055 gyro(config.gyro_address());
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 GoalMapper goal(GoalColor::BLUE);
 CameraDataParser cam_parser(uart, goal);
 
-OutsCommonTest test(outs, coords, gyro, button, uart, cam_parser, led);
+OutsCommonTest test(outs, coords, gyro, controls, uart, cam_parser, led);
 
 void setup()
 {

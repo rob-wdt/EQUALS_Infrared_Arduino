@@ -5,42 +5,27 @@
 #include "core/sensors/button/button.h"
 #include "core/led/led.h"
 #include "management/config/robot-config.h"
+#include "debug/debug-controls.h"
 
 class PDCControlTest
 {
 public:
-    PDCControlTest(PDCControl pdc, BNO055 gyro, Button button, Led led) : _pdc(pdc), _gyro(gyro), _button(button), _led(led) {}
+    PDCControlTest(PDCControl pdc, BNO055 gyro, DebugControls controls, Led led) : _pdc(pdc), _gyro(gyro), _controls(controls), _led(led) {}
 
     void setup()
     {
         _gyro.init();
-        _button.init();
+        _controls.init();
         _led.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
-
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start.");
-        _button.wait_click();
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        _controls.wait_start();
     }
     void loop()
     {
+        if (!_controls.update(_gyro))
+            return;
         _gyro.read();
         gyroData data = _gyro.data();
 
@@ -52,7 +37,7 @@ public:
 private:
     PDCControl _pdc;
     BNO055 _gyro;
-    Button _button;
+    DebugControls _controls;
     Led _led;
 };
 
@@ -61,10 +46,10 @@ RobotConfig config(robot_type);
 
 PDCControl pdc(config.controls_config().pdc);
 BNO055 gyro(config.gyro_address());
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 
-PDCControlTest test(pdc, gyro, button, led);
+PDCControlTest test(pdc, gyro, controls, led);
 
 void setup()
 {

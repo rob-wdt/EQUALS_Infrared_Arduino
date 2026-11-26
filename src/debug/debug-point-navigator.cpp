@@ -10,6 +10,7 @@
 
 #include "management/robot-type/robot-type.h"
 #include "management/config/robot-config.h"
+#include "debug/debug-controls.h"
 
 #define SPEED 150
 #define TARGET_POINT {0, -40}
@@ -19,39 +20,26 @@
 class PointNavigatorTest
 {
 public:
-    PointNavigatorTest(MovementController mc, HeadingController align, BNO055 gyro, CameraDataParser cd, Button button, Led led) : _mc(mc), _align(align), _gyro(gyro), _cd(cd), _button(button), _led(led) {}
+    PointNavigatorTest(MovementController mc, HeadingController align, BNO055 gyro, CameraDataParser cd, DebugControls controls, Led led) : _mc(mc), _align(align), _gyro(gyro), _cd(cd), _controls(controls), _led(led) {}
     void setup()
     {
         _cd.init();
         _mc.init();
         _gyro.init();
-        _button.init();
+        _controls.init();
         _led.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
-
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start.");
-        _button.wait_click();
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        _controls.wait_start();
     }
     void loop(bool go_to_ball, point target_point, int speed, float hysteresis)
     {
+        if (!_controls.update(_gyro, &_cd))
+        {
+            _mc.stop();
+            return;
+        }
         _gyro.read();
         _cd.parse();
 
@@ -89,7 +77,7 @@ private:
     RobotCoordinatesCalculator _rc;
     BallCoordinatesCalculator _bc;
     CameraDataParser _cd;
-    Button _button;
+    DebugControls _controls;
     Led _led;
 };
 
@@ -107,10 +95,10 @@ HeadingController align(new PDCControl(config.controls_config().pdc));
 BNO055 gyro(config.gyro_address());
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 CameraDataParser cd(uart, GoalMapper(own_goal));
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 
-PointNavigatorTest test(mc, align, gyro, cd, button, led);
+PointNavigatorTest test(mc, align, gyro, cd, controls, led);
 
 void setup()
 {

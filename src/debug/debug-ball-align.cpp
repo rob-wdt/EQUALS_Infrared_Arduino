@@ -9,6 +9,7 @@
 #include "control/camera-data-parser/camera-data-parser.h"
 #include "management/config/robot-config.h"
 #include "management/goal-mapper/goal-mapper.h"
+#include "debug/debug-controls.h"
 
 // CV.py changes the sign of the ball angle only (ball.angle = -ball.angle), so to compare it with the gyro yaw
 // it has to be turned back. If the robot turns away from the ball, set 1
@@ -21,39 +22,26 @@
 class BallAlignTest
 {
 public:
-    BallAlignTest(MovementController mc, HeadingController align, BNO055 gyro, Button button, CameraDataParser cam_parser, Led led) : _m(mc), _align(align), _gyro(gyro), _button(button), _cam_parser(cam_parser), _led(led) {}
+    BallAlignTest(MovementController mc, HeadingController align, BNO055 gyro, DebugControls controls, CameraDataParser cam_parser, Led led) : _m(mc), _align(align), _gyro(gyro), _controls(controls), _cam_parser(cam_parser), _led(led) {}
     void setup()
     {
         _gyro.init();
         _cam_parser.init();
         _m.init();
-        _button.init();
+        _controls.init();
         _led.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
-
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start.");
-        _button.wait_click();
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        _controls.wait_start();
     }
     void loop(float lin_speed, float move_angle)
     {
+        if (!_controls.update(_gyro, &_cam_parser))
+        {
+            _m.stop();
+            return;
+        }
         _gyro.read();
         _cam_parser.parse();
 
@@ -84,7 +72,7 @@ private:
     MovementController _m;
     HeadingController _align;
     BNO055 _gyro;
-    Button _button;
+    DebugControls _controls;
     CameraDataParser _cam_parser;
     Led _led;
 
@@ -111,13 +99,13 @@ MovementController movement_controller(
     config.motors_config().loc_angles);
 HeadingController align(new PDCControl(config.controls_config().pdc));
 BNO055 gyro(config.gyro_address());
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 
-BallAlignTest test(movement_controller, align, gyro, button, cam_parser, led);
+BallAlignTest test(movement_controller, align, gyro, controls, cam_parser, led);
 
 void setup()
 {

@@ -3,18 +3,27 @@
 #include "core/UART/UART.h"
 #include "control/camera-data-parser/camera-data-parser.h"
 #include "management/config/robot-config.h"
+#include "core/sensors/button/button.h"
 
 class CamDataParserTest
 {
 public:
-    CamDataParserTest(UART uart, GoalMapper goal) : _uart(uart), _c(uart, goal) {}
+    CamDataParserTest(UART uart, GoalMapper goal, Button goal_button) : _uart(uart), _c(uart, goal), _goal_button(goal_button) {}
     void setup()
     {
         _c.init();
+        _goal_button.init();
         Serial.begin(115200);
     }
     void loop()
     {
+        _goal_button.read();
+        if (_goal_button.was_pressed())
+        {
+            _c.toggle_own_goal();
+            Serial.print("Own goal: ");
+            Serial.println(_c.own_goal() == GoalColor::YELLOW ? "YELLOW" : "BLUE");
+        }
         _c.parse();
         Serial.print("Parsed data:\tBall angle: ");
         Serial.print(_c.data().ball_angle);
@@ -33,6 +42,7 @@ public:
 private:
     UART _uart;
     CameraDataParser _c;
+    Button _goal_button;
 };
 
 RobotViolet robot_type;
@@ -40,7 +50,8 @@ RobotConfig config(robot_type);
 
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 GoalMapper goal(GoalColor::YELLOW);
-CamDataParserTest test(uart, goal);
+Button goal_button(config.pins().btn3);
+CamDataParserTest test(uart, goal, goal_button);
 
 void setup()
 {

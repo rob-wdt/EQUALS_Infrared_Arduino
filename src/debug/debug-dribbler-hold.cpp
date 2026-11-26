@@ -11,6 +11,7 @@
 #include "control/camera-data-parser/camera-data-parser.h"
 #include "management/config/robot-config.h"
 #include "management/goal-mapper/goal-mapper.h"
+#include "debug/debug-controls.h"
 
 // Checks how the dribbler holds the ball: the dribbler spins all the time and the robot turns to a heading.
 // Put the ball into the dribbler and press the button: the terminal shows how long the ball is held and how often it's lost.
@@ -36,39 +37,22 @@ const int SWEEP_ANGLES[] = {0, 90, 180, -90};
 class DribblerHoldTest
 {
 public:
-    DribblerHoldTest(MovementController mc, HeadingController align, BNO055 gyro, Button button, CameraDataParser cam_parser, Led led, Dribbler dribbler, BallDetector ball_detector)
-        : _m(mc), _align(align), _gyro(gyro), _button(button), _cam_parser(cam_parser), _led(led), _dribbler(dribbler), _ball_detector(ball_detector) {}
+    DribblerHoldTest(MovementController mc, HeadingController align, BNO055 gyro, DebugControls controls, CameraDataParser cam_parser, Led led, Dribbler dribbler, BallDetector ball_detector)
+        : _m(mc), _align(align), _gyro(gyro), _controls(controls), _cam_parser(cam_parser), _led(led), _dribbler(dribbler), _ball_detector(ball_detector) {}
     void setup()
     {
         _gyro.init();
         _cam_parser.init();
         _m.init();
-        _button.init();
+        _controls.init();
         _led.init();
         _dribbler.init();
         _ball_detector.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
-
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Put the ball into the dribbler and press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start. The same button pauses the test.");
-        _button.wait_click();
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        Serial.println("Put the ball into the dribbler.");
+        _controls.wait_start();
 
         _start();
     }
@@ -76,25 +60,12 @@ public:
     {
         _gyro.read();
         _ball_detector.read();
-        _button.read();
-
-        // Pause / resume on a click (on release, so one click doesn't toggle it every loop)
-        bool pressed = _button.is_pressed();
-        if (_was_pressed && !pressed)
+        if (!_controls.update(_gyro, &_cam_parser))
         {
-            _paused = !_paused;
-            if (_paused)
-            {
-                _m.stop();
-                _dribbler.stop();
-                Serial.println("Paused");
-            }
-            else
-                _start();
-        }
-        _was_pressed = pressed;
-        if (_paused)
+            _m.stop();
+            _dribbler.stop();
             return;
+        }
 
         _update_target();
         _update_ball();
@@ -114,15 +85,13 @@ private:
     MovementController _m;
     HeadingController _align;
     BNO055 _gyro;
-    Button _button;
+    DebugControls _controls;
     CameraDataParser _cam_parser;
     Led _led;
     Dribbler _dribbler;
     BallDetector _ball_detector;
 
     int _target = 0;
-    bool _paused = false;
-    bool _was_pressed = false;
     unsigned long _sweep_mark = 0;
     int _sweep_i = 0;
     unsigned long _last_print = 0;
@@ -229,7 +198,7 @@ MovementController movement_controller(
 // The regulator for turning with the ball: tune with_ball_align_pdc / with_ball_align_max_speed in config.json with this test
 HeadingController align(new PDCControl(config.controls_config().with_ball_pdc), config.controls_config().with_ball_max_speed);
 BNO055 gyro(config.gyro_address());
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_config().buffer_size, config.UART_config().buffer_starter);
 GoalColor own_goal = GoalColor::BLUE;
@@ -237,7 +206,7 @@ CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 Dribbler dribbler(config.pins().dribbler, config.dribbler_config().min, config.dribbler_config().max);
 BallDetector ball_detector(Phototransistor(config.pins().phototransistor), config.phototransistor_threshold());
 
-DribblerHoldTest test(movement_controller, align, gyro, button, cam_parser, led, dribbler, ball_detector);
+DribblerHoldTest test(movement_controller, align, gyro, controls, cam_parser, led, dribbler, ball_detector);
 
 void setup()
 {
