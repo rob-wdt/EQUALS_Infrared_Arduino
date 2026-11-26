@@ -12,6 +12,11 @@ struct gyroData
     int16_t pitch, roll, yaw; // from -180 to 180
 };
 
+struct bnoStatus
+{
+    uint8_t mode, system, self_test, error;
+};
+
 class BNO055 : public Sensor
 {
 public:
@@ -21,6 +26,7 @@ public:
     void read() override;
     void set_zero_angles();
     gyroData data();
+    bnoStatus status();
 
 private:
     Adafruit_BNO055 _bno;
