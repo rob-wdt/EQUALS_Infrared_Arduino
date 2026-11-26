@@ -48,10 +48,6 @@ void Robot::calibrate_gyro()
     _led.on();
 
     Serial.println("Gyroscope calibrated");
-    Serial.print("Press button #");
-    Serial.print(_gyro_button.pin());
-    Serial.println(" to set the zero angles.");
-    _gyro_button.wait_click();
     _gyro.set_zero_angles();
 
     Serial.print("Press button #");
