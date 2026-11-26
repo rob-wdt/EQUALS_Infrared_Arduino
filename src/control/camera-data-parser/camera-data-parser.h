@@ -10,6 +10,8 @@ public:
     CameraDataParser(UART uart, GoalMapper goal_mapper);
     void init();
     void parse();
+    void toggle_own_goal();
+    GoalColor own_goal();
     cameraData data();
 
 private:

@@ -2,6 +2,10 @@
 
 GoalMapper::GoalMapper(GoalColor own_goal): _data{cameraData{0, 0, 0, 0, 0, 0}} { _own_goal_blue = own_goal == GoalColor::BLUE; }
 
+void GoalMapper::toggle_own_goal() { _own_goal_blue = !_own_goal_blue; }
+
+GoalColor GoalMapper::own_goal() { return _own_goal_blue ? GoalColor::BLUE : GoalColor::YELLOW; }
+
 void GoalMapper::map(rawCameraData raw)
 {
     _data.ball_angle = raw.ball_angle;

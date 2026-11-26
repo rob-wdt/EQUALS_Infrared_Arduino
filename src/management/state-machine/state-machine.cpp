@@ -6,6 +6,12 @@ State *StateMachine::current() { return _current; }
 
 StateSet &StateMachine::states() { return _states; }
 
+void StateMachine::reset_field_reference()
+{
+    _own_goal_known = false;
+    _ball_watcher.reset();
+}
+
 void StateMachine::_prepare(StateContext &ctx)
 {
     ctx.states = &_states;

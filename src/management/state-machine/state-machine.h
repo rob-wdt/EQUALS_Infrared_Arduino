@@ -17,6 +17,7 @@ public:
     void run_state(State *state, StateContext &ctx, Command &cmd);
     State *current();
     StateSet &states();
+    void reset_field_reference();
 
 private:
     StateSet _states;

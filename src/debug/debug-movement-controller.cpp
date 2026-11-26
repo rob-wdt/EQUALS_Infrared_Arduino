@@ -5,53 +5,44 @@
 #include "core/sensors/button/button.h"
 #include "core/led/led.h"
 #include "management/config/robot-config.h"
+#include "debug/debug-controls.h"
 
 // FEEL FREE TO CHANGE
-#define SPEED 0
+#define SPEED 150
 #define MOVE_ANGLE 0
 #define ALIGN_ANGLE 0
 
 class MovementControllerTest
 {
 public:
-    MovementControllerTest(MovementController mc, HeadingController align, BNO055 gyro, Button btn, Led led) : _m(mc), _align(align), _gyro(gyro), _button(btn), _led(led) {}
+    MovementControllerTest(MovementController mc, HeadingController align, BNO055 gyro, DebugControls controls, Led led)
+        : _m(mc), _align(align), _gyro(gyro), _controls(controls), _led(led) {}
+
     void setup()
     {
-        _gyro.init();
-        _m.init();
-        _button.init();
-        _led.init();
         Serial.begin(115200);
 
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to calibrate the gyroscope.");
-        _button.wait_click();
+        _gyro.init();
+        _m.init();
+        _controls.init();
+        _led.init();
 
-        while (!_gyro.calibrated())
-            ;
-        _led.on();
-
-        Serial.println("Gyroscope calibrated");
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to set the zero angles.");
-        _button.wait_click();
-        _gyro.set_zero_angles();
-
-        Serial.print("Press button #");
-        Serial.print(_button.pin());
-        Serial.println(" to start.");
-        _button.wait_click();
-
-        Serial.println("Zero angles set.");
+        _controls.calibrate_and_set_zero(_gyro, _led);
+        _controls.wait_start();
     }
+
     void loop(int speed)
     {
         _gyro.read();
-        gyroData data = _gyro.data();
 
-        _m.set_velocity(speed, MOVE_ANGLE - _gyro.data().yaw, _align.calculate(ALIGN_ANGLE, data));
+        if (!_controls.update(_gyro))
+        {
+            _m.stop();
+            return;
+        }
+
+        gyroData data = _gyro.data();
+        _m.set_velocity(speed, MOVE_ANGLE - data.yaw, _align.calculate(ALIGN_ANGLE, data));
         _m.move();
     }
 
@@ -59,11 +50,11 @@ private:
     MovementController _m;
     HeadingController _align;
     BNO055 _gyro;
-    Button _button;
+    DebugControls _controls;
     Led _led;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
 MovementController movement_controller(
@@ -75,10 +66,10 @@ MovementController movement_controller(
 HeadingController align(new PIDControl(config.controls_config().pid));
 
 BNO055 gyro(config.gyro_address());
-Button button(config.pins().btn1);
+DebugControls controls(config.pins().btn1, config.pins().btn2, config.pins().btn3);
 Led led(config.pins().led1);
 
-MovementControllerTest test(movement_controller, align, gyro, button, led);
+MovementControllerTest test(movement_controller, align, gyro, controls, led);
 
 void setup()
 {

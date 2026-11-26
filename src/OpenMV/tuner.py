@@ -17,7 +17,7 @@ import sensor
 # ------------------------------------------------- WHAT TO DO ------------------------------------------------------- #
 
 # Suffix of the variables in settings.py: "ATTACKER" (violet robot) or "DEFENDER" (white robot)
-ROBOT = "DEFENDER"
+ROBOT = "ATTACKER"
 
 # "objects"   - all objects as the robot sees them: frames, lines, angles and distances (like main.py)
 # "mask"      - only the pixels that fall into the threshold of TARGET are white: tune the thresholds here
@@ -27,14 +27,14 @@ ROBOT = "DEFENDER"
 # "distance"  - pixels from the center to TARGET, for filling PX_TO_CM: put the object at 10, 15, 20 ... cm
 # "exposure"  - automatic gain, white balance and exposure: the terminal shows what the camera picked,
 #               use it as a starting point for GAIN, WHITE and EXPOSURE
-MODE = "center"
+MODE = "objects"
 
 # Object for the "mask", "threshold" and "distance" modes: "yellow", "blue" or "ball"
 TARGET = "ball"
 
 # "threshold" mode: center of the sampling square (image pixels) and its size
 SAMPLE_POS = (170, 88)
-SAMPLE_SIZE = 2
+SAMPLE_SIZE = 1
 
 # How often the terminal is updated, ms
 PRINT_EVERY_MS = 300
@@ -43,19 +43,19 @@ PRINT_EVERY_MS = 300
 # ------------------------------------- PARAMETERS (the same as in settings.py) -------------------------------------- #
 
 # LAB thresholds: (L min, L max, A min, A max, B min, B max)
-YELLOW_THRESHOLD = [(0, 100, -6, 5, 20, 127)]
-BLUE_THRESHOLD = [(0, 100, -128, 16, -128, -10)]
-RED_THRESHOLD = [(45, 61, 8, 35, 15, 34)]
+YELLOW_THRESHOLD = [(71, 84, -3, 14, 26, 127)]
+BLUE_THRESHOLD = [(38, 52, -17, 3, -23, 0)]
+RED_THRESHOLD = [(0, 100, 22, 127, -35, 127)]
 
 WHITE = (64, 60, 64)  # rgb_gain_db
-GAIN = 24
-EXPOSURE = 21_450
+GAIN = 20
+EXPOSURE = 21_000
 
 # Shift of the mirror center from the middle of the frame, pixels: CENTER = (W // 2 + x, H // 2 + y)
-CENTER_OFFSET = (-5, -12)
+CENTER_OFFSET = (-3, -15)
 
-MASK_RADIUS = 105
-ROBOT_RADIUS = 13
+MASK_RADIUS = 115
+ROBOT_RADIUS = 10
 
 PX_TO_CM = (
     # PX CM
