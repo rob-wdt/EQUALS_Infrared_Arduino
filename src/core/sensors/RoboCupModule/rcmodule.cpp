@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "rcmodule.h"
 
-RCModule::RCModule(int pin) : _pin(pin) {}
+RCModule::RCModule(int pin) : _pin(pin), _data(0) {}
 
 void RCModule::init() { pinMode(_pin, INPUT); }
 

@@ -4,6 +4,10 @@ CameraDataParser::CameraDataParser(UART uart, GoalMapper goal_mapper) : _uart(ua
 
 void CameraDataParser::init() { _uart.init(); }
 
+void CameraDataParser::toggle_own_goal() { _goal.toggle_own_goal(); }
+
+GoalColor CameraDataParser::own_goal() { return _goal.own_goal(); }
+
 void CameraDataParser::parse()
 {
     _uart.receive();

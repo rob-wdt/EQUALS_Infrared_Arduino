@@ -11,6 +11,7 @@ public:
     void read() override;
     void reset();
     bool is_pressed();
+    bool was_pressed();
     // Blocks until the button is pressed and released again
     void wait_click();
 
@@ -18,5 +19,6 @@ public:
 
 private:
     uint8_t _pin;
-    bool _is_pressed;
+    bool _is_pressed = false;
+    bool _was_pressed = false;
 };

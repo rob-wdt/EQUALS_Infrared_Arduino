@@ -43,9 +43,9 @@ private:
     HeadingController _align;
     HeadingController _with_ball_align; // while the dribbler holds the ball
     BNO055 _gyro;
+    Button _start_stop_button;
     Button _gyro_button;
-    Button _start_button;
-    Button _stop_button;
+    Button _goal_button;
     Kicker _kicker;
     Led _led;
     Dribbler _dribbler;
@@ -54,6 +54,10 @@ private:
     StateIndicator _state_indicator;
 
     StateMachine _fsm;
+    bool _previous_rc_start = false;
+    bool _start_requested = false;
+    bool _stop_requested = false;
+    bool _recalibrate_requested = false;
 
     StateContext _make_context();
     void _apply(Command cmd);

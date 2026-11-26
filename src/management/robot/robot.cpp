@@ -13,16 +13,16 @@ Robot::Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool
                                                                                                                              Motor(_config.pins().m3_1, _config.pins().m3_2, _config.motors_config().directions.m3_dir),
                                                                                                                              Motor(_config.pins().m4_1, _config.pins().m4_2, _config.motors_config().directions.m4_dir)},
                                                                                                                          _config.motors_config().loc_angles),
-                                                                                                    _align(new PDCControl(_config.controls_config().pdc)), _with_ball_align(new PDCControl(_config.controls_config().with_ball_pdc), _config.controls_config().with_ball_max_speed), _gyro(_config.gyro_address()), _gyro_button(_config.pins().btn1), _start_button(_config.pins().btn1), _stop_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led1), _dribbler(_config.pins().dribbler, _config.dribbler_config().min, _config.dribbler_config().max), _state_indicator(Led(_config.pins().led1), Led(_config.pins().led2), Led(_config.pins().led3)), _rcmodule(_config.pins().robocup_module) {}
+                                                                                                    _align(new PDCControl(_config.controls_config().pdc)), _with_ball_align(new PDCControl(_config.controls_config().with_ball_pdc), _config.controls_config().with_ball_max_speed), _gyro(_config.gyro_address()), _start_stop_button(_config.pins().btn1), _gyro_button(_config.pins().btn2), _goal_button(_config.pins().btn3), _kicker(_config.pins().solenoid, _config.kicking_time_ms()), _led(_config.pins().led1), _dribbler(_config.pins().dribbler, _config.dribbler_config().min, _config.dribbler_config().max), _state_indicator(Led(_config.pins().led1), Led(_config.pins().led2), Led(_config.pins().led3)), _rcmodule(_config.pins().robocup_module) {}
 
 void Robot::init()
 {
     _movement_controller.init();
     _cam_parser.init();
     _gyro.init();
+    _start_stop_button.init();
     _gyro_button.init();
-    _start_button.init();
-    _stop_button.init();
+    _goal_button.init();
     _kicker.init();
     _led.init();
     _dribbler.init();
@@ -40,7 +40,7 @@ void Robot::calibrate_gyro()
 
     Serial.print("Press button #");
     Serial.print(_gyro_button.pin());
-    Serial.println(" to calibrate the gyroscope.");
+    Serial.println(" to calibrate the gyroscope and set zero angles.");
     _gyro_button.wait_click();
 
     while (!_gyro.calibrated())
@@ -51,19 +51,49 @@ void Robot::calibrate_gyro()
     _gyro.set_zero_angles();
 
     Serial.print("Press button #");
-    Serial.print(_gyro_button.pin());
+    Serial.print(_start_stop_button.pin());
     Serial.println(" to start.");
-    _gyro_button.wait_click();
+    _start_stop_button.wait_click();
+    _start_requested = true;
 }
 
 void Robot::listen()
 {
     _ball_detector.read();
     _gyro.read();
+    _start_stop_button.read();
+    _gyro_button.read();
+    _goal_button.read();
+
+    if (_start_stop_button.was_pressed())
+    {
+        if (_fsm.current() == &_fsm.states().idle)
+            _start_requested = true;
+        else
+            _stop_requested = true;
+    }
+
+    if (_gyro_button.was_pressed())
+    {
+        _recalibrate_requested = true;
+        _stop_requested = true;
+    }
+
+    if (_goal_button.was_pressed())
+    {
+        _cam_parser.toggle_own_goal();
+        _fsm.reset_field_reference();
+        Serial.print("Own goal: ");
+        Serial.println(_cam_parser.own_goal() == GoalColor::YELLOW ? "YELLOW" : "BLUE");
+    }
+
     _cam_parser.parse();
-    _start_button.read();
-    _stop_button.read();
     _rcmodule.read();
+
+    bool rc_start = _rcmodule.start();
+    if (rc_start && !_previous_rc_start)
+        _start_requested = true;
+    _previous_rc_start = rc_start;
 }
 
 void Robot::calculate_coords()
@@ -87,8 +117,10 @@ StateContext Robot::_make_context()
     ctx.ball_visible = ctx.cam.ball_distance > 0;
     ctx.own_goal_visible = ctx.cam.own_goal_distance > 0;
     ctx.ball_captured = _ball_detector.ball_detected();
-    ctx.start_pressed = _start_button.is_pressed() || _rcmodule.start();
-    ctx.stop_pressed = _stop_button.is_pressed() || !_rcmodule.start();
+    ctx.stop_pressed = _stop_requested || !_rcmodule.start();
+    ctx.start_pressed = !ctx.stop_pressed && _start_requested;
+    _start_requested = false;
+    _stop_requested = false;
     ctx.start_role = _start_role;
     ctx.params.speed = _config.speed();
     return ctx;
@@ -126,6 +158,17 @@ void Robot::_apply(Command cmd)
 void Robot::update()
 {
     listen();
+
+    if (_recalibrate_requested)
+    {
+        _movement_controller.stop();
+        while (!_gyro.calibrated())
+            ;
+        _gyro.set_zero_angles();
+        _recalibrate_requested = false;
+        Serial.println("Gyroscope calibrated; zero angles set");
+    }
+
     calculate_coords();
 
     StateContext ctx = _make_context();
