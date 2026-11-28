@@ -42,11 +42,11 @@ struct Command
 struct AttackerStateParams
 {
     int orbit_enter_angle = 30;     // deg, ball is this far from the front -> start orbiting
-    int orbit_exit_angle = 15;      // deg, ball is this close to the front -> stop orbiting
-    int orbit_distance = 20;        // cm, orbit only when the ball is closer than this
+    int orbit_exit_angle = 10;      // deg, ball is this close to the front -> stop orbiting
+    int orbit_distance = 25;        // cm, orbit only when the ball is closer than this
     unsigned long capture_ms = 200; // the ball must stay captured this long before Drive (dribbler gets hold of it)
     int capture_speed_dribbler = 100;
-    int capture_speed_simple = 150;
+    int capture_speed_simple = 140;
     unsigned long drive_max_ms = 2500;    // kick anyway, the ball must not be held for too long
     int kick_goal_distance = 80;          // cm, kick when the opponent goal is closer than this
     unsigned long kick_cooldown_ms = 100; // pause after the kick
@@ -58,30 +58,29 @@ struct AttackerStateParams
 
 struct DefenderStateParams
 {
-    int guard_distance = 80; // cm from own goal
+    int guard_distance = 50; // cm from own goal
     // Guard zone around the own goal (cm, relative to the goal center seen by the camera):
     // a front line y = guard_line_distance from -guard_half_width to +guard_half_width
     // and two side lines from its ends back to the goal line, at guard_side_angle to the goal line
     int guard_line_distance = 40;
     int guard_half_width = 35;
-    int guard_side_angle = 60;    // deg, 90 = straight back (a rectangle), less = wider at the goal line
-    int guard_slow_distance = 15; // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
+    int guard_side_angle = 60;   // deg, 90 = straight back (a rectangle), less = wider at the goal line
+    int guard_slow_distance = 5; // cm, closer to the guard point than this -> slow down, so it doesn't overshoot
     // Coordinates are noisy: the guard point jumps by a few cm every frame and the robot would chase it forever.
     // Closer than guard_arrive_distance -> stop, move again only when the point is guard_hold_distance away
     int guard_arrive_distance = 3; // cm
-    int guard_hold_distance = 5;   // cm
-    float guard_smoothing = 0.3;   // 0..1, how much the guard point follows a new measurement each frame (1 = no smoothing)
-    int guard_tolerance = 10;      // cm, hysteresis for leaving the guard position
-    int clear_distance = 35;       // cm, ball is this close -> clear it
-    int clear_tolerance = 10;      // cm, hysteresis for giving up the clearance
-    unsigned long clear_max_ms = 3000;
+    int guard_hold_distance = 6;   // cm
+    float guard_smoothing = 0.7;   // 0..1, how much the guard point follows a new measurement each frame (1 = no smoothing)
+    int guard_tolerance = 3;       // cm, hysteresis for leaving the guard position
 };
 
 struct RoleSwitchingStateParams
 {
-    float ball_still_epsilon = 5;          // cm, smaller displacement counts as "not moving"
-    unsigned long role_switch_ms = 5000;   // ball not moving (or lost) for this long -> swap roles
-    unsigned long role_cooldown_ms = 5000; // no swaps for this long after the previous one
+    float ball_position_tolerance = 10; // cm from the reference point in field coordinates
+    float ball_distance_tolerance = 10; // cm from the reference distance
+    int ball_angle_tolerance = 30;      // degrees from the reference field bearing
+    unsigned long ball_stable_ms = 3000;
+    unsigned long attack_duration_ms = 5000;
 };
 struct StateParams
 {
@@ -105,7 +104,6 @@ struct StateContext
     bool start_pressed;
     bool stop_pressed;
     RoleKind start_role;
-    bool can_change_role;
     StateParams params;
 
     // Derived by StateMachine
@@ -127,8 +125,6 @@ public:
     // Fills cmd and returns the next state, nullptr means "stay"
     virtual State *update(StateContext &ctx, Command &cmd) = 0;
     virtual RoleKind role() const { return RoleKind::NONE; }
-    // Role swap is allowed only from "calm" states, not while capturing or kicking
-    virtual bool can_switch_role() const { return false; }
     // Name for printing and debugging
     virtual const char *name() const = 0;
 };

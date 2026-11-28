@@ -19,8 +19,7 @@
 class Robot
 {
 public:
-    // can_change_role: whether the robot may swap attacker / defender during the game (needs a teammate)
-    Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool can_change_role);
+    Robot(RoleKind start_role, RobotType robot_type, GoalColor own_goal, bool has_dribbler);
     void init();
     void calibrate_gyro();
     void listen();
@@ -30,9 +29,9 @@ public:
 
 private:
     RoleKind _start_role;
-    bool _can_change_role;
     RobotType _robot_type;
     RobotConfig _config;
+    bool _has_dribbler;
 
     BallDetector _ball_detector;
     OutsHandlerCoords _outs_handler;

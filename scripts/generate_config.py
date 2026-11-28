@@ -156,6 +156,10 @@ def _robot(name: str, cfg: dict) -> str:
 
     threshold = _number(_get(cfg, "phototransistor_threshold", name), f"{name}.phototransistor_threshold")
     line(f"#define PHOTOTRANSISTOR_THRESHOLD_{up} {threshold}")
+    above_threshold = cfg.get("phototransistor_detected_above_threshold", False)
+    if not isinstance(above_threshold, bool):
+        raise ValueError(f"{name}.phototransistor_detected_above_threshold must be a boolean")
+    line(f"#define PHOTOTRANSISTOR_DETECTED_ABOVE_THRESHOLD_{up} {str(above_threshold).lower()}")
     line()
 
     offset = _number(_get(cfg, "ball_angle_offset", name), f"{name}.ball_angle_offset")

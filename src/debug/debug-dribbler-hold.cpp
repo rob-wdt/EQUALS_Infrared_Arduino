@@ -235,7 +235,7 @@ UART uart(config.UART_config().num, config.UART_config().baudrate, config.UART_c
 GoalColor own_goal = GoalColor::BLUE;
 CameraDataParser cam_parser(uart, GoalMapper(own_goal));
 Dribbler dribbler(config.pins().dribbler, config.dribbler_config().min, config.dribbler_config().max);
-BallDetector ball_detector(Phototransistor(config.pins().phototransistor), config.phototransistor_threshold());
+BallDetector ball_detector(Phototransistor(config.pins().phototransistor), config.phototransistor_threshold(), config.phototransistor_detected_above_threshold());
 
 DribblerHoldTest test(movement_controller, align, gyro, button, cam_parser, led, dribbler, ball_detector);
 

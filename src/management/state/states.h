@@ -48,7 +48,6 @@ class StateAttackerDribblerSearch : public StateAttackerDribbler
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerDribblerSearch"; }
-    bool can_switch_role() const override { return true; }
 };
 
 class StateAttackerDribblerApproach : public StateAttackerDribbler
@@ -56,7 +55,6 @@ class StateAttackerDribblerApproach : public StateAttackerDribbler
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerDribblerApproach"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerDribblerCapture : public StateAttackerDribbler
@@ -65,7 +63,6 @@ public:
     void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerDribblerCapture"; }
-    bool can_switch_role() const override { return false; }
 
 private:
     Timer _timer;
@@ -77,7 +74,6 @@ class StateAttackerDribblerDrive : public StateAttackerDribbler
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerDribblerDrive"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerDribblerKick : public StateAttackerDribbler
@@ -105,7 +101,6 @@ class StateAttackerSimpleSearch : public StateAttackerSimple
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerSimpleSearch"; }
-    bool can_switch_role() const override { return true; }
 };
 
 class StateAttackerSimpleApproach : public StateAttackerSimple
@@ -113,7 +108,6 @@ class StateAttackerSimpleApproach : public StateAttackerSimple
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerSimpleApproach"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerSimpleOrbit : public StateAttackerSimple
@@ -121,7 +115,6 @@ class StateAttackerSimpleOrbit : public StateAttackerSimple
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerSimpleOrbit"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerSimpleCapture : public StateAttackerSimple
@@ -129,7 +122,6 @@ class StateAttackerSimpleCapture : public StateAttackerSimple
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerSimpleCapture"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerSimpleDrive : public StateAttackerSimple
@@ -137,7 +129,6 @@ class StateAttackerSimpleDrive : public StateAttackerSimple
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerSimpleDrive"; }
-    bool can_switch_role() const override { return false; }
 };
 
 class StateAttackerSimpleKick : public StateAttackerSimple
@@ -146,7 +137,6 @@ public:
     void enter(StateContext &ctx) override;
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "AttackerSimpleKick"; }
-    bool can_switch_role() const override { return false; }
 
 private:
     Timer _timer;
@@ -167,7 +157,6 @@ class StateDefenderReturn : public StateDefender
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "DefenderReturn"; }
-    bool can_switch_role() const override { return true; }
 };
 
 // Common part of the guard states: drives to the guard point and stands still there
@@ -190,7 +179,6 @@ class StateDefenderGuardFront : public StateDefenderGuard
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "DefenderGuardFront"; }
-    bool can_switch_role() const override { return true; }
 };
 
 class StateDefenderGuardLeft : public StateDefenderGuard
@@ -198,7 +186,6 @@ class StateDefenderGuardLeft : public StateDefenderGuard
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "DefenderGuardLeft"; }
-    bool can_switch_role() const override { return true; }
 };
 
 class StateDefenderGuardRight : public StateDefenderGuard
@@ -206,7 +193,6 @@ class StateDefenderGuardRight : public StateDefenderGuard
 public:
     State *update(StateContext &ctx, Command &cmd) override;
     const char *name() const override { return "DefenderGuardRight"; }
-    bool can_switch_role() const override { return true; }
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

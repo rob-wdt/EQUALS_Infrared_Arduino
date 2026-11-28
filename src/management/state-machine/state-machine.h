@@ -26,7 +26,8 @@ private:
     bool _own_goal_known = false;
     point _own_goal;
     RoleKind _role = RoleKind::NONE;
-    unsigned long _last_role_switch = 0;
+    bool _temporary_attack = false;
+    Timer _attack_timer;
 
     // Fills the fields of ctx that the machine derives itself (states, ball history)
     void _prepare(StateContext &ctx);

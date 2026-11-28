@@ -3,8 +3,6 @@
 #include "control/ball-detector/ball-detector.h"
 #include "management/config/robot-config.h"
 
-#define THRESHOLD 1
-
 class BallDetectorTest
 {
 public:
@@ -22,17 +20,17 @@ public:
         Serial.print("\tPhtstr data: ");
         Serial.print(_b.phototransistor_data());
         Serial.print("\tThreshold: ");
-        Serial.println(THRESHOLD);
+        Serial.println(_b.threshold());
     }
 
 private:
     BallDetector _b;
 };
 
-RobotViolet robot_type;
+RobotWhite robot_type;
 RobotConfig config(robot_type);
 
-BallDetector ball_detector(Phototransistor(config.pins().phototransistor), THRESHOLD);
+BallDetector ball_detector(Phototransistor(config.pins().phototransistor), config.phototransistor_threshold(), config.phototransistor_detected_above_threshold());
 
 BallDetectorTest test(ball_detector);
 

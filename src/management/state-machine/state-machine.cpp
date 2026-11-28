@@ -26,7 +26,10 @@ void StateMachine::_prepare(StateContext &ctx)
     ctx.own_goal_known = _own_goal_known;
     ctx.own_goal = _own_goal;
 
-    _ball_watcher.update(ctx.ball_visible, ctx.ball, ctx.params.role_switching.ball_still_epsilon);
+    const auto &params = ctx.params.role_switching;
+    _ball_watcher.update(ctx.ball_visible, ctx.ball, ctx.cam.ball_distance,
+                         ctx.gyro.yaw + ctx.cam.ball_angle, params.ball_position_tolerance,
+                         params.ball_distance_tolerance, params.ball_angle_tolerance);
     ctx.ball_still_ms = _ball_watcher.still_ms();
     ctx.ball_lost_ms = _ball_watcher.lost_ms();
 }
@@ -69,12 +72,11 @@ void StateMachine::_transition_to(State *next, StateContext &ctx)
     if (next == _current)
         return;
 
-    // Starting to play or swapping roles: forget the old ball history and start the cooldown
+    // Starting to play or swapping roles: forget the old ball history
     RoleKind next_role = next->role();
     if (next_role != RoleKind::NONE && next_role != _role)
     {
         _role = next_role;
-        _last_role_switch = millis();
         _ball_watcher.reset();
         ctx.ball_still_ms = 0;
         ctx.ball_lost_ms = 0;
@@ -93,6 +95,7 @@ State *StateMachine::_global_transition(StateContext &ctx)
     if (ctx.stop_pressed)
     {
         _role = RoleKind::NONE;
+        _temporary_attack = false;
         return &_states.idle;
     }
 
@@ -107,36 +110,23 @@ State *StateMachine::_global_transition(StateContext &ctx)
 
 State *StateMachine::_role_switch(StateContext &ctx)
 {
-    if (!ctx.can_change_role || !_current->can_switch_role() || ctx.ball_captured)
-        return nullptr;
-    if (millis() - _last_role_switch < ctx.params.role_switching.role_cooldown_ms)
+    if (ctx.out != OutType::NO)
         return nullptr;
 
-    bool still = ctx.ball_still_ms >= ctx.params.role_switching.role_switch_ms;
-    bool lost = ctx.ball_lost_ms >= ctx.params.role_switching.role_switch_ms;
-
-    switch (_current->role())
+    if (_temporary_attack)
     {
-    case RoleKind::DEFENDER:
-        if (still)
-        {
-            if (ctx.start_role == RoleKind::ATTACKER_DRIBBLER)
-                return &_states.attacker_dribbler_search;
-                
-            if (ctx.start_role == RoleKind::ATTACKER_SIMPLE)
-                return &_states.attacker_simple_search;
-        }
-        break;
-    case RoleKind::ATTACKER_DRIBBLER:
-        if (still || lost)
-            return &_states.defender_return;
-        break;
-    case RoleKind::ATTACKER_SIMPLE:
-        if (still || lost)
-            return &_states.defender_return;
-        break;
-    default:
-        break;
+        if (!_attack_timer.time_is_up())
+            return nullptr;
+
+        _temporary_attack = false;
+        return &_states.defender_return;
     }
-    return nullptr;
+
+    if (_current->role() != RoleKind::DEFENDER || !ctx.ball_visible ||
+        ctx.ball_still_ms < ctx.params.role_switching.ball_stable_ms)
+        return nullptr;
+
+    _temporary_attack = true;
+    _attack_timer.set_time_ms(ctx.params.role_switching.attack_duration_ms);
+    return &_states.attacker_simple_search;
 }

@@ -10,6 +10,7 @@ motorsConfig RobotType::motors_config() { return _motors_config; }
 outsBounds RobotType::outs_bounds() { return _outs; }
 float RobotType::outs_hysteresis() { return _outs_hysteresis; }
 int RobotType::phototransistor_threshold() { return _phototransistor_threshold; }
+bool RobotType::phototransistor_detected_above_threshold() { return _phototransistor_detected_above_threshold; }
 float RobotType::ball_angle_offset() { return _ball_angle_offset; }
 pin RobotType::pins() { return _pins; }
 int RobotType::speed() { return _speed; }
@@ -65,6 +66,7 @@ RobotViolet::RobotViolet() : RobotType()
     _kicking_time_ms = KICKING_TIME_MS_VIOLET;
     _dribbler_config = dribbler_config_violet;
     _phototransistor_threshold = PHOTOTRANSISTOR_THRESHOLD_VIOLET;
+    _phototransistor_detected_above_threshold = PHOTOTRANSISTOR_DETECTED_ABOVE_THRESHOLD_VIOLET;
     _ball_angle_offset = BALL_ANGLE_OFFSET_VIOLET;
 }
 
@@ -118,5 +120,6 @@ RobotWhite::RobotWhite() : RobotType()
     _kicking_time_ms = KICKING_TIME_MS_WHITE;
     _dribbler_config = dribbler_config_white;
     _phototransistor_threshold = PHOTOTRANSISTOR_THRESHOLD_WHITE;
+    _phototransistor_detected_above_threshold = PHOTOTRANSISTOR_DETECTED_ABOVE_THRESHOLD_WHITE;
     _ball_angle_offset = BALL_ANGLE_OFFSET_WHITE;
 }

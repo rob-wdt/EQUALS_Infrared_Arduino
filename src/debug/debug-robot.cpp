@@ -21,9 +21,9 @@ private:
     Robot _robot;
 };
 
-RobotWhite robot_type;
+RobotViolet robot_type;
 GoalColor own_goal = GoalColor::BLUE;
-Robot robot(RoleKind::DEFENDER, robot_type, own_goal, false);
+Robot robot(RoleKind::ATTACKER_SIMPLE, robot_type, own_goal, false);
 
 RobotTest test(robot);
 

@@ -6,6 +6,11 @@ import sensor
 UART_NUM: int = 3
 UART_BAUDRATE: int = 230400
 
+# Distant balls may contain only a few pixels matching the orange threshold.
+# Goal detection keeps the larger per-robot limits below.
+BALL_PIXELS_THRESHOLD = 3
+BALL_AREA_THRESHOLD = 4
+
 ########################################################################################################################
 # ----------------------------------------------- ATTACKER ----------------------------------------------------------- #
 
@@ -18,17 +23,17 @@ if FRAMESIZE_ATTACKER == sensor.QVGA:
     OBJECT_DETECTING_PIX_THRESHOLD_ATTACKER = 9
     OBJECT_DETECTING_AREA_THRESHOLD_ATTACKER = 9
 
-YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -6, 5, 20, 127)]
-BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, -128, 16, -128, -10)]
-RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 12, 127, -5, 127)]
+YELLOW_THRESHOLD_ATTACKER: tuple[list[int]] = [(30, 90, 4, 30, 22, 75)]
+BLUE_THRESHOLD_ATTACKER: tuple[list[int]] = [(4, 35, -22, 8, -30, -3)]
+RED_THRESHOLD_ATTACKER: tuple[list[int]] = [(0, 100, 25, 127, -128, 127)]
 
 WHITE_ATTACKER = (64, 60, 64)
 
-CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2 + 10, FRAME_H_ATTACKER // 2 - 12)
+CENTER_ATTACKER = maths.Point(FRAME_W_ATTACKER // 2 + 22, FRAME_H_ATTACKER // 2 - 8)
 MASK_RADIUS_ATTACKER: int = 115
-ROBOT_RADIUS_ATTACKER: int = 13
-GAIN_ATTACKER = 24
-EXPOSURE_ATTACKER = 21450
+ROBOT_RADIUS_ATTACKER: int = 0
+GAIN_ATTACKER = 20
+EXPOSURE_ATTACKER = 21000
 
 PIXELS_FORMAT_ATTACKER = sensor.RGB565
 
@@ -90,20 +95,20 @@ if FRAMESIZE_DEFENDER == sensor.QVGA:
     FRAME_H_DEFENDER = 240
     FRAME_W_DEFENDER = 320
 
-    OBJECT_DETECTING_PIX_THRESHOLD_DEFENDER = 9
-    OBJECT_DETECTING_AREA_THRESHOLD_DEFENDER = 9
+    OBJECT_DETECTING_PIX_THRESHOLD_DEFENDER = 3
+    OBJECT_DETECTING_AREA_THRESHOLD_DEFENDER = 4
 
-YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, -128, 127, 22, 127)]
-BLUE_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, -128, 16, -128, -10)]
-RED_THRESHOLD_DEFENDER: tuple[list[int]] = [(0, 100, 12, 127, -5, 127)]
+YELLOW_THRESHOLD_DEFENDER: tuple[list[int]] = [(35, 75, -4, 18, 27, 85)]
+BLUE_THRESHOLD_DEFENDER: tuple[list[int]] = [(4, 35, -22, 8, -30, -3)]
+RED_THRESHOLD_DEFENDER: tuple[list[int]] = [(15, 70, 18, 70, 22, 90)]
 
 WHITE_DEFENDER = (64, 60, 64)
 
 CENTER_DEFENDER = maths.Point(FRAME_W_DEFENDER // 2 - 4, FRAME_H_DEFENDER // 2 - 12)
-MASK_RADIUS_DEFENDER: int = 105
-ROBOT_RADIUS_DEFENDER: int = 13
-GAIN_DEFENDER = 24
-EXPOSURE_DEFENDER = 21450
+MASK_RADIUS_DEFENDER: int = 115
+ROBOT_RADIUS_DEFENDER: int = 0
+GAIN_DEFENDER = 20
+EXPOSURE_DEFENDER = 21000
 
 PIXELS_FORMAT_DEFENDER = sensor.RGB565
 

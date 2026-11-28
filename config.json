@@ -28,15 +28,15 @@
             "buffer_starter": 255
         },
         "outs_bounds": {
-            "right": 60,
-            "left": -60,
-            "front_goal": 100,
-            "rear_goal": -75,
-            "front_corners": 100,
-            "rear_corners": -80,
+            "right": 75,
+            "left": -80,
+            "front_goal": 80,
+            "rear_goal": -85,
+            "front_corners": 85,
+            "rear_corners": -90,
             "goal_zone_half_width": 45
         },
-        "outs_hysteresis": 5,
+        "outs_hysteresis": 0,
         "motors": {
             "location_angles": [
                 315,
@@ -73,8 +73,9 @@
             "min": 1200,
             "max": 1700
         },
-        "phototransistor_threshold": 3,
-        "ball_angle_offset": 2
+        "phototransistor_threshold": 18,
+        "phototransistor_detected_above_threshold": false,
+        "ball_angle_offset": 0
     },
     "white": {
         "speed": 200,
@@ -108,12 +109,13 @@
             "right": 55,
             "left": -55,
             "front_goal": 55,
-            "rear_goal": -100,
+            "rear_goal": -80,
             "front_corners": 65,
-            "rear_corners": -100,
+            "rear_corners": -82,
             "goal_zone_half_width": 50
         },
-        "outs_hysteresis": 0,
+        "outs_hysteresis": 5,
+        "distance_sensor_threshold": 10,
         "motors": {
             "location_angles": [
                 315,
@@ -150,7 +152,8 @@
             "min": 1000,
             "max": 1500
         },
-        "phototransistor_threshold": 1,
+        "phototransistor_threshold": 25,
+        "phototransistor_detected_above_threshold": true,
         "ball_angle_offset": 0
     }
 }

@@ -42,7 +42,9 @@ class DetectingBlob(DetectingStrategy):
 
 class DetectingRound(DetectingStrategy):
     def get_blobs(self, img: sensor.image.Image, threshold, pix_threshold: int, area_threshold: int):
-        blobs = img.find_blobs(threshold, pixels_threshold=pix_threshold, area_threshold=area_threshold)
+        blobs = img.find_blobs(threshold, pixels_threshold=settings.BALL_PIXELS_THRESHOLD,
+                               area_threshold=settings.BALL_AREA_THRESHOLD,
+                               x_stride=1, y_stride=1)
         blobs = sorted(blobs, key=lambda b: b.roundness(), reverse=True)
         return blobs
 
